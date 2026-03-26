@@ -192,13 +192,7 @@ async function tryFirebaseInit(){
       if(!auth.currentUser) return openModal('authModal');
       const data = getFormData();
       if(!validateForm(data)) return showToast('أكمل الحقول المطلوبة.');
-      const file = document.getElementById('imageFile').files[0];
       let imageUrl = '';
-      if(file){
-        const fileRef = ref(storage, `cars/${Date.now()}-${file.name}`);
-        await uploadBytes(fileRef, file);
-        imageUrl = await getDownloadURL(fileRef);
-      }
       await addDoc(collection(db, 'listings'), {
         ...data,
         imageUrl,
