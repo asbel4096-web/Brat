@@ -3,363 +3,140 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>براتشوcars | متجر سيارات</title>
-  <meta name="description" content="براتشوcars - عرض سيارات بطريقة احترافية مع تواصل سريع عبر فيسبوك وواتساب والخريطة." />
-  <style>
-    :root{
-      --bg:#07111f;
-      --panel:#0f1b2d;
-      --panel-2:#13233b;
-      --line:#213657;
-      --text:#f6f8fc;
-      --muted:#b8c4d8;
-      --blue:#2d7dff;
-      --blue-2:#6db0ff;
-      --white:#ffffff;
-      --ok:#15b86a;
-      --shadow:0 12px 30px rgba(0,0,0,.25);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Tahoma, Arial, sans-serif;
-      background:linear-gradient(180deg,#050b14,#0a1526 35%,#07111f);
-      color:var(--text);
-    }
-    a{text-decoration:none;color:inherit}
-    .container{width:min(1180px,92%);margin:auto}
-    .topbar{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter:blur(12px);
-      background:rgba(7,17,31,.82);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .topbar-inner{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:14px 0;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{
-      width:48px;height:48px;border-radius:14px;
-      background:linear-gradient(135deg,#fff,#82b7ff 45%,#2d7dff);
-      color:#03101f;font-weight:900;display:grid;place-items:center;box-shadow:var(--shadow)
-    }
-    .brand h1{font-size:1.25rem;margin:0}
-    .brand p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
-    .actions{display:flex;gap:10px;flex-wrap:wrap}
-    .btn{
-      border:none; cursor:pointer; padding:12px 16px; border-radius:14px;
-      color:var(--white); background:var(--panel-2); border:1px solid var(--line);
-      font-weight:700; font-size:.95rem; display:inline-flex; align-items:center; gap:8px;
-      transition:.2s ease; box-shadow:var(--shadow)
-    }
-    .btn:hover{transform:translateY(-1px)}
-    .btn.primary{background:linear-gradient(135deg,var(--blue),#1762da);border-color:transparent}
-    .btn.light{background:#fff;color:#091321}
-    .btn.ok{background:linear-gradient(135deg,#13a95f,#0f8b4f);border-color:transparent}
-    .hero{padding:34px 0 24px}
-    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-    .card{
-      background:linear-gradient(180deg,rgba(19,35,59,.9),rgba(10,18,31,.95));
-      border:1px solid rgba(255,255,255,.07);
-      border-radius:var(--radius); box-shadow:var(--shadow)
-    }
-    .hero-content{padding:28px}
-    .badge{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(45,125,255,.14);border:1px solid rgba(109,176,255,.25);color:#dbe9ff;font-size:.88rem}
-    .hero h2{font-size:2rem;line-height:1.45;margin:16px 0 12px}
-    .hero p{color:var(--muted);line-height:1.9;margin:0 0 18px}
-    .hero-buttons{display:flex;gap:10px;flex-wrap:wrap}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px}
-    .stat{padding:18px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
-    .stat strong{display:block;font-size:1.45rem;margin-bottom:6px}
-    .stat span{color:var(--muted);font-size:.92rem}
-    .section{padding:12px 0 26px}
-    .section-title{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:14px}
-    .section-title h3{margin:0;font-size:1.4rem}
-    .section-title p{margin:0;color:var(--muted)}
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-    .search,.select{
-      background:var(--panel);border:1px solid var(--line);color:#fff;
-      border-radius:14px;padding:14px 16px;font-size:1rem;outline:none
-    }
-    .search{flex:1;min-width:230px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .car-card{overflow:hidden}
-    .car-media{aspect-ratio:16/10;background:linear-gradient(135deg,#152744,#0c1524);display:grid;place-items:center;font-size:1.05rem;color:#d9e8ff}
-    .car-body{padding:18px}
-    .car-title{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:10px}
-    .car-title h4{margin:0;font-size:1.08rem}
-    .price{color:#8bc3ff;font-weight:800;white-space:nowrap}
-    .meta{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0}
-    .meta div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);font-size:.92rem;color:#d9e2f1}
-    .meta span{display:block;color:var(--muted);font-size:.82rem;margin-bottom:5px}
-    .cta-row{display:flex;gap:8px;flex-wrap:wrap}
-    .small-btn{flex:1;min-width:110px;text-align:center;padding:11px 12px;border-radius:12px;background:#0c1627;border:1px solid var(--line);color:#fff;font-weight:700}
-    .small-btn.primary{background:linear-gradient(135deg,var(--blue),#195fcd);border:none}
-    .small-btn.ok{background:linear-gradient(135deg,#14aa60,#0e894d);border:none}
-    .features{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .feature{padding:18px}
-    .feature h4{margin:0 0 10px}
-    .feature p{margin:0;color:var(--muted);line-height:1.8;font-size:.95rem}
-    .auth{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .auth-card{padding:22px}
-    .auth-card h4{margin:0 0 10px;font-size:1.2rem}
-    .auth-card p{margin:0 0 16px;color:var(--muted);line-height:1.8}
-    .note{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);color:#dce6f7;border:1px solid rgba(255,255,255,.05);line-height:1.8}
-    footer{padding:28px 0 40px;color:var(--muted)}
-    .footer-grid{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
-    .mini{font-size:.88rem}
-    .toast{
-      position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
-      background:#fff;color:#091321;padding:13px 16px;border-radius:14px;box-shadow:var(--shadow);
-      display:none;z-index:200;font-weight:700
-    }
-    @media (max-width:960px){
-      .hero-grid,.auth,.features,.grid{grid-template-columns:1fr 1fr}
-    }
-    @media (max-width:720px){
-      .hero-grid,.auth,.features,.grid,.stats{grid-template-columns:1fr}
-      .hero h2{font-size:1.55rem}
-      .actions,.hero-buttons,.cta-row,.toolbar{width:100%}
-      .btn,.small-btn{justify-content:center}
-    }
-  </style>
+  <title>براتشو كار | سوق السيارات في ليبيا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="topbar">
-    <div class="container topbar-inner">
-      <div class="brand">
-        <div class="logo">B</div>
-        <div>
-          <h1>براتشوcars</h1>
-          <p>متجر سيارات احترافي لعرض السيارات والتواصل السريع</p>
-        </div>
+  <header class="topbar">
+    <div class="logo-wrap">
+      <div class="logo-badge">BC</div>
+      <div>
+        <h1>براتشو <span>كار</span></h1>
+        <p>منصة إعلانات السيارات</p>
       </div>
-      <div class="actions">
-        <a class="btn primary" href="https://www.facebook.com/share/182Ph7u47X/?mibextid=wwXIfr" target="_blank" rel="noopener">فيسبوك الصفحة</a>
-        <button class="btn" onclick="followPage()">متابعة الصفحة</button>
-        <button class="btn" onclick="enableNotifications()">تشغيل الإشعارات</button>
-        <a class="btn ok" href="#auth">تسجيل الدخول</a>
+    </div>
+    <div class="top-actions">
+      <button id="openAuthBtn" class="ghost-btn">دخول / تسجيل</button>
+      <button id="logoutBtn" class="ghost-btn hidden">تسجيل خروج</button>
+      <button id="openAddBtn" class="primary-btn">أضف إعلان</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="pill">نسخة Firebase متقدمة</span>
+      <h2>اعرض سيارتك وخلي الموافقة من الإدارة قبل النشر</h2>
+      <p>المستخدم يسجل، يضيف سيارته، وترسل تلقائيًا للمراجعة. بعد الموافقة تظهر في الموقع.</p>
+      <div class="hero-actions">
+        <button id="openAddHeroBtn" class="primary-btn">اعرض سيارتك الآن</button>
+        <button id="openAdminBtn" class="secondary-btn">لوحة الإدارة</button>
       </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-stat"><strong id="approvedCount">0</strong><span>إعلانات منشورة</span></div>
+      <div class="hero-stat"><strong id="pendingCount">0</strong><span>قيد المراجعة</span></div>
+      <div class="hero-stat"><strong id="userState">زائر</strong><span>حالة الحساب</span></div>
+    </div>
+  </section>
+
+  <main class="container">
+    <section class="filters card">
+      <input id="searchInput" type="text" placeholder="ابحث عن سيارة، مدينة، موديل..." />
+      <select id="brandFilter">
+        <option value="">كل الماركات</option>
+        <option>Hyundai</option>
+        <option>Kia</option>
+        <option>Toyota</option>
+        <option>Genesis</option>
+        <option>Mercedes</option>
+      </select>
+      <select id="cityFilter">
+        <option value="">كل المدن</option>
+        <option>طرابلس</option>
+        <option>مصراتة</option>
+        <option>بنغازي</option>
+        <option>الزاوية</option>
+      </select>
+      <button id="applyFilterBtn" class="secondary-btn">بحث</button>
+    </section>
+
+    <section class="section-head">
+      <h3>الإعلانات المنشورة</h3>
+      <p>الموافق عليها فقط تظهر للزوار</p>
+    </section>
+
+    <section id="listingsGrid" class="listings-grid"></section>
+
+    <section class="section-head">
+      <h3>كيف تشتغل المنصة</h3>
+    </section>
+    <section class="steps-grid">
+      <div class="step card"><strong>1</strong><p>المستخدم يسجل حساب</p></div>
+      <div class="step card"><strong>2</strong><p>يضيف بيانات السيارة والصور</p></div>
+      <div class="step card"><strong>3</strong><p>الإعلان يدخل حالة مراجعة</p></div>
+      <div class="step card"><strong>4</strong><p>الإدارة توافق أو ترفض</p></div>
+    </section>
+  </main>
+
+  <div id="authModal" class="modal hidden">
+    <div class="modal-box">
+      <button class="close-btn" data-close="authModal">×</button>
+      <h3>تسجيل الدخول / إنشاء حساب</h3>
+      <div class="tabs">
+        <button class="tab active" data-auth-tab="login">دخول</button>
+        <button class="tab" data-auth-tab="register">حساب جديد</button>
+      </div>
+      <div id="loginFormWrap" class="auth-pane">
+        <input id="loginEmail" type="email" placeholder="البريد الإلكتروني" />
+        <input id="loginPassword" type="password" placeholder="كلمة المرور" />
+        <button id="loginBtn" class="primary-btn full">دخول</button>
+      </div>
+      <div id="registerFormWrap" class="auth-pane hidden">
+        <input id="registerName" type="text" placeholder="الاسم الكامل" />
+        <input id="registerEmail" type="email" placeholder="البريد الإلكتروني" />
+        <input id="registerPassword" type="password" placeholder="كلمة المرور" />
+        <button id="registerBtn" class="primary-btn full">إنشاء حساب</button>
+      </div>
+      <p class="hint">يمكنك لاحقًا تفعيل Google Sign-In بسهولة داخل Firebase.</p>
     </div>
   </div>
 
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="card hero-content">
-        <span class="badge">سيارات مرتبة • تواصل سريع • عرض احترافي</span>
-        <h2>أهلاً بك في متجر <span style="color:#8bc3ff">براتشوcars</span><br>اختر سيارتك وتواصل مباشرة</h2>
-        <p>
-          متجر مصمم لعرض السيارات على شكل احترافي مع أزرار مباشرة لفيسبوك، المتابعة، الإشعارات، الخريطة،
-          والتواصل السريع. تقدر تستخدمه كرابط رسمي لصفحتك وتنشره في البايو أو على منشورات فيسبوك.
-        </p>
-        <div class="hero-buttons">
-          <a class="btn primary" href="#cars">تصفح السيارات</a>
-          <a class="btn light" href="https://www.facebook.com/share/182Ph7u47X/?mibextid=wwXIfr" target="_blank" rel="noopener">زيارة الصفحة</a>
-          <a class="btn" href="https://maps.google.com/?q=Tripoli%20Libya" target="_blank" rel="noopener">فتح الخريطة</a>
-        </div>
+  <div id="addModal" class="modal hidden">
+    <div class="modal-box large">
+      <button class="close-btn" data-close="addModal">×</button>
+      <h3>إضافة إعلان سيارة</h3>
+      <div class="form-grid">
+        <input id="title" type="text" placeholder="عنوان الإعلان" />
+        <input id="brand" type="text" placeholder="الماركة" />
+        <input id="model" type="text" placeholder="الموديل" />
+        <input id="year" type="number" placeholder="السنة" />
+        <input id="price" type="number" placeholder="السعر" />
+        <input id="mileage" type="text" placeholder="الممشى" />
+        <input id="city" type="text" placeholder="المدينة" />
+        <input id="phone" type="text" placeholder="رقم الهاتف" />
+        <textarea id="description" placeholder="وصف السيارة"></textarea>
+        <input id="imageFile" type="file" accept="image/*" />
       </div>
-      <div class="card stats">
-        <div class="stat"><strong>24/7</strong><span>استقبال رسائل واستفسارات</span></div>
-        <div class="stat"><strong>واتساب</strong><span>تواصل سريع مع الزبون</span></div>
-        <div class="stat"><strong>Facebook</strong><span>ربط مباشر مع الصفحة</span></div>
-      </div>
+      <button id="submitListingBtn" class="primary-btn full">إرسال للمراجعة</button>
+      <p class="hint">الإعلان لن يظهر للزوار إلا بعد موافقة الإدارة.</p>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="container">
-      <div class="section-title">
-        <div>
-          <h3>روابط سريعة</h3>
-          <p>كل ما يحتاجه الزبون في مكان واحد</p>
-        </div>
-      </div>
-      <div class="features">
-        <div class="card feature">
-          <h4>زر فيسبوك</h4>
-          <p>يفتح صفحة براتشوcars مباشرة لعرض المنشورات والتفاعل والمتابعة.</p>
-        </div>
-        <div class="card feature">
-          <h4>زر متابعة</h4>
-          <p>يعرض تنبيه داخل الموقع ويحوّل الزبون للصفحة حتى يضغط متابعة من فيسبوك.</p>
-        </div>
-        <div class="card feature">
-          <h4>زر إشعارات</h4>
-          <p>يطلب سماح إشعارات المتصفح محليًا، وهو مناسب عند تشغيل الموقع على دومين حقيقي.</p>
-        </div>
-        <div class="card feature">
-          <h4>زر خرائط</h4>
-          <p>يفتح الموقع على Google Maps. عدّل الرابط لاحقًا إلى موقعك الحقيقي في طرابلس.</p>
-        </div>
-      </div>
+  <div id="adminModal" class="modal hidden">
+    <div class="modal-box large admin-box">
+      <button class="close-btn" data-close="adminModal">×</button>
+      <h3>لوحة الإدارة</h3>
+      <p class="hint">تظهر لك الإعلانات المعلقة. هذه اللوحة تتطلب أن يكون البريد مسجل كمسؤول داخل firebase-config.js</p>
+      <div id="pendingList" class="admin-list"></div>
     </div>
-  </section>
+  </div>
 
-  <section class="section" id="cars">
-    <div class="container">
-      <div class="section-title">
-        <div>
-          <h3>السيارات المعروضة</h3>
-          <p>نسخة تجريبية — بدّل البيانات بسياراتك الحقيقية</p>
-        </div>
-      </div>
-      <div class="toolbar">
-        <input id="searchInput" class="search" type="text" placeholder="ابحث عن سيارة... مثال: أزيرا، سوناتا، كيا" oninput="filterCars()" />
-        <select id="brandFilter" class="select" onchange="filterCars()">
-          <option value="all">كل الماركات</option>
-          <option value="هيونداي">هيونداي</option>
-          <option value="كيا">كيا</option>
-          <option value="مرسيدس">مرسيدس</option>
-        </select>
-      </div>
-      <div class="grid" id="carsGrid">
-        <article class="card car-card" data-brand="هيونداي" data-name="هيونداي أزيرا 2012">
-          <div class="car-media">صورة هيونداي أزيرا 2012</div>
-          <div class="car-body">
-            <div class="car-title"><h4>هيونداي أزيرا 2012</h4><div class="price">السعر على الخاص</div></div>
-            <div class="meta">
-              <div><span>المحرك</span>3.0</div>
-              <div><span>الناقل</span>أوتوماتيك</div>
-              <div><span>الموقع</span>طرابلس</div>
-              <div><span>الحالة</span>درجة أولى</div>
-            </div>
-            <div class="cta-row">
-              <a class="small-btn ok" href="https://wa.me/218000000000" target="_blank" rel="noopener">واتساب</a>
-              <a class="small-btn primary" href="https://www.facebook.com/share/182Ph7u47X/?mibextid=wwXIfr" target="_blank" rel="noopener">فيسبوك</a>
-              <a class="small-btn" href="https://maps.google.com/?q=Tripoli%20Libya" target="_blank" rel="noopener">الخريطة</a>
-            </div>
-          </div>
-        </article>
+  <div id="toast" class="toast hidden"></div>
 
-        <article class="card car-card" data-brand="كيا" data-name="كيا K5 2014">
-          <div class="car-media">صورة كيا K5 2014</div>
-          <div class="car-body">
-            <div class="car-title"><h4>كيا K5 2014</h4><div class="price">السعر على الهاتف</div></div>
-            <div class="meta">
-              <div><span>المحرك</span>2.0</div>
-              <div><span>الناقل</span>أوتوماتيك</div>
-              <div><span>الموقع</span>طرابلس</div>
-              <div><span>الحالة</span>فل الفل</div>
-            </div>
-            <div class="cta-row">
-              <a class="small-btn ok" href="https://wa.me/218000000000" target="_blank" rel="noopener">واتساب</a>
-              <a class="small-btn primary" href="https://www.facebook.com/share/182Ph7u47X/?mibextid=wwXIfr" target="_blank" rel="noopener">فيسبوك</a>
-              <a class="small-btn" href="https://maps.google.com/?q=Tripoli%20Libya" target="_blank" rel="noopener">الخريطة</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="card car-card" data-brand="مرسيدس" data-name="مرسيدس GLC 300 2018">
-          <div class="car-media">صورة مرسيدس GLC 300 2018</div>
-          <div class="car-body">
-            <div class="car-title"><h4>مرسيدس GLC 300 2018</h4><div class="price">السعر للجادين</div></div>
-            <div class="meta">
-              <div><span>المحرك</span>3.0</div>
-              <div><span>الناقل</span>أوتوماتيك</div>
-              <div><span>الموقع</span>طرابلس</div>
-              <div><span>الحالة</span>نظافة ممتازة</div>
-            </div>
-            <div class="cta-row">
-              <a class="small-btn ok" href="https://wa.me/218000000000" target="_blank" rel="noopener">واتساب</a>
-              <a class="small-btn primary" href="https://www.facebook.com/share/182Ph7u47X/?mibextid=wwXIfr" target="_blank" rel="noopener">فيسبوك</a>
-              <a class="small-btn" href="https://maps.google.com/?q=Tripoli%20Libya" target="_blank" rel="noopener">الخريطة</a>
-            </div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="auth">
-    <div class="container auth">
-      <div class="card auth-card">
-        <h4>تسجيل الدخول عبر Gmail</h4>
-        <p>
-          أضفت لك واجهة جاهزة لزر <strong>المتابعة بواسطة Google</strong> داخل المتجر. التفعيل الحقيقي يحتاج
-          ربط Google OAuth أو Firebase Authentication مع دومين الموقع بعد رفعه على الاستضافة.
-        </p>
-        <button class="btn light" onclick="googleLoginDemo()">المتابعة بواسطة Google</button>
-        <div style="height:12px"></div>
-        <div class="note">
-          التفعيل الحقيقي يحتاج:
-          دومين أو رابط استضافة ثابت + إعدادات Google Cloud أو Firebase + Client ID مصرح له.
-        </div>
-      </div>
-      <div class="card auth-card">
-        <h4>ما الذي أصبح جاهزًا الآن؟</h4>
-        <p>
-          تم تجهيز الأزرار والواجهات داخل الموقع: زر فيسبوك، زر متابعة، زر إشعارات، زر خرائط، وقسم تسجيل الدخول.
-          وبعد رفع الموقع على استضافة حقيقية أقدر أرتب لك نسخة ثانية بربط حقيقي إذا وفرت بيانات الحسابات المطلوبة.
-        </p>
-        <div class="note">
-          ملاحظة: المتابعة الحقيقية والإشعارات داخل فيسبوك نفسها تتم من صفحة فيسبوك، أما الموقع فقط يوجّه الزبون بسرعة إليها.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container footer-grid">
-      <div>
-        <strong>براتشوcars</strong>
-        <div class="mini">عرض فقط وغير مسؤول عن أي اتفاق يتم خارج التواصل المباشر.</div>
-      </div>
-      <div class="actions">
-        <a class="btn primary" href="https://www.facebook.com/share/182Ph7u47X/?mibextid=wwXIfr" target="_blank" rel="noopener">صفحتنا على فيسبوك</a>
-        <a class="btn ok" href="https://maps.google.com/?q=Tripoli%20Libya" target="_blank" rel="noopener">موقعنا على الخريطة</a>
-      </div>
-    </div>
-  </footer>
-
-  <div class="toast" id="toast"></div>
-
-  <script>
-    function showToast(message){
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.display = 'block';
-      clearTimeout(window.toastTimer);
-      window.toastTimer = setTimeout(()=> toast.style.display = 'none', 3200);
-    }
-
-    function followPage(){
-      showToast('سيتم تحويلك إلى صفحة فيسبوك حتى تضغط متابعة من هناك.');
-      setTimeout(()=> {
-        window.open('https://www.facebook.com/share/182Ph7u47X/?mibextid=wwXIfr','_blank');
-      }, 500);
-    }
-
-    function googleLoginDemo(){
-      showToast('واجهة Google جاهزة، لكن التفعيل الحقيقي يحتاج ربط Google OAuth بعد الاستضافة.');
-    }
-
-    async function enableNotifications(){
-      if (!('Notification' in window)) {
-        showToast('هذا المتصفح لا يدعم الإشعارات.');
-        return;
-      }
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        new Notification('براتشوcars', {
-          body: 'تم تفعيل إشعارات المتصفح لهذا الموقع.',
-        });
-        showToast('تم تفعيل إشعارات المتصفح.');
-      } else {
-        showToast('لم يتم السماح بالإشعارات.');
-      }
-    }
-
-    function filterCars(){
-      const text = document.getElementById('searchInput').value.trim().toLowerCase();
-      const brand = document.getElementById('brandFilter').value;
-      const cards = document.querySelectorAll('.car-card');
-      cards.forEach(card => {
-        const name = card.dataset.name.toLowerCase();
-        const cBrand = card.dataset.brand;
-        const okText = !text || name.includes(text);
-        const okBrand = brand === 'all' || brand === cBrand;
-        card.style.display = okText && okBrand ? '' : 'none';
-      });
-    }
-  </script>
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
