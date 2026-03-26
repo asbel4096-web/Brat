@@ -10,15 +10,15 @@
 // };
 
 export const firebaseSettings = {
-  apiKey: "PUT_YOUR_API_KEY",
-  authDomain: "PUT_YOUR_AUTH_DOMAIN",
-  projectId: "PUT_YOUR_PROJECT_ID",
-  storageBucket: "PUT_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PUT_YOUR_SENDER_ID",
-  appId: "PUT_YOUR_APP_ID"
+  apiKey: "AIzaSyDsZF0lFIBHFbZEs0W456Mvvmng-JrvtBE",
+ 
+  authDomain: "bratsho-car.firebaseapp.com",
+  projectId: "bratsho-car",
+  storageBucket: "bratsho-car.firebasestorage.app",
+  messagingSenderId: "320104607081",
+  appId: "1:320104607081:web:9fcab5d13d76206e7921f8"
 };
 
-// ضع هنا بريد الأدمن الرئيسي
 export const adminEmails = [
-  "admin@example.com"
+  "bnzabena@gmail.com"
 ];
