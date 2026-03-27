@@ -257,7 +257,7 @@ async function tryFirebaseInit() {
     const approvedSnap = await getDocs(
       query(collection(db, 'listings'), where('status', '==', 'approved'))
     );
-    state.listings = approvedSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    state.listings = approvedSnap.docs.map(d => ({ ...d.data(), id: d.id }));
     renderListings();
   }
 
@@ -271,7 +271,7 @@ async function tryFirebaseInit() {
     const pendingSnap = await getDocs(
       query(collection(db, 'listings'), where('status', '==', 'pending'))
     );
-    state.pending = pendingSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    state.pending = pendingSnap.docs.map(d => ({ ...d.data(), id: d.id }));
     renderPending();
   }
 
