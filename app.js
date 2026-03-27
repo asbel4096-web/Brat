@@ -206,27 +206,29 @@ async function tryFirebaseInit(){
       if(state.isAdmin) await loadPending();
     });
 
-    pendingList.addEventListener('click', async e => {
-      const btn = e.target.closest('button[data-action]');
-      if(!btn || !state.isAdmin) return;
-      const id = btn.dataset.id;
-      const action = btn.dataset.action;
-      if(action === 'approve') {
-        await updateDoc(doc(db, 'listings', id), { status: 'approved' });
-        showToast('تمت الموافقة على الإعلان.');
-      } else {
-        await deleteDoc(doc(db, 'listings', id));
-        showToast('تم حذف الإعلان المرفوض.');
-      }
-      await loadListings();
-      await loadPending();
-    });
+pendingList.addEventListener('click', async e => {
+  try {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn || !state.isAdmin) return;
+
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
+
+    if (action === 'approve') {
+      await updateDoc(doc(db, 'listings', id), { status: 'approved' });
+      showToast('تمت الموافقة على الإعلان.');
+    } else {
+      await deleteDoc(doc(db, 'listings', id));
+      showToast('تم حذف الإعلان المرفوض.');
+    }
 
     await loadListings();
     await loadPending();
-  } catch(err){
+  } catch (err) {
     console.error(err);
-    showToast('حدث خطأ في تهيئة Firebase. راجع ملف الإعدادات أو القواعد.');
+    showToast('حدث خطأ في تهيئة القواعد أو Firebase.');
+  }
+});
     state.pending = [{id:'pending-demo', title:'طلب تجريبي', city:'طرابلس', description:'تعذر الاتصال بفirebase، فتم تشغيل الوضع التجريبي.'}];
     renderPending();
   }
