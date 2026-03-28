@@ -22,16 +22,16 @@ export function injectFrame(active='home'){
   top.innerHTML = `
     <div class="container topbar-inner">
       <div class="brand">
-        <div>
+        <div class="brand-copy">
           <h1 class="brand-title"><span>براتشو</span> كار</h1>
           <p class="brand-sub">سيارات، قطع غيار، ميكانيكي متنقل</p>
         </div>
         <div class="logo-badge">BC</div>
       </div>
       <div class="quick-actions">
-        <a class="soft-btn" href="settings.html">الإعدادات</a>
-        <a class="soft-btn" href="dashboard.html">حسابي</a>
-        <a class="primary-btn" href="add.html">أضف إعلان</a>
+        <a class="soft-btn header-btn" href="settings.html">الإعدادات</a>
+        <a class="soft-btn header-btn" href="dashboard.html">حسابي</a>
+        <a class="primary-btn header-btn" href="add.html">أضف إعلان</a>
       </div>
     </div>
   `;

@@ -1,5 +1,5 @@
 import { bootCommon } from './common.js';
-bootCommon('settings');
+bootCommon();
 document.getElementById('app').innerHTML = `
 <main class="page">
   <section class="page-head"><div class="container">
@@ -7,13 +7,13 @@ document.getElementById('app').innerHTML = `
     <p class="page-sub">الوضع، الدولة، العملة، وإعدادات الحساب.</p>
   </div></section>
   <section class="section"><div class="container">
-    <div class="list-card">
-      <div class="list-row"><span>الدولة</span><span>ليبيا</span></div>
-      <div class="list-row"><span>العملة</span><span>دينار</span></div>
-      <div class="list-row"><span>الوضع الليلي</span><button class="soft-btn" data-toggle-theme>تبديل</button></div>
-      <div class="list-row"><span>إعدادات الحساب</span><span>←</span></div>
-      <div class="list-row"><span>المساعدة</span><span>←</span></div>
-      <div class="list-row"><span>عن التطبيق</span><span>براتشو كار</span></div>
+    <div class="settings-card">
+      <div class="settings-row"><div class="settings-label">الدولة</div><div class="settings-value">ليبيا</div></div>
+      <div class="settings-row"><div class="settings-label">العملة</div><div class="settings-value">دينار</div></div>
+      <div class="settings-row"><div class="settings-label">الوضع الليلي</div><button class="soft-btn settings-action">تبديل</button></div>
+      <div class="settings-row"><div class="settings-label">إعدادات الحساب</div><div class="settings-value">←</div></div>
+      <div class="settings-row"><div class="settings-label">المساعدة</div><div class="settings-value">←</div></div>
+      <div class="settings-row"><div class="settings-label">عن التطبيق</div><div class="settings-value">براتشو كار</div></div>
     </div>
   </div></section>
 </main>`;
