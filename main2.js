@@ -384,11 +384,11 @@ async function tryFirebaseInit() {
   pendingList.addEventListener('click', async e => {
     try {
       const btn = e.target.closest('button[data-action]');
-      if (!btn || !state.isAdmin) return;
+if (!btn || !state.isAdmin) return;
+alert('admin=' + state.isAdmin + ' | user=' + (state.user?.email || 'null'));
 
-      const id = btn.dataset.id;
-      const action = btn.dataset.action;
-
+const id = btn.dataset.id;
+const action = btn.dataset.action;
       if (action === 'approve') {
         await updateDoc(doc(db, 'listings', id), { status: 'approved' });
         showToast('تمت الموافقة على الإعلان.');
