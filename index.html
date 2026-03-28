@@ -11,126 +11,152 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="logo-wrap">
-      <div class="logo-badge">BC</div>
-      <div>
-        <h1>براتشو <span>كار</span></h1>
-        <p>منصة إعلانات السيارات</p>
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-badge">BC</div>
+        <div>
+          <h1>براتشو كار</h1>
+          <p>سوق السيارات في ليبيا</p>
+        </div>
+      </a>
+      <div class="top-actions">
+        <button id="openAuthBtn" class="ghost-btn">دخول / تسجيل</button>
+        <button id="logoutBtn" class="ghost-btn hidden">تسجيل خروج</button>
+        <a href="dashboard.html" id="dashboardLink" class="outline-btn hidden">حسابي</a>
+        <a href="admin.html" id="adminLink" class="outline-btn hidden">لوحة الإدارة</a>
+        <button id="openAddBtn" class="btn">أضف إعلان</button>
       </div>
-    </div>
-    <div class="top-actions">
-      <button id="openAuthBtn" class="ghost-btn">دخول / تسجيل</button>
-      <button id="logoutBtn" class="ghost-btn hidden">تسجيل خروج</button>
-      <button id="openAddBtn" class="primary-btn">أضف إعلان</button>
     </div>
   </header>
 
   <section class="hero">
-    <div>
-      <span class="pill">نسخة Firebase متقدمة</span>
-      <h2>اعرض سيارتك وخلي الموافقة من الإدارة قبل النشر</h2>
-      <p>المستخدم يسجل، يضيف سيارته، وترسل تلقائيًا للمراجعة. بعد الموافقة تظهر في الموقع.</p>
-      <div class="hero-actions">
-        <button id="openAddHeroBtn" class="primary-btn">اعرض سيارتك الآن</button>
-        <button id="openAdminBtn" class="secondary-btn">لوحة الإدارة</button>
+    <div class="container hero-grid">
+      <div class="hero-main">
+        <span class="pill">منصة حقيقية | Firebase + صور متعددة</span>
+        <h2>اعرض سيارتك، راجعها الإدارة، وانشرها في منصة منظمة أفضل من السوق المفتوح للسيارات</h2>
+        <p>ابحث حسب المدينة والماركة والسنة، وافتح صفحة تفاصيل واضحة بكل المواصفات والصور والتواصل المباشر.</p>
+        <div class="hero-mini">
+          <span class="icon-label">بحث ذكي</span>
+          <span class="icon-label">إعلانات مميزة</span>
+          <span class="icon-label">واتساب واتصال</span>
+          <span class="icon-label">لوحة مستخدم</span>
+        </div>
+        <div class="search-row">
+          <input id="searchInput" type="text" placeholder="ابحث: سوناتا 2016، طرابلس، كيا...">
+          <select id="brandFilter">
+            <option value="">كل الماركات</option>
+            <option value="Hyundai">Hyundai</option>
+            <option value="Kia">Kia</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Genesis">Genesis</option>
+            <option value="Mercedes">Mercedes</option>
+          </select>
+          <select id="cityFilter">
+            <option value="">كل المدن</option>
+            <option value="طرابلس">طرابلس</option>
+            <option value="مصراتة">مصراتة</option>
+            <option value="بنغازي">بنغازي</option>
+            <option value="الزاوية">الزاوية</option>
+          </select>
+          <select id="sortFilter">
+            <option value="newest">الأحدث</option>
+            <option value="priceAsc">الأقل سعرًا</option>
+            <option value="priceDesc">الأعلى سعرًا</option>
+          </select>
+          <button id="applyFilterBtn" class="btn">بحث</button>
+        </div>
       </div>
-    </div>
-    <div class="hero-card">
-      <div class="hero-stat"><strong id="approvedCount">0</strong><span>إعلانات منشورة</span></div>
-      <div class="hero-stat"><strong id="pendingCount">0</strong><span>قيد المراجعة</span></div>
-      <div class="hero-stat"><strong id="userState">زائر</strong><span>حالة الحساب</span></div>
+      <aside class="hero-side">
+        <div class="stat-grid">
+          <div class="stat"><strong id="approvedCount">0</strong><span>إعلانات منشورة</span></div>
+          <div class="stat"><strong id="pendingCount">0</strong><span>قيد المراجعة</span></div>
+          <div class="stat"><strong id="userState">زائر</strong><span>حالة الحساب</span></div>
+          <div class="stat"><strong id="featuredCount">0</strong><span>إعلانات مميزة</span></div>
+        </div>
+        <div class="quick-links">
+          <a href="#featuredSection">الإعلانات المميزة</a>
+          <a href="#latestSection">أحدث الإعلانات</a>
+          <a href="dashboard.html">حسابي</a>
+          <a href="admin.html">الإدارة</a>
+        </div>
+      </aside>
     </div>
   </section>
 
   <main class="container">
-    <section class="filters card">
-      <input id="searchInput" type="text" placeholder="ابحث عن سيارة، مدينة، موديل..." />
-      <select id="brandFilter">
-        <option value="">كل الماركات</option>
-        <option>Hyundai</option>
-        <option>Kia</option>
-        <option>Toyota</option>
-        <option>Genesis</option>
-        <option>Mercedes</option>
-      </select>
-      <select id="cityFilter">
-        <option value="">كل المدن</option>
-        <option>طرابلس</option>
-        <option>مصراتة</option>
-        <option>بنغازي</option>
-        <option>الزاوية</option>
-      </select>
-      <button id="applyFilterBtn" class="secondary-btn">بحث</button>
+    <section id="featuredSection">
+      <div class="section-head">
+        <div>
+          <h3>الإعلانات المميزة</h3>
+          <p>عروض مختارة تظهر في الواجهة أولًا</p>
+        </div>
+      </div>
+      <section id="featuredGrid" class="listings-grid"></section>
     </section>
 
-    <section class="section-head">
-      <h3>الإعلانات المنشورة</h3>
-      <p>الموافق عليها فقط تظهر للزوار</p>
-    </section>
-
-    <section id="listingsGrid" class="listings-grid"></section>
-
-    <section class="section-head">
-      <h3>كيف تشتغل المنصة</h3>
-    </section>
-    <section class="steps-grid">
-      <div class="step card"><strong>1</strong><p>المستخدم يسجل حساب</p></div>
-      <div class="step card"><strong>2</strong><p>يضيف بيانات السيارة والصور</p></div>
-      <div class="step card"><strong>3</strong><p>الإعلان يدخل حالة مراجعة</p></div>
-      <div class="step card"><strong>4</strong><p>الإدارة توافق أو ترفض</p></div>
+    <section id="latestSection">
+      <div class="section-head">
+        <div>
+          <h3>أحدث الإعلانات</h3>
+          <p>السيارات المنشورة والموافق عليها فقط</p>
+        </div>
+      </div>
+      <section id="listingsGrid" class="listings-grid"></section>
     </section>
   </main>
 
   <div id="authModal" class="modal hidden">
     <div class="modal-box">
-      <button class="close-btn" data-close="authModal">×</button>
-      <h3>تسجيل الدخول / إنشاء حساب</h3>
+      <div class="modal-head">
+        <h3>دخول / إنشاء حساب</h3>
+        <button class="close-btn" data-close="authModal">×</button>
+      </div>
       <div class="tabs">
         <button class="tab active" data-auth-tab="login">دخول</button>
         <button class="tab" data-auth-tab="register">حساب جديد</button>
       </div>
-      <div id="loginFormWrap" class="auth-pane">
-        <input id="loginEmail" type="email" placeholder="البريد الإلكتروني" />
-        <input id="loginPassword" type="password" placeholder="كلمة المرور" />
-        <button id="loginBtn" class="primary-btn full">دخول</button>
+      <div id="loginFormWrap">
+        <input id="loginEmail" class="field" type="email" placeholder="البريد الإلكتروني">
+        <input id="loginPassword" class="field" type="password" placeholder="كلمة المرور" style="margin-top:12px">
+        <button id="loginBtn" class="btn" style="width:100%;margin-top:14px">دخول</button>
       </div>
-      <div id="registerFormWrap" class="auth-pane hidden">
-        <input id="registerName" type="text" placeholder="الاسم الكامل" />
-        <input id="registerEmail" type="email" placeholder="البريد الإلكتروني" />
-        <input id="registerPassword" type="password" placeholder="كلمة المرور" />
-        <button id="registerBtn" class="primary-btn full">إنشاء حساب</button>
+      <div id="registerFormWrap" class="hidden">
+        <input id="registerName" class="field" type="text" placeholder="الاسم الكامل">
+        <input id="registerEmail" class="field" type="email" placeholder="البريد الإلكتروني" style="margin-top:12px">
+        <input id="registerPassword" class="field" type="password" placeholder="كلمة المرور" style="margin-top:12px">
+        <button id="registerBtn" class="btn" style="width:100%;margin-top:14px">إنشاء حساب</button>
       </div>
-      <p class="hint">يمكنك لاحقًا تفعيل Google Sign-In بسهولة داخل Firebase.</p>
     </div>
   </div>
 
   <div id="addModal" class="modal hidden">
-    <div class="modal-box large">
-      <button class="close-btn" data-close="addModal">×</button>
-      <h3>إضافة إعلان سيارة</h3>
-      <div class="form-grid">
-        <input id="title" type="text" placeholder="عنوان الإعلان" />
-        <input id="brand" type="text" placeholder="الماركة" />
-        <input id="model" type="text" placeholder="الموديل" />
-        <input id="year" type="number" placeholder="السنة" />
-        <input id="price" type="number" placeholder="السعر" />
-        <input id="mileage" type="text" placeholder="الممشى" />
-        <input id="city" type="text" placeholder="المدينة" />
-        <input id="phone" type="text" placeholder="رقم الهاتف" />
-        <textarea id="description" placeholder="وصف السيارة"></textarea>
-        <input id="imageFile" type="file" accept="image/*" />
+    <div class="modal-box modal-wide">
+      <div class="modal-head">
+        <h3>إضافة إعلان سيارة</h3>
+        <button class="close-btn" data-close="addModal">×</button>
       </div>
-      <button id="submitListingBtn" class="primary-btn full">إرسال للمراجعة</button>
-      <p class="hint">الإعلان لن يظهر للزوار إلا بعد موافقة الإدارة.</p>
-    </div>
-  </div>
-
-  <div id="adminModal" class="modal hidden">
-    <div class="modal-box large admin-box">
-      <button class="close-btn" data-close="adminModal">×</button>
-      <h3>لوحة الإدارة</h3>
-      <p class="hint">تظهر لك الإعلانات المعلقة. هذه اللوحة تتطلب أن يكون البريد مسجل كمسؤول داخل firebase-config.js</p>
-      <div id="pendingList" class="admin-list"></div>
+      <div class="form-grid">
+        <input id="title" class="field" type="text" placeholder="عنوان الإعلان">
+        <input id="price" class="field" type="number" placeholder="السعر">
+        <input id="brand" class="field" type="text" placeholder="الماركة">
+        <input id="model" class="field" type="text" placeholder="الموديل">
+        <input id="year" class="field" type="number" placeholder="السنة">
+        <input id="mileage" class="field" type="text" placeholder="الممشى">
+        <input id="city" class="field" type="text" placeholder="المدينة">
+        <input id="phone" class="field" type="text" placeholder="رقم الهاتف">
+        <input id="transmission" class="field full" type="text" placeholder="ناقل الحركة: أوتوماتيك / عادي">
+        <input id="fuel" class="field" type="text" placeholder="الوقود">
+        <input id="color" class="field" type="text" placeholder="اللون">
+        <textarea id="description" class="textarea full" placeholder="وصف السيارة"></textarea>
+        <div class="full upload-wrap">
+          <strong>صور السيارة</strong>
+          <p class="hint">ارفع حتى 8 صور. أول صورة ستكون الصورة الرئيسية.</p>
+          <input id="imageFile" class="field" type="file" accept="image/*" multiple>
+          <div id="previewGrid" class="preview-grid"></div>
+        </div>
+      </div>
+      <button id="submitListingBtn" class="btn" style="width:100%;margin-top:16px">إرسال للمراجعة</button>
+      <p class="hint">لن يظهر الإعلان إلا بعد موافقة الإدارة.</p>
     </div>
   </div>
 
