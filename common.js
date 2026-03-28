@@ -46,17 +46,21 @@ export function injectFrame(active='home'){
   document.body.prepend(top);
 
   const nav = document.createElement('nav');
-  nav.className = 'bottom-nav';
-  nav.innerHTML = `
-    <ul>
-      <li><a href="index.html" class="${active==='home'?'active':''}">🏠<span>الرئيسية</span></a></li>
-      <li><a href="cars.html" class="${active==='cars'?'active':''}">🚘<span>السيارات</span></a></li>
-      <li><a href="parts.html" class="${active==='parts'?'active':''}">🧩<span>القطع</span></a></li>
-      <li><a href="services.html" class="${active==='services'?'active':''}">🛠️<span>الخدمات</span></a></li>
-      <li><a href="settings.html" class="${active==='settings'?'active':''}">⚙️<span>الإعدادات</span></a></li>
-    </ul>`;
-  document.body.append(nav);
-}
+nav.className = 'bottom-nav';
+nav.innerHTML = `
+  <ul class="bottom-nav-grid">
+    <li><a href="index.html" class="${active==='home'?'active':''}">🏠<span>الرئيسية</span></a></li>
+    <li><a href="messages.html" class="${active==='messages'?'active':''}">💬<span>دردشاتي</span></a></li>
+    <li class="nav-center">
+      <a href="add.html" class="nav-add ${active==='add'?'active':''}">
+        <span class="nav-add-circle">＋</span>
+        <span>أضف إعلان</span>
+      </a>
+    </li>
+    <li><a href="my-ads.html" class="${active==='myads'?'active':''}">🧾<span>إعلاناتي</span></a></li>
+    <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">👤<span>حسابي</span></a></li>
+  </ul>`;
+document.body.append(nav);
 
 export function layoutStart(title, sub=''){
   return `<main class="page"><section class="section"><div class="container"><h2 class="page-title">${title}</h2>${sub?`<p class="page-sub">${sub}</p>`:''}</div></section>`;
