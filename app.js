@@ -1,3 +1,7 @@
+عدّلت لك الجزء المطلوب. عندك الآن ناقص فقط تضيف storage وترجع كود رفع الصورة داخل submitListingBtn.
+
+استبدل ملف app.js بالمحتوى هذا:
+
 import { firebaseSettings, adminEmails } from './firebase-config.js';
 
 const demoListings = [
@@ -241,16 +245,19 @@ async function tryFirebaseInit() {
   const [
     { initializeApp },
     { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile },
-    { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where, updateDoc, doc, deleteDoc }
+    { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where, updateDoc, doc, deleteDoc },
+    { getStorage, ref, uploadBytes, getDownloadURL }
   ] = await Promise.all([
     import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),
     import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'),
-    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js')
   ]);
 
   const app = initializeApp(firebaseSettings);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const storage = getStorage(app);
   state.firebaseEnabled = true;
 
   async function loadListings() {
@@ -335,7 +342,14 @@ async function tryFirebaseInit() {
       const data = getFormData();
       if (!validateForm(data)) return showToast('أكمل الحقول المطلوبة.');
 
+      const file = document.getElementById('imageFile').files[0];
       let imageUrl = '';
+
+      if (file) {
+        const fileRef = ref(storage, `cars/${Date.now()}-${file.name}`);
+        await uploadBytes(fileRef, file);
+        imageUrl = await getDownloadURL(fileRef);
+      }
 
       await addDoc(collection(db, 'listings'), {
         ...data,
@@ -389,3 +403,5 @@ tryFirebaseInit().catch(err => {
   initLocalHandlers();
   showToast('تم تشغيل الوضع التجريبي.');
 });
+
+اصةخته كله قم بمراجعة كاملة بسرعة արված to=analysis python.exec code="""print('noop')"""
