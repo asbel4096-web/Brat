@@ -1,7 +1,23 @@
-import {bootCommon, injectFrame, seedListings, listingCard} from './common.js';
-bootCommon();
-const page=document.body.dataset.page||'cars';
-injectFrame(page);
-const map={cars:['car','السيارات','سيارات للبيع ومركبات'],parts:['part','قطع الغيار','قطع سيارات وكماليات'],services:['service','الميكانيكي المتنقل','خدمات متنقلة وفنيون']};
-const [type,title,sub]=map[page];
-document.getElementById('app').innerHTML=`<section class="page"><div class="container"><div class="section-head"><div><h2>${title}</h2><p>${sub}</p></div><a class="btn" href="add.html">أضف إعلان</a></div><div class="cards">${seedListings.filter(x=>x.type===type).map(listingCard).join('')}</div></div></section>`;
+import { bootCommon, seedListings, adCard } from './common.js';
+const page = document.body.dataset.page;
+bootCommon(page);
+
+const map = {cars:'car', parts:'part', services:'service'};
+const titleMap = {cars:'السيارات', parts:'قطع الغيار', services:'الميكانيكي المتنقل'};
+const subMap = {
+  cars:'سيارات للبيع، وارد حديث، وعروض مميزة.',
+  parts:'محركات، كمبيو، بطاريات، جنوط، وأبواب.',
+  services:'خدمات فحص وصيانة متنقلة داخل المدن.'
+};
+
+const items = seedListings.filter(x=>x.type===map[page]);
+document.getElementById('app').innerHTML = `
+<main class="page">
+  <section class="section">
+    <div class="container">
+      <h2 class="page-title">${titleMap[page]}</h2>
+      <p class="page-sub">${subMap[page]}</p>
+      <div class="ads-grid" style="margin-top:18px">${items.map(adCard).join('')}</div>
+    </div>
+  </section>
+</main>`;

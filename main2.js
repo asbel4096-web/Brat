@@ -1,14 +1,78 @@
-import {bootCommon, injectFrame, seedListings, listingCard} from './common.js';
-bootCommon(); injectFrame('home');
-const app=document.getElementById('app');
-const cars=seedListings.filter(x=>x.type==='car');
-const parts=seedListings.filter(x=>x.type==='part');
-const services=seedListings.filter(x=>x.type==='service');
-app.innerHTML=`
-<section class="hero"><div class="container"><div class="hero-card"><div class="pill-row"><span class="pill">سيارات</span><span class="pill">قطع غيار</span><span class="pill">ميكانيكي متنقل</span><span class="pill">وضع ليلي/نهاري</span></div><h2 class="hero-headline">منصة سيارات وقطع وخدمات متنقلة في ليبيا</h2><p class="hero-sub">ابحث بسرعة، أضف إعلانك في دقائق، وتواصل مباشرة مع البائع أو الفني.</p><div class="pill-row"><a class="ghost-btn" href="cars.html">🚗 السيارات</a><a class="ghost-btn" href="parts.html">🧩 قطع الغيار</a><a class="ghost-btn" href="services.html">🛠️ الميكانيكي المتنقل</a><a class="ghost-btn" href="settings.html">🌙 الإعدادات</a></div><div class="search-card"><div class="search-grid"><input placeholder="ابحث: سوناتا 2016، كمبيو أوبتيما، ميكانيكي متنقل..."><select><option>كل الأقسام</option><option>السيارات</option><option>قطع الغيار</option><option>الخدمات</option></select><select><option>كل المدن</option><option>طرابلس</option><option>مصراتة</option><option>بنغازي</option></select><button class="btn">بحث</button></div></div></div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><h2>الأقسام الرئيسية</h2><p>منصة متخصصة بدل السوق العام</p></div></div><div class="category-grid"><a class="category-card" href="cars.html"><div class="badge">🚗 القسم 1</div><h3>السيارات</h3><p>سيارات للبيع، سيدان، SUV، عائلية، اقتصادية، وارد حديث، ومركبات مميزة.</p></a><a class="category-card" href="parts.html"><div class="badge">🧩 القسم 2</div><h3>قطع غيار السيارات</h3><p>محركات، كمبيو، أبواب، فنارات، جنوط، بطاريات، شاشات، وكماليات.</p></a><a class="category-card" href="services.html"><div class="badge">🛠️ القسم 3</div><h3>الميكانيكي المتنقل</h3><p>فحص، كهرباء، تغيير زيوت، إنقاذ سريع، بطاريات، وخدمة عند الزبون.</p></a></div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><h2>تصفح سريع</h2><p>واجهة مثل التطبيقات لكن مخصصة للسيارات</p></div></div><div class="mini-grid"><div class="mini-card">🚘<h4>سيدان</h4></div><div class="mini-card">🚙<h4>SUV</h4></div><div class="mini-card">⚙️<h4>محركات</h4></div><div class="mini-card">🔋<h4>بطاريات</h4></div><div class="mini-card">💡<h4>فنارات</h4></div><div class="mini-card">🛞<h4>جنوط</h4></div><div class="mini-card">🔧<h4>فحص كمبيوتر</h4></div><div class="mini-card">🚨<h4>إنقاذ سريع</h4></div></div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><h2>إعلانات مميزة</h2><p>أفضل السيارات والقطع والخدمات</p></div><a class="ghost-btn" href="cars.html">المزيد ←</a></div><div class="cards">${seedListings.filter(x=>x.featured).map(listingCard).join('')}</div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><h2>أحدث السيارات</h2><p>سيارات جاهزة للعرض والبيع</p></div></div><div class="cards">${cars.map(listingCard).join('')}</div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><h2>أحدث القطع والخدمات</h2><p>كل ما يخص السيارة في مكان واحد</p></div></div><div class="cards">${[...parts,...services].map(listingCard).join('')}</div></div></section>
-<section class="section"><div class="container"><div class="info-strip"><div class="stat"><strong>3</strong><span>أقسام رئيسية</span></div><div class="stat"><strong>24/7</strong><span>تصفح وخدمات</span></div><div class="stat"><strong>صور</strong><span>متعددة لكل إعلان</span></div><div class="stat"><strong>واتساب</strong><span>تواصل مباشر</span></div></div></div></section>`;
+import { bootCommon, seedListings, adCard } from './common.js';
+bootCommon('home');
+
+const cars = seedListings.filter(x=>x.type==='car');
+const parts = seedListings.filter(x=>x.type==='part');
+const services = seedListings.filter(x=>x.type==='service');
+
+document.getElementById('app').innerHTML = `
+<main class="page">
+  <section class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="hero-badges">
+          <span class="hero-badge">سيارات</span>
+          <span class="hero-badge">قطع غيار</span>
+          <span class="hero-badge">ميكانيكي متنقل</span>
+          <span class="hero-badge"><button data-toggle-theme style="all:unset;cursor:pointer">وضع ليلي/نهاري</button></span>
+        </div>
+        <div class="hero-grid">
+          <div>
+            <h2>منصة سيارات وقطع وخدمات متنقلة في ليبيا</h2>
+            <p>ابحث بسرعة، أضف إعلانك في دقائق، وتواصل مباشرة مع البائع أو الفني.</p>
+          </div>
+          <div class="search-card">
+            <div class="search-row">
+              <input class="ghost-input" placeholder="ابحث: سوناتا 2016 / كمبيو أوبتيما / فحص كمبيوتر">
+              <select><option>كل الأقسام</option><option>سيارات</option><option>قطع</option><option>خدمات</option></select>
+              <select><option>كل المدن</option><option>طرابلس</option><option>مصراتة</option><option>الزاوية</option></select>
+              <button class="primary-btn full">بحث</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><h3>الأقسام الرئيسية</h3><p>منصة متخصصة بدل السوق العام</p></div>
+      </div>
+      <div class="category-grid">
+        <div class="section-card"><div class="mini">🚘 القسم 1</div><h4>السيارات</h4><p>سيارات للبيع، سيدان، SUV، عائلية، اقتصادية، وارد حديث، ومركبات مميزة.</p></div>
+        <div class="section-card"><div class="mini">🧩 القسم 2</div><h4>قطع غيار السيارات</h4><p>محركات، كمبيو، أبواب، فنارات، جنوط، بطاريات، شاشات، وكماليات.</p></div>
+        <div class="section-card"><div class="mini">🛠️ القسم 3</div><h4>الميكانيكي المتنقل</h4><p>فحص، كهرباء، تغيير زيوت، إنقاذ سريع، بطاريات، وخدمة عند الزبون.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><div><h3>تصفح سريع</h3><p>واجهة مثل التطبيقات لكن مخصصة للسيارات</p></div></div>
+      <div class="quick-grid">
+        <div class="chip">🚗 سيدان</div>
+        <div class="chip">🚙 SUV</div>
+        <div class="chip">⚙️ محركات</div>
+        <div class="chip">🪫 بطاريات</div>
+        <div class="chip">💡 فنارات</div>
+        <div class="chip">🛞 جنوط</div>
+        <div class="chip">🔧 كهرباء</div>
+        <div class="chip">🚨 إنقاذ سريع</div>
+        <div class="chip">📟 فحص كمبيوتر</div>
+        <div class="chip">🇰🇷 وارد حديث</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><div><h3>إعلانات مميزة</h3><p>أفضل السيارات والقطع والخدمات</p></div><a class="section-link" href="cars.html">المزيد ←</a></div>
+      <div class="ads-grid">
+        ${cars.slice(0,1).map(adCard).join('')}
+        ${parts.slice(0,1).map(adCard).join('')}
+        ${services.slice(0,1).map(adCard).join('')}
+      </div>
+    </div>
+  </section>
+</main>`;

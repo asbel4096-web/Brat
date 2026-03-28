@@ -1,25 +1,24 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>الإعدادات | براتشو كار</title><link rel="stylesheet" href="styles.css"></head><body><div id="app"></div><script type="module">import {initTheme,setTheme,shellTop,finishShell} from './common-luxury.js'; initTheme();document.getElementById('app').innerHTML=shellTop('الإعدادات')+`
-<section class="section card setting-box"><div class="lang-switch"><div class="lang-btn">English</div><div class="lang-btn active">العربية</div></div></section>
-<section class="section card setting-box list-card">
-  <div class="list-row"><div><div class="list-main">الدولة</div><div class="list-sub">ليبيا</div></div><div class="arrow">🏳️</div></div>
-  <div class="list-row"><div><div class="list-main">العملة</div><div class="list-sub">دينار</div></div><div class="arrow">💱</div></div>
-</section>
-<section class="section card setting-box">
-  <div class="switch-row"><div><div class="list-main">تفعيل بصمة الإصبع</div></div><div class="toggle" id="finger"></div></div>
-  <div class="switch-row"><div><div class="list-main">الوضع الليلي</div></div><div class="toggle ${document.body.classList.contains('theme-dark')?'active':''}" id="themeToggle"></div></div>
-</section>
-<section class="section card list-card">
-  <a class="list-row" href="#"><div class="list-main">المستخدمين المحظورين</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">إعدادات التنبيهات</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">إعدادات الحساب</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">إدارة الأجهزة</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">تغيير كلمة المرور</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">اتفاقية الاستخدام</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">سياسة الخصوصية</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">المساعدة</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">عن التطبيق</div><div class="arrow">‹</div></a>
-  <a class="list-row" href="#"><div class="list-main">تسجيل الخروج</div><div class="arrow">↩</div></a>
-</section>
-`+finishShell('account');
-const tg=document.getElementById('themeToggle'); tg.onclick=()=>{const dark=!document.body.classList.contains('theme-dark'); setTheme(dark?'dark':'light'); tg.classList.toggle('active',dark);};
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعدادات</title><link rel="stylesheet" href="./styles.css"></head>
+<body><div id="app"></div>
+<script type="module">
+import { bootCommon } from './common.js';
+bootCommon('settings');
+document.getElementById('app').innerHTML = `
+<main class="page">
+  <section class="section"><div class="container">
+    <h2 class="page-title">الإعدادات</h2>
+    <p class="page-sub">واجهة نظيفة مع دعم الوضع الليلي والنهاري.</p>
+    <div class="list-card" style="margin-top:20px">
+      <div class="list-row"><span>الدولة</span><span>ليبيا 🇱🇾</span></div>
+      <div class="list-row"><span>العملة</span><span>دينار</span></div>
+      <div class="list-row"><span>الوضع</span><button class="soft-btn" data-toggle-theme>تبديل الوضع</button></div>
+      <div class="list-row"><span>إعدادات الحساب</span><span>←</span></div>
+      <div class="list-row"><span>المساعدة</span><span>←</span></div>
+      <div class="list-row"><span>عن التطبيق</span><span>براتشو كار 1.0</span></div>
+    </div>
+  </div></section>
+</main>`;
 </script></body></html>
