@@ -1,4 +1,101 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>أضف إعلان</title><link rel="stylesheet" href="styles.css"></head><body><main id="app" class="page"></main><script type="module">
-import {bootCommon, injectFrame} from './common.js'; bootCommon(); injectFrame();
-document.getElementById('app').innerHTML=`<div class="container"><div class="section-head"><div><h2>أضف إعلان</h2><p>سيارة أو قطعة غيار أو خدمة ميكانيكي متنقل</p></div></div><div class="panel"><div class="form-grid"><select><option>اختر القسم</option><option>سيارة</option><option>قطعة غيار</option><option>خدمة ميكانيكي متنقل</option></select><input placeholder="عنوان الإعلان"><input placeholder="الماركة أو الخدمة"><input placeholder="الموديل / نوع القطعة"><input placeholder="السنة"><input placeholder="السعر"><input placeholder="المدينة"><input placeholder="رقم الهاتف"><input placeholder="واتساب"><textarea class="full" rows="5" placeholder="الوصف"></textarea><div class="full upload-box">ارفع صورًا متعددة للإعلان</div><button class="btn full">إرسال للمراجعة</button></div></div></div>`;
-</script></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إضافة إعلان | براتشو كار</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="add">
+  <div id="app"></div>
+
+  <script type="module">
+    import { bootCommon, injectFrame } from './common.js';
+
+    bootCommon();
+    injectFrame('add');
+
+    document.getElementById('app').innerHTML = `
+      <section class="page-section">
+        <div class="container narrow">
+          <h1>أضف إعلانك</h1>
+          <p class="muted">أضف سيارة أو قطعة غيار أو خدمة ميكانيكي متنقل.</p>
+
+          <form id="listingForm" class="card form-card">
+            <label for="category">نوع الإعلان</label>
+            <select id="category" required>
+              <option value="">اختر النوع</option>
+              <option value="car">سيارة</option>
+              <option value="part">قطعة غيار</option>
+              <option value="service">خدمة ميكانيكي متنقل</option>
+            </select>
+
+            <label for="title">عنوان الإعلان</label>
+            <input id="title" type="text" placeholder="مثال: كيا K5 2014 أو محرك سوناتا أو ميكانيكي متنقل" required />
+
+            <label for="brand">الماركة</label>
+            <input id="brand" type="text" placeholder="مثال: Kia / Hyundai / Toyota" />
+
+            <label for="model">الموديل</label>
+            <input id="model" type="text" placeholder="مثال: K5 / Sonata / Camry" />
+
+            <label for="year">السنة</label>
+            <input id="year" type="number" placeholder="مثال: 2016" />
+
+            <label for="price">السعر</label>
+            <input id="price" type="number" placeholder="مثال: 45000" required />
+
+            <label for="mileage">المسافة / الحالة</label>
+            <input id="mileage" type="text" placeholder="مثال: 120,000 كم أو جديدة" />
+
+            <label for="city">المدينة</label>
+            <input id="city" type="text" placeholder="مثال: طرابلس" required />
+
+            <label for="phone">رقم الهاتف</label>
+            <input id="phone" type="text" placeholder="مثال: 0912345678" required />
+
+            <label for="description">الوصف</label>
+            <textarea id="description" rows="5" placeholder="اكتب تفاصيل الإعلان هنا"></textarea>
+
+            <label for="imageFile">الصورة</label>
+            <input id="imageFile" type="file" accept="image/*" />
+
+            <button type="submit" class="primary-btn full">إرسال الإعلان</button>
+          </form>
+
+          <div id="formMsg" class="hint" style="margin-top:12px;"></div>
+        </div>
+      </section>
+    `;
+
+    const form = document.getElementById('listingForm');
+    const msg = document.getElementById('formMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        category: document.getElementById('category').value.trim(),
+        title: document.getElementById('title').value.trim(),
+        brand: document.getElementById('brand').value.trim(),
+        model: document.getElementById('model').value.trim(),
+        year: document.getElementById('year').value.trim(),
+        price: document.getElementById('price').value.trim(),
+        mileage: document.getElementById('mileage').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        status: 'pending'
+      };
+
+      if (!data.category || !data.title || !data.price || !data.city || !data.phone) {
+        msg.textContent = 'أكمل الحقول المطلوبة.';
+        return;
+      }
+
+      msg.textContent = 'تم تجهيز النموذج. خطوة Firebase التالية ستكون ربط الحفظ الحقيقي.';
+      console.log(data);
+    });
+  </script>
+</body>
+</html>
