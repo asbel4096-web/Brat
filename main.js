@@ -400,4 +400,9 @@ tryFirebaseInit().catch(err => {
   showToast('تم تشغيل الوضع التجريبي.');
 });
 
-اصةخته كله قم بمراجعة كاملة بسرعة արված to=analysis python.exec code="""print('noop')"""
+bindStaticUI();
+tryFirebaseInit().catch(err => {
+  console.error(err);
+  initLocalHandlers();
+  showToast('تم تشغيل الوضع التجريبي.');
+});
