@@ -1,39 +1,16 @@
 export const seedListings = [
-  {
-    id:'1',
-    type:'car',
-    title:'هيونداي سوناتا 2016',
-    price:37772,
-    city:'طرابلس',
-    year:2016,
-    mileage:'95,000 كم',
-    desc:'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.',
-    image:'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
-    images:[
-      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=80'
-    ],
-    specs:{
-      body:'سيدان',
-      fuel:'بنزين',
-      gear:'أوتوماتيك',
-      engine:'2.0',
-      import:'استيراد كوري',
-      condition:'ممتازة'
-    },
-    seller:{
-      name:'براتشو كار',
-      phone:'0912345678',
-      whatsapp:'0912345678',
-      joined:'عضو منذ 2024'
-    }
-  }
+  {id:'1',type:'car',title:'هيونداي سوناتا 2016',price:37772,city:'طرابلس',year:2016,mileage:'95,000 كم',status:'approved'},
+  {id:'2',type:'part',title:'كمبيو كيا أوبتيما 2014',price:4500,city:'مصراتة',year:2014,mileage:'قطعة مستعملة',status:'pending'},
+  {id:'3',type:'service',title:'ميكانيكي متنقل - فحص كمبيوتر',price:120,city:'طرابلس',year:2026,mileage:'خدمة متنقلة',status:'approved'}
+];
+
+export const seedChats = [
+  {name:'محمد', last:'السلام عليكم، السيارة موجودة؟', time:'منذ 5 دقائق', unread:2},
+  {name:'أحمد', last:'نبي تفاصيل أكثر على القطعة', time:'منذ 20 دقيقة', unread:0},
+  {name:'سالم', last:'ممكن رقم الواتساب؟', time:'منذ ساعة', unread:1}
 ];
 
 export function bootCommon(active='home'){
-  const dark = localStorage.getItem('bratsho-theme') === 'dark';
-  document.body.classList.toggle('dark', dark);
   injectFrame(active);
 }
 
@@ -72,4 +49,8 @@ export function injectFrame(active='home'){
     </ul>
   `;
   document.body.append(nav);
+}
+
+export function formatPrice(n){
+  return Number(n).toLocaleString('en-US') + ' د.ل';
 }
