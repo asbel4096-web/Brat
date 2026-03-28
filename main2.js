@@ -23,22 +23,34 @@ document.getElementById('app').innerHTML = `
             <p>ابحث بسرعة، أضف إعلانك في دقائق، وتواصل مباشرة مع البائع أو الفني.</p>
           </div>
 
-          <div class="search-panel">
-            <div class="search-row">
-              <input placeholder="ابحث: سوناتا 2016 / كمبيو أوبتيما / فحص كمبيوتر">
-              <select>
-                <option>كل الأقسام</option>
-                <option>سيارات</option>
-                <option>قطع</option>
-                <option>خدمات</option>
-              </select>
-              <select>
-                <option>كل المدن</option>
-                <option>طرابلس</option>
-                <option>مصراتة</option>
-                <option>الزاوية</option>
-              </select>
-              <button class="primary-btn full">بحث</button>
+          <div class="search-panel search-panel-lux">
+            <div class="search-head">
+              <strong>بحث سريع</strong>
+              <span>فلترة حسب القسم والمدينة</span>
+            </div>
+
+            <div class="search-form-lux">
+              <div class="search-input-wrap">
+                <input placeholder="ابحث: سوناتا 2016 / كمبيو أوبتيما / فحص كمبيوتر">
+              </div>
+
+              <div class="search-filters-row">
+                <select>
+                  <option>كل الأقسام</option>
+                  <option>سيارات</option>
+                  <option>قطع</option>
+                  <option>خدمات</option>
+                </select>
+
+                <select>
+                  <option>كل المدن</option>
+                  <option>طرابلس</option>
+                  <option>مصراتة</option>
+                  <option>الزاوية</option>
+                </select>
+
+                <button class="primary-btn search-submit-btn">بحث</button>
+              </div>
             </div>
           </div>
         </div>

@@ -58,28 +58,24 @@ export function injectFrame(active='home'){
           <span>الرئيسية</span>
         </a>
       </li>
-
       <li>
         <a href="messages.html" class="${active==='messages' ? 'active' : ''}">
           <span class="nav-icon">◔</span>
           <span>دردشاتي</span>
         </a>
       </li>
-
       <li class="nav-center">
         <a href="add.html" class="nav-add ${active==='add' ? 'active' : ''}">
           <span class="nav-add-circle">+</span>
           <span>أضف إعلان</span>
         </a>
       </li>
-
       <li>
         <a href="my-ads.html" class="${active==='myads' ? 'active' : ''}">
           <span class="nav-icon">▤</span>
           <span>إعلاناتي</span>
         </a>
       </li>
-
       <li>
         <a href="dashboard.html" class="${active==='dashboard' ? 'active' : ''}">
           <span class="nav-icon">◉</span>
@@ -93,7 +89,6 @@ export function injectFrame(active='home'){
 
 export function adCard(item){
   const badge = item.type === 'car' ? 'سيارة' : item.type === 'part' ? 'قطعة غيار' : 'خدمة';
-
   return `
     <article class="ad-card">
       <div class="ad-image" style="background-image:url('${item.image}')"></div>
