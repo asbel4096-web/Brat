@@ -35,17 +35,6 @@ export function bootCommon(active='home'){
   const dark = localStorage.getItem('bratsho-theme') === 'dark';
   document.body.classList.toggle('dark', dark);
   injectFrame(active);
-  bindThemeSwitch();
-}
-
-export function bindThemeSwitch(){
-  document.addEventListener('click', e => {
-    const btn = e.target.closest('[data-toggle-theme]');
-    if(!btn) return;
-    const isDark = !document.body.classList.contains('dark');
-    document.body.classList.toggle('dark', isDark);
-    localStorage.setItem('bratsho-theme', isDark ? 'dark' : 'light');
-  });
 }
 
 export function injectFrame(active='home'){

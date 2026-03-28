@@ -4,48 +4,38 @@ bootCommon('home');
 const item = seedListings[0];
 
 document.getElementById('app').innerHTML = `
-<main class="page">
+<main class="page details-mobile-page">
   <section class="details-page">
     <div class="container">
-      <div class="details-top">
-        <div class="details-gallery-card">
-          <div class="details-main-image" style="background-image:url('${item.images[0]}')"></div>
-          <div class="details-thumbs">
-            ${item.images.map((src, i) => `<button class="details-thumb ${i===0?'active':''}" style="background-image:url('${src}')" aria-label="صورة ${i+1}"></button>`).join('')}
-          </div>
-        </div>
+      <div class="details-hero-card">
+        <div class="details-main-image" style="background-image:url('${item.images[0]}')"></div>
 
-        <div class="details-side-card">
-          <span class="badge">سيارة</span>
-          <h2 class="details-title">${item.title}</h2>
-          <div class="details-price">${Number(item.price).toLocaleString('en-US')} د.ل</div>
-          <div class="details-meta">
-            <span>${item.city}</span>
-            <span>${item.year}</span>
-            <span>${item.mileage}</span>
+        <div class="details-hero-body">
+          <div class="details-topline">
+            <span class="badge">سيارة</span>
+            <span class="details-mini-meta">${item.city} • ${item.year} • ${item.mileage}</span>
           </div>
+
+          <div class="details-price">${Number(item.price).toLocaleString('en-US')} د.ل</div>
+          <h2 class="details-title">${item.title}</h2>
           <p class="details-desc">${item.desc}</p>
 
           <div class="details-actions">
             <a class="primary-btn full" href="tel:${item.seller.phone}">اتصال مباشر</a>
             <a class="soft-btn full" href="https://wa.me/218${item.seller.whatsapp.slice(1)}">واتساب</a>
           </div>
-
-          <div class="seller-mini-card">
-            <div>
-              <strong>${item.seller.name}</strong>
-              <div class="muted">${item.seller.joined}</div>
-            </div>
-            <div class="seller-avatar">BC</div>
-          </div>
         </div>
       </div>
 
-      <div class="details-grid">
+      <div class="details-thumbs">
+        ${item.images.map((src, i) => `<button class="details-thumb ${i===0?'active':''}" style="background-image:url('${src}')" aria-label="صورة ${i+1}"></button>`).join('')}
+      </div>
+
+      <div class="details-sections-grid">
         <section class="details-block">
           <div class="block-head">
             <h3>المواصفات</h3>
-            <p>تفاصيل مختصرة وواضحة</p>
+            <p>كل المعلومات المهمة بسرعة</p>
           </div>
           <div class="specs-grid">
             <div class="spec-card"><span>نوع الهيكل</span><strong>${item.specs.body}</strong></div>
@@ -59,28 +49,33 @@ document.getElementById('app').innerHTML = `
 
         <section class="details-block">
           <div class="block-head">
-            <h3>وصف الإعلان</h3>
-            <p>كل ما يحتاجه المشتري في صفحة واحدة</p>
+            <h3>بيانات البائع</h3>
+            <p>تواصل مباشر وسريع</p>
           </div>
-          <div class="details-text-card">
-            <p>سيارة نظيفة ومناسبة للاستعمال اليومي، مع حالة ممتازة من ناحية المحرك والصالون والمظهر الخارجي. الإعلان مصمم ليظهر بشكل فاخر وواضح على الجوال مع أزرار تواصل مباشرة.</p>
-            <p>يمكنك لاحقًا ربط هذه الصفحة ببيانات Firebase الحقيقية بحيث تتغير الصور والمواصفات تلقائيًا حسب الإعلان.</p>
+          <div class="seller-card">
+            <div class="seller-row">
+              <div>
+                <strong>${item.seller.name}</strong>
+                <div class="muted">${item.seller.joined}</div>
+              </div>
+              <div class="seller-avatar">BC</div>
+            </div>
+            <div class="contact-row"><span>الهاتف</span><strong>${item.seller.phone}</strong></div>
+            <div class="contact-row"><span>المدينة</span><strong>${item.city}</strong></div>
+            <div class="contact-row"><span>واتساب</span><strong>${item.seller.whatsapp}</strong></div>
           </div>
         </section>
 
-        <aside class="details-block sticky-contact">
+        <section class="details-block">
           <div class="block-head">
-            <h3>تواصل مع البائع</h3>
-            <p>خطوات سريعة ومباشرة</p>
+            <h3>وصف الإعلان</h3>
+            <p>عرض واضح واحترافي</p>
           </div>
-          <div class="contact-panel">
-            <div class="contact-row"><span>الاسم</span><strong>${item.seller.name}</strong></div>
-            <div class="contact-row"><span>الهاتف</span><strong>${item.seller.phone}</strong></div>
-            <div class="contact-row"><span>المدينة</span><strong>${item.city}</strong></div>
-            <a class="primary-btn full" href="tel:${item.seller.phone}">اتصل الآن</a>
-            <a class="soft-btn full" href="https://wa.me/218${item.seller.whatsapp.slice(1)}">راسل واتساب</a>
+          <div class="details-text-card">
+            <p>هذه نسخة جوال محسنة لصفحة التفاصيل، بحيث يظهر السعر والعنوان وأزرار التواصل مباشرة بدون أن يغطيها الشريط السفلي.</p>
+            <p>يمكن لاحقًا ربط هذه الصفحة مع Firebase لعرض الإعلان الحقيقي والصور الحقيقية لكل سيارة أو قطعة أو خدمة.</p>
           </div>
-        </aside>
+        </section>
       </div>
     </div>
   </section>
@@ -93,7 +88,6 @@ thumbs.forEach(btn=>{
   btn.addEventListener('click', ()=>{
     thumbs.forEach(x=>x.classList.remove('active'));
     btn.classList.add('active');
-    const bg = btn.style.backgroundImage;
-    mainImage.style.backgroundImage = bg;
+    mainImage.style.backgroundImage = btn.style.backgroundImage;
   });
 });
