@@ -392,4 +392,3 @@ tryFirebaseInit().catch(err => {
   initLocalHandlers();
   showToast('تم تشغيل الوضع التجريبي.');
 });
-
