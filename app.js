@@ -1,7 +1,3 @@
-عدّلت لك الجزء المطلوب. عندك الآن ناقص فقط تضيف storage وترجع كود رفع الصورة داخل submitListingBtn.
-
-استبدل ملف app.js بالمحتوى هذا:
-
 import { firebaseSettings, adminEmails } from './firebase-config.js';
 
 const demoListings = [
