@@ -400,9 +400,3 @@ tryFirebaseInit().catch(err => {
   showToast('تم تشغيل الوضع التجريبي.');
 });
 
-bindStaticUI();
-tryFirebaseInit().catch(err => {
-  console.error(err);
-  initLocalHandlers();
-  showToast('تم تشغيل الوضع التجريبي.');
-});
