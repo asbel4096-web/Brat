@@ -3,79 +3,481 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>إضافة إعلان | براتشو كار</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <title>إضافة إعلان فاخر | براتشو كار</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5f7fb; --card:#ffffff; --text:#0d1530; --muted:#6b7280; --line:#e6eaf2;
+      --primary:#2563eb; --primary-dark:#163fa8; --primary-soft:#eef4ff; --shadow:0 12px 30px rgba(15,23,42,.08);
+      --success:#10b981; --danger:#ef4444; --warning:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Tajawal',system-ui,sans-serif;background:linear-gradient(180deg,#f8faff 0%,#f3f5fa 100%);color:var(--text)}
+    a{text-decoration:none;color:inherit}
+    .shell{max-width:520px;margin:0 auto;min-height:100vh;padding-bottom:96px}
+    .topbar{position:sticky;top:0;z-index:20;background:rgba(245,247,251,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(230,234,242,.7)}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 14px}
+    .icon-btn{width:44px;height:44px;border:none;border-radius:14px;background:var(--card);box-shadow:var(--shadow);font-size:22px;cursor:pointer}
+    .crumb{font-size:14px;color:var(--muted);margin-top:4px}
+    .title-wrap{text-align:center;flex:1}
+    .title-wrap h1{margin:0;font-size:22px;font-weight:900}
+    .progress-wrap{padding:0 18px 16px}
+    .progress-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}
+    .progress{height:9px;background:#e8edf8;border-radius:999px;overflow:hidden}
+    .progress > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary-dark),var(--primary));border-radius:999px;transition:width .25s ease}
+    .section{padding:20px 18px}
+    .hero-card{background:linear-gradient(135deg,#0b1738 0%,#1b43ad 100%);color:#fff;border-radius:28px;padding:24px;box-shadow:0 18px 40px rgba(37,99,235,.22)}
+    .hero-card h2{margin:0 0 10px;font-size:34px;line-height:1.18;font-weight:900}
+    .hero-card p{margin:0;color:rgba(255,255,255,.88);font-size:18px;line-height:1.7}
+    .chip-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+    .chip{padding:11px 16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:999px;font-size:15px}
+    .step-panel{display:none}
+    .step-panel.active{display:block}
+    .card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);border:1px solid rgba(230,234,242,.9)}
+    .panel-head{padding:22px 20px 0}
+    .panel-head h3{margin:0;font-size:34px;font-weight:900}
+    .panel-head p{margin:8px 0 0;color:var(--muted);font-size:18px;line-height:1.7}
+    .searchbox{position:relative;margin:18px 20px 10px}
+    .searchbox input{width:100%;border:1px solid var(--line);background:#fbfcff;border-radius:18px;padding:16px 48px 16px 18px;font:inherit;font-size:18px;outline:none}
+    .searchbox span{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:24px;color:#6b7280}
+    .option-list{padding:8px 16px 18px;display:grid;gap:14px}
+    .option-card{display:flex;align-items:center;justify-content:space-between;padding:18px;border:1px solid var(--line);border-radius:20px;background:#fff;cursor:pointer;transition:.2s ease;box-shadow:0 8px 18px rgba(2,6,23,.04)}
+    .option-card:hover,.option-card.selected{border-color:#bdd1ff;background:var(--primary-soft);transform:translateY(-1px)}
+    .option-meta{display:flex;align-items:center;gap:14px}
+    .emoji{width:54px;height:54px;border-radius:16px;background:#f4f7ff;display:grid;place-items:center;font-size:28px}
+    .option-card.selected .emoji{background:#dce9ff}
+    .option-card h4{margin:0;font-size:26px;font-weight:800}
+    .option-card p{margin:6px 0 0;color:var(--muted);font-size:16px}
+    .arrow{font-size:28px;color:#111827}
+    .notice{margin:18px 18px 0;padding:16px 18px;border:2px dashed #90b8ff;background:#f5f9ff;border-radius:20px;font-size:16px;line-height:1.9}
+    .notice b{display:block;margin-bottom:6px;font-size:18px}
+    .toolbar{padding:16px 18px 6px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .toggle{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:700}
+    .toggle input{width:22px;height:22px;accent-color:var(--primary)}
+    .link-tip{color:var(--primary);font-weight:800;font-size:17px}
+    .photo-grid{padding:10px 18px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .slot{position:relative;aspect-ratio:1/1;border-radius:20px;border:2px solid #dbe2ee;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden}
+    .slot.primary{background:linear-gradient(135deg,#1d4ed8,#2563eb);border-color:#2563eb;color:#fff}
+    .slot .plus{font-size:44px;line-height:1}
+    .slot .slot-label{position:absolute;bottom:12px;right:12px;left:12px;text-align:center;font-size:15px;font-weight:800}
+    .slot img{width:100%;height:100%;object-fit:cover}
+    .slot .remove{position:absolute;top:8px;left:8px;width:28px;height:28px;border:none;border-radius:999px;background:rgba(15,23,42,.75);color:#fff;font-size:16px;cursor:pointer}
+    .slot .primary-badge{position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,.92);color:#0f172a;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}
+    .fields{padding:8px 18px 18px;display:grid;gap:14px}
+    .field label{display:block;margin-bottom:8px;font-weight:800;font-size:18px}
+    .field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:#fbfcff;border-radius:18px;padding:15px 16px;font:inherit;font-size:18px;outline:none}
+    .field textarea{min-height:120px;resize:vertical}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .review{padding:10px 18px 20px}
+    .review-card{border:1px solid var(--line);border-radius:22px;padding:18px;background:#fbfcff;margin-bottom:14px}
+    .review-card h4{margin:0 0 12px;font-size:22px;font-weight:900}
+    .kv{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed #e4e8f2;font-size:17px}
+    .kv:last-child{border-bottom:none}
+    .kv span:first-child{color:var(--muted);font-weight:700}
+    .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+    .thumbs img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:16px;border:1px solid var(--line)}
+    .actions{position:sticky;bottom:0;z-index:15;background:linear-gradient(180deg,rgba(245,247,251,0) 0%,rgba(245,247,251,.94) 20%,#f5f7fb 100%);padding:18px}
+    .actions-inner{display:flex;gap:12px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border:1px solid rgba(226,232,240,.85);padding:12px;border-radius:24px;box-shadow:var(--shadow)}
+    .btn{flex:1;border:none;border-radius:18px;padding:16px 18px;font:inherit;font-weight:900;font-size:20px;cursor:pointer}
+    .btn.primary{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff}
+    .btn.secondary{background:#fff;color:#0f172a;border:1px solid var(--line)}
+    .btn.ghost{background:#eef4ff;color:#1d4ed8}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+    .msg{padding:0 18px 8px;color:var(--muted);font-size:16px;font-weight:700}
+    .bottom-nav{position:fixed;bottom:12px;right:50%;transform:translateX(50%);width:min(100% - 24px,520px);background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border:1px solid rgba(226,232,240,.9);border-radius:28px;box-shadow:var(--shadow);padding:10px 8px;display:grid;grid-template-columns:repeat(5,1fr);z-index:30}
+    .nav-item{text-align:center;color:#6b7280;font-size:13px;font-weight:800}
+    .nav-item .i{display:block;font-size:24px;margin-bottom:6px}
+    .nav-item.active{color:var(--primary)}
+    @media (max-width:420px){
+      .hero-card h2,.panel-head h3{font-size:28px}
+      .option-card h4{font-size:22px}
+      .grid-2{grid-template-columns:1fr}
+      .kv{grid-template-columns:110px 1fr}
+    }
+  </style>
 </head>
-<body data-page="add">
-  <div id="app"></div>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <button class="icon-btn" id="closeBtn" aria-label="إغلاق">✕</button>
+        <div class="title-wrap">
+          <h1 id="headerTitle">إضافة إعلان فاخر</h1>
+          <div class="crumb" id="headerCrumb">اختر القسم المناسب أولًا</div>
+        </div>
+        <button class="icon-btn" id="nextTopBtn" aria-label="التالي">←</button>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="stepLabel">الخطوة 1 من 6</span>
+          <span id="stepName">اختيار القسم</span>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+    </header>
 
-  <script type="module">
-    import { bootCommon, injectFrame } from './common.js';
-
-    bootCommon();
-    injectFrame('add');
-
-    document.getElementById('app').innerHTML = `
-      <section class="page-section">
-        <div class="container narrow">
-          <h1>أضف إعلانك</h1>
-          <p class="muted">أضف سيارة أو قطعة غيار أو خدمة ميكانيكي متنقل.</p>
-
-          <form id="listingForm" class="card form-card">
-            <label for="category">نوع الإعلان</label>
-            <select id="category" required>
-              <option value="">اختر النوع</option>
-              <option value="car">سيارة</option>
-              <option value="part">قطعة غيار</option>
-              <option value="service">خدمة ميكانيكي متنقل</option>
-            </select>
-
-            <label for="title">عنوان الإعلان</label>
-            <input id="title" type="text" placeholder="مثال: كيا K5 2014 أو محرك سوناتا أو ميكانيكي متنقل" required />
-
-            <label for="brand">الماركة</label>
-            <input id="brand" type="text" placeholder="مثال: Kia / Hyundai / Toyota" />
-
-            <label for="model">الموديل</label>
-            <input id="model" type="text" placeholder="مثال: K5 / Sonata / Camry" />
-
-            <label for="year">السنة</label>
-            <input id="year" type="number" placeholder="مثال: 2016" />
-
-            <label for="price">السعر</label>
-            <input id="price" type="number" placeholder="مثال: 45000" required />
-
-            <label for="mileage">المسافة / الحالة</label>
-            <input id="mileage" type="text" placeholder="مثال: 120,000 كم أو جديدة" />
-
-            <label for="city">المدينة</label>
-            <input id="city" type="text" placeholder="مثال: طرابلس" required />
-
-            <label for="phone">رقم الهاتف</label>
-            <input id="phone" type="text" placeholder="مثال: 0912345678" required />
-
-            <label for="description">الوصف</label>
-            <textarea id="description" rows="5" placeholder="اكتب تفاصيل الإعلان هنا"></textarea>
-
-            <label for="imageFile">الصورة</label>
-            <input id="imageFile" type="file" accept="image/*" />
-
-            <button type="submit" class="primary-btn full">إرسال الإعلان</button>
-          </form>
-
-          <div id="formMsg" class="hint" style="margin-top:12px;"></div>
+    <main>
+      <section class="section step-panel active" data-step="1">
+        <div class="card">
+          <div class="panel-head">
+            <h3>ماذا تود بيعه أو الإعلان عنه؟</h3>
+            <p>اختر القسم المناسب لإضافة إعلانك بشكل احترافي وسريع.</p>
+          </div>
+          <div class="searchbox">
+            <input id="categorySearch" type="text" placeholder="ابحث في القسم" />
+            <span>⌕</span>
+          </div>
+          <div class="option-list" id="categoryList"></div>
         </div>
       </section>
-    `;
 
-    const form = document.getElementById('listingForm');
+      <section class="section step-panel" data-step="2">
+        <div class="card">
+          <div class="panel-head">
+            <h3 id="subTitle">اختر النوع الفرعي</h3>
+            <p id="subDesc">حدد النوع بدقة ليظهر إعلانك بشكل أفضل للمشترين.</p>
+          </div>
+          <div class="searchbox">
+            <input id="subcategorySearch" type="text" placeholder="ابحث في النوع" />
+            <span>⌕</span>
+          </div>
+          <div class="option-list" id="subcategoryList"></div>
+        </div>
+      </section>
+
+      <section class="section step-panel" data-step="3">
+        <div class="card">
+          <div class="panel-head">
+            <h3>أضف صور الإعلان</h3>
+            <p>يمكنك رفع حتى 12 صورة. اختر صورة رئيسية واجعل الإعلان أكثر جذبًا.</p>
+          </div>
+          <div class="notice">
+            <b>نصائح سريعة</b>
+            • كلما زاد عدد الصور الجيدة زادت فرص المشاهدة.<br>
+            • الصورة الرئيسية تظهر أولًا في القوائم.<br>
+            • خيار إخفاء اللوحة هنا واجهة فقط، لا يطمس اللوحة تلقائيًا بعد.
+          </div>
+          <div class="toolbar">
+            <a class="link-tip" href="#">نصائح لالتقاط صور جيدة</a>
+            <label class="toggle"><input type="checkbox" id="hidePlateToggle" checked /> إخفاء رقم اللوحة</label>
+          </div>
+          <input id="photosInput" type="file" accept="image/*" multiple hidden />
+          <div class="photo-grid" id="photoGrid"></div>
+        </div>
+      </section>
+
+      <section class="section step-panel" data-step="4">
+        <div class="card">
+          <div class="panel-head">
+            <h3>تفاصيل الإعلان</h3>
+            <p>املأ التفاصيل الأساسية، وسيتم تخصيص التسميات حسب القسم الذي اخترته.</p>
+          </div>
+          <div class="fields">
+            <div class="field">
+              <label for="title">عنوان الإعلان</label>
+              <input id="title" type="text" placeholder="مثال: كيا K5 2014 فل أوبشن" />
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="brand" id="brandLabel">الماركة</label>
+                <input id="brand" type="text" placeholder="مثال: Kia / Hyundai" />
+              </div>
+              <div class="field">
+                <label for="model" id="modelLabel">الموديل</label>
+                <input id="model" type="text" placeholder="مثال: K5 / Sonata" />
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="year" id="yearLabel">السنة</label>
+                <input id="year" type="number" placeholder="مثال: 2016" />
+              </div>
+              <div class="field">
+                <label for="price">السعر</label>
+                <input id="price" type="number" placeholder="مثال: 45000" />
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="mileage" id="mileageLabel">المسافة / الحالة</label>
+                <input id="mileage" type="text" placeholder="مثال: 120,000 كم أو جديدة" />
+              </div>
+              <div class="field">
+                <label for="city">المدينة</label>
+                <input id="city" type="text" placeholder="مثال: طرابلس" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="description">الوصف</label>
+              <textarea id="description" placeholder="اكتب كل التفاصيل المهمة هنا"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section step-panel" data-step="5">
+        <div class="card">
+          <div class="panel-head">
+            <h3>معلومات التواصل</h3>
+            <p>هذه المعلومات تساعد المشتري أو طالب الخدمة على الوصول إليك مباشرة.</p>
+          </div>
+          <div class="fields">
+            <div class="field">
+              <label for="sellerName">الاسم</label>
+              <input id="sellerName" type="text" placeholder="مثال: براتشو كار أو اسمك" />
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="phone">رقم الهاتف</label>
+                <input id="phone" type="text" placeholder="مثال: 0912345678" />
+              </div>
+              <div class="field">
+                <label for="whatsapp">رقم واتساب</label>
+                <input id="whatsapp" type="text" placeholder="مثال: 0912345678" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="locationNote">ملاحظة الموقع</label>
+              <input id="locationNote" type="text" placeholder="مثال: طريق المطار / عين زارة" />
+            </div>
+            <div class="field">
+              <label class="toggle"><input type="checkbox" id="showWhatsapp" checked /> إظهار زر واتساب في الإعلان</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section step-panel" data-step="6">
+        <div class="card">
+          <div class="panel-head">
+            <h3>راجع إعلانك</h3>
+            <p>تأكد من المعلومات قبل الإرسال. سيتم إرسال الإعلان للمراجعة.</p>
+          </div>
+          <div class="review" id="reviewWrap"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="msg" id="formMsg"></div>
+    <div class="actions">
+      <div class="actions-inner">
+        <button class="btn secondary" id="backBtn">السابق</button>
+        <button class="btn primary" id="nextBtn">التالي</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a class="nav-item" href="settings.html"><span class="i">⚙️</span>الإعدادات</a>
+    <a class="nav-item" href="services.html"><span class="i">🛠️</span>الخدمات</a>
+    <a class="nav-item active" href="add.html"><span class="i">➕</span>أضف إعلان</a>
+    <a class="nav-item" href="parts.html"><span class="i">🧩</span>القطع</a>
+    <a class="nav-item" href="cars.html"><span class="i">🚘</span>السيارات</a>
+  </nav>
+
+  <script type="module">
+    import { firebaseSettings } from './firebase-config.js';
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+
+    const app = initializeApp(firebaseSettings);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const categories = [
+      {
+        id:'car', title:'سيارات ومركبات', emoji:'🚘', desc:'بيع سيارات، سيارات للإيجار، وارد حديث، وعروض مميزة',
+        subs:[
+          {id:'cars-sale', title:'سيارات للبيع', emoji:'🚗', desc:'سيارات جديدة ومستعملة للبيع'},
+          {id:'cars-rent', title:'مركبات للإيجار', emoji:'🛻', desc:'سيارات ومركبات للإيجار'},
+          {id:'suv', title:'SUV ودفع رباعي', emoji:'🚙', desc:'عائلية ومرتفعة'},
+          {id:'economy', title:'سيارات اقتصادية', emoji:'⛽', desc:'استهلاك منخفض ومصاريف أقل'}
+        ]
+      },
+      {
+        id:'part', title:'قطع غيار السيارات', emoji:'🧩', desc:'محركات، كمبيو، كهرباء، هيكل، إطارات وجنوط',
+        subs:[
+          {id:'engine', title:'محركات', emoji:'⚙️', desc:'محركات كاملة وأجزاء محرك'},
+          {id:'gearbox', title:'كمبيو', emoji:'🔩', desc:'قير أوتوماتيك وعادي'},
+          {id:'body', title:'هيكل وبودي', emoji:'🚪', desc:'أبواب، رفارف، صدامات'},
+          {id:'wheels', title:'إطارات وجنوط', emoji:'🛞', desc:'جنطات وإطارات وملحقاتها'}
+        ]
+      },
+      {
+        id:'service', title:'الميكانيكي المتنقل', emoji:'🛠️', desc:'ميكانيكي، كهربائي، فحص كمبيوتر، إنقاذ سريع',
+        subs:[
+          {id:'mobile-mechanic', title:'ميكانيكي متنقل', emoji:'🔧', desc:'صيانة في الموقع'},
+          {id:'electrician', title:'كهربائي سيارات', emoji:'🔋', desc:'بطاريات، دينمو، حساسات'},
+          {id:'diagnostic', title:'فحص كمبيوتر', emoji:'💻', desc:'قراءة أعطال وبرمجة'},
+          {id:'rescue', title:'إنقاذ سريع', emoji:'🚨', desc:'خدمة طريق وسحب وتشغيل'}
+        ]
+      }
+    ];
+
+    const state = {
+      step:1,
+      category:null,
+      subcategory:null,
+      images:[],
+      primaryIndex:0
+    };
+
+    const panels = [...document.querySelectorAll('.step-panel')];
+    const stepNames = ['اختيار القسم','اختيار النوع','الصور','التفاصيل','التواصل','المراجعة'];
+    const progressBar = document.getElementById('progressBar');
+    const stepLabel = document.getElementById('stepLabel');
+    const stepName = document.getElementById('stepName');
+    const headerCrumb = document.getElementById('headerCrumb');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
     const msg = document.getElementById('formMsg');
+    const categoryList = document.getElementById('categoryList');
+    const subcategoryList = document.getElementById('subcategoryList');
+    const reviewWrap = document.getElementById('reviewWrap');
+    const photoGrid = document.getElementById('photoGrid');
+    const photosInput = document.getElementById('photosInput');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    function renderCategories(filter=''){
+      const q = filter.trim().toLowerCase();
+      categoryList.innerHTML='';
+      categories.filter(c => !q || (c.title + ' ' + c.desc).toLowerCase().includes(q)).forEach(cat => {
+        const card = document.createElement('button');
+        card.type='button';
+        card.className='option-card' + (state.category?.id===cat.id ? ' selected' : '');
+        card.innerHTML = `
+          <div class="option-meta">
+            <div class="emoji">${cat.emoji}</div>
+            <div>
+              <h4>${cat.title}</h4>
+              <p>${cat.desc}</p>
+            </div>
+          </div>
+          <div class="arrow">‹</div>
+        `;
+        card.addEventListener('click',()=>{
+          state.category = cat;
+          state.subcategory = null;
+          renderCategories(document.getElementById('categorySearch').value);
+          renderSubcategories();
+        });
+        categoryList.appendChild(card);
+      });
+    }
 
-      const data = {
-        category: document.getElementById('category').value.trim(),
+    function renderSubcategories(filter=''){
+      subcategoryList.innerHTML='';
+      if(!state.category) return;
+      document.getElementById('subTitle').textContent = state.category.title;
+      document.getElementById('subDesc').textContent = 'اختر النوع الفرعي المناسب داخل ' + state.category.title;
+      const q = filter.trim().toLowerCase();
+      state.category.subs.filter(s => !q || (s.title+' '+s.desc).toLowerCase().includes(q)).forEach(sub => {
+        const card = document.createElement('button');
+        card.type='button';
+        card.className='option-card' + (state.subcategory?.id===sub.id ? ' selected' : '');
+        card.innerHTML = `
+          <div class="option-meta">
+            <div class="emoji">${sub.emoji}</div>
+            <div>
+              <h4>${sub.title}</h4>
+              <p>${sub.desc}</p>
+            </div>
+          </div>
+          <div class="arrow">‹</div>
+        `;
+        card.addEventListener('click',()=>{
+          state.subcategory = sub;
+          renderSubcategories(document.getElementById('subcategorySearch').value);
+        });
+        subcategoryList.appendChild(card);
+      });
+      applyDynamicLabels();
+    }
+
+    function renderPhotos(){
+      photoGrid.innerHTML='';
+      for(let i=0;i<12;i++){
+        const slot = document.createElement('button');
+        slot.type='button';
+        const image = state.images[i];
+        slot.className='slot' + (i===state.primaryIndex ? ' primary' : '');
+
+        if(image){
+          slot.innerHTML = `
+            <img src="${image.preview}" alt="photo ${i+1}">
+            ${i===state.primaryIndex ? '<span class="primary-badge">الرئيسية</span>' : ''}
+            <button class="remove" type="button">✕</button>
+          `;
+          slot.querySelector('.remove').addEventListener('click',(e)=>{
+            e.stopPropagation();
+            state.images.splice(i,1);
+            if(state.primaryIndex >= state.images.length) state.primaryIndex = Math.max(0, state.images.length-1);
+            renderPhotos();
+          });
+          slot.addEventListener('click',()=>{
+            state.primaryIndex = i;
+            renderPhotos();
+          });
+        } else {
+          slot.innerHTML = `<div class="plus">＋</div>${i===state.primaryIndex ? '<div class="slot-label">الرئيسية</div>' : ''}`;
+          slot.addEventListener('click',()=>photosInput.click());
+        }
+        photoGrid.appendChild(slot);
+      }
+    }
+
+    photosInput.addEventListener('change',(e)=>{
+      const files = [...e.target.files].slice(0, 12 - state.images.length);
+      files.forEach(file => state.images.push({file, preview: URL.createObjectURL(file)}));
+      renderPhotos();
+      e.target.value='';
+    });
+
+    function applyDynamicLabels(){
+      const c = state.category?.id;
+      document.getElementById('brandLabel').textContent = c==='service' ? 'نوع الخدمة' : 'الماركة';
+      document.getElementById('modelLabel').textContent = c==='part' ? 'القطعة / التوافق' : (c==='service' ? 'التخصص / الفئة' : 'الموديل');
+      document.getElementById('yearLabel').textContent = c==='service' ? 'سنوات الخبرة' : (c==='part' ? 'السنة / التوافق' : 'السنة');
+      document.getElementById('mileageLabel').textContent = c==='service' ? 'الحالة / التغطية' : (c==='part' ? 'الحالة' : 'المسافة / الحالة');
+    }
+
+    function updateStepUI(){
+      panels.forEach(p => p.classList.toggle('active', Number(p.dataset.step)===state.step));
+      progressBar.style.width = ((state.step/6)*100) + '%';
+      stepLabel.textContent = `الخطوة ${state.step} من 6`;
+      stepName.textContent = stepNames[state.step-1];
+      headerCrumb.textContent = state.category ? `${state.category.title}${state.subcategory ? ' • ' + state.subcategory.title : ''}` : 'اختر القسم المناسب أولًا';
+      backBtn.style.visibility = state.step===1 ? 'hidden' : 'visible';
+      nextBtn.textContent = state.step===6 ? 'إرسال الإعلان' : 'التالي';
+      if(state.step===6) renderReview();
+    }
+
+    function validateStep(){
+      msg.textContent='';
+      if(state.step===1 && !state.category){ msg.textContent='اختر قسمًا أولًا.'; return false; }
+      if(state.step===2 && !state.subcategory){ msg.textContent='اختر نوعًا فرعيًا.'; return false; }
+      if(state.step===3 && !state.images.length){ msg.textContent='أضف صورة واحدة على الأقل.'; return false; }
+      if(state.step===4){
+        if(!document.getElementById('title').value.trim() || !document.getElementById('price').value.trim() || !document.getElementById('city').value.trim()){
+          msg.textContent='أكمل عنوان الإعلان والسعر والمدينة.'; return false;
+        }
+      }
+      if(state.step===5){
+        if(!document.getElementById('phone').value.trim()) { msg.textContent='أدخل رقم الهاتف.'; return false; }
+      }
+      return true;
+    }
+
+    function getPayload(){
+      return {
+        category: state.category?.id || '',
+        subcategory: state.subcategory?.id || '',
+        categoryTitle: state.category?.title || '',
+        subcategoryTitle: state.subcategory?.title || '',
         title: document.getElementById('title').value.trim(),
         brand: document.getElementById('brand').value.trim(),
         model: document.getElementById('model').value.trim(),
@@ -83,19 +485,96 @@
         price: document.getElementById('price').value.trim(),
         mileage: document.getElementById('mileage').value.trim(),
         city: document.getElementById('city').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
         description: document.getElementById('description').value.trim(),
+        sellerName: document.getElementById('sellerName').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        whatsapp: document.getElementById('whatsapp').value.trim(),
+        locationNote: document.getElementById('locationNote').value.trim(),
+        showWhatsapp: document.getElementById('showWhatsapp').checked,
+        hidePlate: document.getElementById('hidePlateToggle').checked,
         status: 'pending'
       };
+    }
 
-      if (!data.category || !data.title || !data.price || !data.city || !data.phone) {
-        msg.textContent = 'أكمل الحقول المطلوبة.';
-        return;
+    function renderReview(){
+      const data = getPayload();
+      reviewWrap.innerHTML = `
+        <div class="review-card">
+          <h4>التصنيف</h4>
+          <div class="kv"><span>القسم</span><span>${data.categoryTitle || '-'}</span></div>
+          <div class="kv"><span>النوع</span><span>${data.subcategoryTitle || '-'}</span></div>
+        </div>
+        <div class="review-card">
+          <h4>التفاصيل</h4>
+          <div class="kv"><span>العنوان</span><span>${data.title || '-'}</span></div>
+          <div class="kv"><span>${document.getElementById('brandLabel').textContent}</span><span>${data.brand || '-'}</span></div>
+          <div class="kv"><span>${document.getElementById('modelLabel').textContent}</span><span>${data.model || '-'}</span></div>
+          <div class="kv"><span>${document.getElementById('yearLabel').textContent}</span><span>${data.year || '-'}</span></div>
+          <div class="kv"><span>السعر</span><span>${data.price || '-'}</span></div>
+          <div class="kv"><span>المدينة</span><span>${data.city || '-'}</span></div>
+          <div class="kv"><span>${document.getElementById('mileageLabel').textContent}</span><span>${data.mileage || '-'}</span></div>
+          <div class="kv"><span>الوصف</span><span>${data.description || '-'}</span></div>
+        </div>
+        <div class="review-card">
+          <h4>التواصل</h4>
+          <div class="kv"><span>الاسم</span><span>${data.sellerName || '-'}</span></div>
+          <div class="kv"><span>الهاتف</span><span>${data.phone || '-'}</span></div>
+          <div class="kv"><span>واتساب</span><span>${data.whatsapp || '-'}</span></div>
+          <div class="kv"><span>الموقع</span><span>${data.locationNote || '-'}</span></div>
+        </div>
+        <div class="review-card">
+          <h4>الصور</h4>
+          <div class="thumbs">${state.images.map((img, i)=>`<img src="${img.preview}" alt="img ${i+1}">`).join('')}</div>
+        </div>
+      `;
+    }
+
+    async function submitListing(){
+      const user = auth.currentUser;
+      if(!user){ msg.textContent='سجل الدخول أولًا قبل إرسال الإعلان.'; return; }
+      try{
+        msg.textContent='جارٍ رفع الصور وإرسال الإعلان...';
+        const uploaded = [];
+        for(let i=0;i<state.images.length;i++){
+          const item = state.images[i];
+          const fileRef = ref(storage, `cars/${Date.now()}-${i}-${item.file.name}`);
+          await uploadBytes(fileRef, item.file);
+          const url = await getDownloadURL(fileRef);
+          uploaded.push(url);
+        }
+        const data = getPayload();
+        await addDoc(collection(db, 'listings'), {
+          ...data,
+          imageUrl: uploaded[state.primaryIndex] || uploaded[0] || '',
+          images: uploaded,
+          createdAt: serverTimestamp(),
+          createdBy: user.uid,
+          createdByEmail: user.email,
+          createdByName: user.displayName || data.sellerName || ''
+        });
+        msg.textContent='تم إرسال الإعلان بنجاح للمراجعة.';
+        setTimeout(()=> location.href='dashboard.html', 1200);
+      }catch(err){
+        console.error(err);
+        msg.textContent='تعذر إرسال الإعلان. تحقق من القواعد أو تسجيل الدخول.';
       }
+    }
 
-      msg.textContent = 'تم تجهيز النموذج. خطوة Firebase التالية ستكون ربط الحفظ الحقيقي.';
-      console.log(data);
+    nextBtn.addEventListener('click', async ()=>{
+      if(!validateStep()) return;
+      if(state.step<6){ state.step++; updateStepUI(); return; }
+      await submitListing();
     });
+    backBtn.addEventListener('click', ()=>{ if(state.step>1){ state.step--; updateStepUI(); } });
+    document.getElementById('closeBtn').addEventListener('click', ()=> history.back());
+    document.getElementById('nextTopBtn').addEventListener('click', async ()=> nextBtn.click());
+    document.getElementById('categorySearch').addEventListener('input', e=>renderCategories(e.target.value));
+    document.getElementById('subcategorySearch').addEventListener('input', e=>renderSubcategories(e.target.value));
+
+    renderCategories();
+    renderSubcategories();
+    renderPhotos();
+    updateStepUI();
   </script>
 </body>
 </html>
