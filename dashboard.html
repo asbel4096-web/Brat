@@ -1,4 +1,37 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة المستخدم</title><link rel="stylesheet" href="styles.css"></head><body><main id="app" class="page"></main><script type="module">
-import {bootCommon, injectFrame, seedListings} from './common.js'; bootCommon(); injectFrame();
-document.getElementById('app').innerHTML=`<div class="container"><div class="section-head"><div><h2>لوحة المستخدم</h2><p>إعلاناتي، المفضلة، الحساب، والإحصائيات</p></div><a class="btn" href="add.html">أضف إعلان</a></div><div class="info-strip"><div class="stat"><strong>4</strong><span>إعلانات منشورة</span></div><div class="stat"><strong>1</strong><span>قيد المراجعة</span></div><div class="stat"><strong>9</strong><span>مفضلة</span></div><div class="stat"><strong>27</strong><span>رسائل</span></div></div><div class="section"><div class="panel"><table class="table"><tr><th>العنوان</th><th>القسم</th><th>الحالة</th><th>الإجراء</th></tr>${seedListings.map(x=>`<tr><td>${x.title}</td><td>${x.type}</td><td>منشور</td><td><a class='ghost-btn' href='details.html?id=${x.id}'>فتح</a></td></tr>`).join('')}</table></div></div></div>`;
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>حسابي | براتشو كار</title><link rel="stylesheet" href="styles.css"></head><body><div id="app"></div><script type="module">
+import {initTheme,shellTop,finishShell} from './common-luxury.js'; initTheme();
+document.getElementById('app').innerHTML = shellTop('حسابي') + `
+<section class="hero-card card">
+  <div class="hero-head">
+    <div class="avatar">👤</div>
+    <div class="hero-meta"><h2>تاجر سيارات</h2><p>عضو منذ 05/09/2024</p></div>
+  </div>
+  <div class="chip-row"><div class="chip">عضوية مجانية</div><div class="chip">رقم الحساب: 74379475</div><div class="chip">⭐ 0 تقييم</div></div>
+</section>
+<section class="stat-grid">
+  <div class="card stat-card"><div class="stat-top"><div class="stat-num">2,891</div><div class="badge-icon">👁️</div></div><div class="stat-label">مشاهدات الإعلانات</div></div>
+  <div class="card stat-card"><div class="stat-top"><div class="stat-num">20</div><div class="badge-icon">📋</div></div><div class="stat-label">حد الإعلانات الفعالة</div></div>
+  <div class="card stat-card"><div class="stat-top"><div class="stat-num">0</div><div class="badge-icon">⭐</div></div><div class="stat-label">التقييم</div></div>
+  <a class="card stat-card" href="add.html"><div class="stat-top"><div class="stat-num">＋</div><div class="badge-icon">🛍️</div></div><div class="stat-label">أضف إعلانك الآن</div></a>
+</section>
+<section class="section card wallet">
+  <div class="small">المحفظة</div><div class="balance">0.0 <span style="font-size:20px">دينار</span></div><div class="small" style="margin-top:8px;color:#d7e2ff">يمكنك استخدام هذا المبلغ عند الدفع على التمييز والترقيات.</div>
+  <div class="stat-grid" style="margin-top:18px"><div class="card stat-card" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)"><div class="stat-num" style="font-size:28px;color:#fff">0</div><div class="stat-label" style="color:#d7e2ff">رصيد الإعلانات</div></div><div class="card stat-card" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)"><div class="stat-num" style="font-size:28px;color:#fff">0</div><div class="stat-label" style="color:#d7e2ff">رصيد التمييز</div></div></div>
+  <div style="margin-top:16px"><button class="btn btn-primary" style="width:100%;background:#fff;color:#12398a">＋ شحن رصيد</button></div>
+</section>
+<section class="section card setting-box">
+  <h3 class="section-title" style="font-size:24px;margin-bottom:8px">سيرتي الذاتية</h3>
+  <div class="subtle">لا يمكنك التقديم على وظيفة إذا كانت نسبة الاكتمال أقل من 50%</div>
+  <div class="progress-wrap"><div style="display:flex;justify-content:space-between;align-items:center"><strong>نسبة اكتمال السيرة الذاتية</strong><span>0%</span></div><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div><div class="stat-grid"><div class="card stat-card"><div class="stat-num" style="font-size:28px">0</div><div class="stat-label">طلبات التوظيف</div></div><div class="card stat-card"><div class="stat-num" style="font-size:28px">0</div><div class="stat-label">المشاهدات</div></div></div><button class="btn btn-primary" style="width:100%;margin-top:14px">إدارة السيرة الذاتية</button></div>
+</section>
+<section class="section card setting-box">
+  <h3 class="section-title" style="font-size:24px;margin-bottom:10px">هل تحتاج إلى مساعدة؟</h3>
+  <div class="subtle">تواصل معنا الآن</div><div class="support-grid" style="margin-top:16px"><button class="btn btn-soft">📞 اتصل بنا</button><button class="btn btn-soft">👤 فريق المبيعات</button><button class="btn btn-soft">⊕ أضف اقتراح</button></div>
+</section>
+<section class="section card setting-box">
+  <h3 class="section-title" style="font-size:24px;margin-bottom:10px">شارك حسابي وإعلاناتي</h3>
+  <div class="subtle">شارك على وسائل التواصل الخاصة بك</div>
+  <div class="chip-row" style="margin-top:18px"><div class="chip">واتساب</div><div class="chip">فيسبوك</div><div class="chip">X</div><div class="chip">رسالة</div><div class="chip">المزيد</div></div>
+</section>
+` + finishShell('account');
 </script></body></html>
