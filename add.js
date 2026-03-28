@@ -21,6 +21,7 @@ function render(){
   </main>`;
   bind();
 }
+
 function renderStep(){
   if(state.step===1) return `
     <div class="step-card">
@@ -33,6 +34,7 @@ function renderStep(){
       </div>
       <div class="actions"><span></span><button class="primary-btn next-btn">التالي</button></div>
     </div>`;
+
   if(state.step===2) return `
     <div class="step-card">
       <h3 class="section-title">اختر النوع الفرعي</h3>
@@ -41,25 +43,52 @@ function renderStep(){
       </div>
       <div class="actions"><button class="soft-btn prev-btn">السابق</button><button class="primary-btn next-btn">التالي</button></div>
     </div>`;
+
   if(state.step===3) return `
-    <div class="step-card">
-      <h3 class="section-title">أضف صور الإعلان</h3>
-      <div class="info-box">
-        <div>يمكن إضافة 30 صورة.</div>
-        <div>الصور تزيد عدد المشاهدات.</div>
-        <div>اختر صورة رئيسية واضحة.</div>
+    <div class="step-card upload-step-shell">
+      <div class="upload-step-top">
+        <div>
+          <h3 class="section-title">أضف صور الإعلان</h3>
+          <p class="section-desc">اختر صورًا واضحة، وحدد الصورة الرئيسية.</p>
+        </div>
+        <span class="upload-count">${state.images.filter(Boolean).length} / 9</span>
       </div>
-      <label style="display:flex;align-items:center;gap:10px;margin:16px 0"><input type="checkbox" checked> إخفاء رقم اللوحة</label>
-      <div class="upload-grid">
+
+      <div class="info-box upload-info-box">
+        <div>يمكنك إضافة حتى 9 صور في هذه النسخة.</div>
+        <div>الصور الواضحة تزيد التفاعل والمشاهدات.</div>
+        <div>أول صورة قوية = إعلان أقوى.</div>
+      </div>
+
+      <label class="plate-toggle">
+        <input type="checkbox" checked>
+        <span>إخفاء رقم اللوحة</span>
+      </label>
+
+      <div class="upload-grid luxury-upload-grid">
         ${Array.from({length:9}).map((_,i)=>`
-          <label class="upload-slot ${state.primary===i?'primary':''}">
+          <label class="upload-slot luxury-upload-slot ${state.primary===i?'primary':''}">
             ${state.images[i] ? `<img src="${state.images[i]}">` : ''}
-            <span>${state.primary===i?'الرئيسية':'إضافة صورة'}</span>
+            <div class="upload-slot-inner">
+              <span class="upload-slot-icon">${state.images[i] ? '✓' : '+'}</span>
+              <span class="upload-slot-text">${state.primary===i ? 'الصورة الرئيسية' : 'إضافة صورة'}</span>
+            </div>
             <input type="file" accept="image/*" data-upload="${i}">
-          </label>`).join('')}
+          </label>
+        `).join('')}
       </div>
-      <div class="actions"><button class="soft-btn prev-btn">السابق</button><button class="primary-btn next-btn">التالي</button></div>
+
+      <div class="upload-hint-row">
+        <span>رتب صورك من الخارج للداخل ثم التفاصيل.</span>
+        <span>الصورة الرئيسية تكون أكثر واحدة ملفتة.</span>
+      </div>
+
+      <div class="actions">
+        <button class="soft-btn prev-btn">السابق</button>
+        <button class="primary-btn next-btn">التالي</button>
+      </div>
     </div>`;
+
   if(state.step===4) return `
     <div class="step-card">
       <h3 class="section-title">تفاصيل الإعلان</h3>
@@ -75,6 +104,7 @@ function renderStep(){
       </div>
       <div class="actions"><button class="soft-btn prev-btn">السابق</button><button class="primary-btn next-btn">التالي</button></div>
     </div>`;
+
   if(state.step===5) return `
     <div class="step-card">
       <h3 class="section-title">بيانات التواصل</h3>
@@ -86,6 +116,7 @@ function renderStep(){
       </div>
       <div class="actions"><button class="soft-btn prev-btn">السابق</button><button class="primary-btn next-btn">التالي</button></div>
     </div>`;
+
   return `
     <div class="step-card">
       <h3 class="section-title">المراجعة قبل النشر</h3>
@@ -98,6 +129,7 @@ function renderStep(){
       <div class="actions"><button class="soft-btn prev-btn">السابق</button><button class="primary-btn" id="sendBtn">إرسال الإعلان</button></div>
     </div>`;
 }
+
 function bind(){
   document.querySelectorAll('.choose-cat').forEach(btn=>btn.onclick=()=>state.category=btn.dataset.cat);
   document.querySelectorAll('.choose-sub').forEach(btn=>btn.onclick=()=>state.subtype=btn.dataset.sub);
@@ -112,6 +144,7 @@ function bind(){
     reader.readAsDataURL(file);
   }));
   const send = document.getElementById('sendBtn');
-  if(send) send.onclick = ()=> alert('تم تجهيز النسخة النظيفة. المرحلة التالية: ربط الحفظ الحقيقي مع Firebase.');
+  if(send) send.onclick = ()=> alert('تم تجهيز النسخة. المرحلة التالية: ربط الحفظ الحقيقي مع Firebase.');
 }
+
 render();
