@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة الإدارة | براتشو كار</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-badge">BC</div>
+        <div><h1>براتشو كار</h1><p>لوحة الإدارة</p></div>
+      </a>
+      <div class="top-actions">
+        <a href="index.html" class="outline-btn">الرئيسية</a>
+        <a href="dashboard.html" class="outline-btn">حسابي</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container dashboard-grid">
+    <aside class="sidebar">
+      <a href="admin.html" class="active">الإعلانات المعلقة</a>
+      <a href="index.html">الرئيسية</a>
+    </aside>
+    <section>
+      <div class="section-head"><div><h3>الإعلانات المعلقة</h3><p>موافقة، رفض، وتمييز الإعلانات</p></div></div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>الإعلان</th>
+              <th>المرسل</th>
+              <th>الحالة</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="adminTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
