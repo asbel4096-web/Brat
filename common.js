@@ -13,8 +13,9 @@ export function bootCommon(active='home'){
   injectFrame(active);
   bindThemeSwitch();
 }
+
 export function bindThemeSwitch(){
-  document.addEventListener('click', e=>{
+  document.addEventListener('click', e => {
     const btn = e.target.closest('[data-toggle-theme]');
     if(!btn) return;
     const isDark = !document.body.classList.contains('dark');
@@ -22,8 +23,10 @@ export function bindThemeSwitch(){
     localStorage.setItem('bratsho-theme', isDark ? 'dark' : 'light');
   });
 }
+
 export function injectFrame(active='home'){
   if(document.querySelector('.topbar')) return;
+
   const top = document.createElement('header');
   top.className = 'topbar';
   top.innerHTML = `
@@ -35,28 +38,62 @@ export function injectFrame(active='home'){
         </div>
         <div class="logo-badge">BC</div>
       </div>
+
       <div class="quick-actions">
         <a class="soft-btn" href="settings.html">الإعدادات</a>
         <a class="soft-btn" href="dashboard.html">حسابي</a>
         <a class="primary-btn" href="add.html">أضف إعلان</a>
       </div>
-    </div>`;
+    </div>
+  `;
   document.body.prepend(top);
 
   const nav = document.createElement('nav');
   nav.className = 'bottom-nav';
   nav.innerHTML = `
     <ul class="bottom-nav-grid">
-      <li><a href="index.html" class="${active==='home'?'active':''}"><span>الرئيسية</span></a></li>
-      <li><a href="messages.html" class="${active==='messages'?'active':''}"><span>دردشاتي</span></a></li>
-      <li class="nav-center"><a href="add.html" class="nav-add ${active==='add'?'active':''}"><span class="nav-add-circle">+</span><span>أضف إعلان</span></a></li>
-      <li><a href="my-ads.html" class="${active==='myads'?'active':''}"><span>إعلاناتي</span></a></li>
-      <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}"><span>حسابي</span></a></li>
-    </ul>`;
+      <li>
+        <a href="index.html" class="${active==='home' ? 'active' : ''}">
+          <span class="nav-icon">⌂</span>
+          <span>الرئيسية</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="messages.html" class="${active==='messages' ? 'active' : ''}">
+          <span class="nav-icon">◔</span>
+          <span>دردشاتي</span>
+        </a>
+      </li>
+
+      <li class="nav-center">
+        <a href="add.html" class="nav-add ${active==='add' ? 'active' : ''}">
+          <span class="nav-add-circle">+</span>
+          <span>أضف إعلان</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="my-ads.html" class="${active==='myads' ? 'active' : ''}">
+          <span class="nav-icon">▤</span>
+          <span>إعلاناتي</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="dashboard.html" class="${active==='dashboard' ? 'active' : ''}">
+          <span class="nav-icon">◉</span>
+          <span>حسابي</span>
+        </a>
+      </li>
+    </ul>
+  `;
   document.body.append(nav);
 }
+
 export function adCard(item){
   const badge = item.type === 'car' ? 'سيارة' : item.type === 'part' ? 'قطعة غيار' : 'خدمة';
+
   return `
     <article class="ad-card">
       <div class="ad-image" style="background-image:url('${item.image}')"></div>
@@ -64,8 +101,13 @@ export function adCard(item){
         <span class="badge">${badge}</span>
         <div class="price">${Number(item.price).toLocaleString('en-US')} د.ل</div>
         <div class="title">${item.title}</div>
-        <div class="meta"><span>${item.city}</span><span>${item.year}</span><span>${item.mileage}</span></div>
+        <div class="meta">
+          <span>${item.city}</span>
+          <span>${item.year}</span>
+          <span>${item.mileage}</span>
+        </div>
         <div class="desc">${item.desc}</div>
       </div>
-    </article>`;
+    </article>
+  `;
 }
