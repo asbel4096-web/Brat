@@ -2,16 +2,32 @@ import { firebaseSettings, adminEmails } from './firebase-config.js';
 
 const demoListings = [
   {
-    id: 'demo-1', title: 'هيونداي توسان 2023', brand: 'Hyundai', model: 'Tucson', year: 2023,
-    price: 118000, mileage: '33,000 كم', city: 'طرابلس', phone: '0910000000',
+    id: 'demo-1',
+    title: 'هيونداي توسان 2023',
+    brand: 'Hyundai',
+    model: 'Tucson',
+    year: 2023,
+    price: 118000,
+    mileage: '33,000 كم',
+    city: 'طرابلس',
+    phone: '0910000000',
     description: 'سيارة عائلية ممتازة، وارد حديث، شاشة، كاميرا، بصمة، حالة ممتازة.',
-    imageUrl: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&q=80', status: 'approved'
+    imageUrl: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&q=80',
+    status: 'approved'
   },
   {
-    id: 'demo-2', title: 'كيا K7 2015', brand: 'Kia', model: 'K7', year: 2015,
-    price: 64000, mileage: '120,000 كم', city: 'مصراتة', phone: '0920000000',
+    id: 'demo-2',
+    title: 'كيا K7 2015',
+    brand: 'Kia',
+    model: 'K7',
+    year: 2015,
+    price: 64000,
+    mileage: '120,000 كم',
+    city: 'مصراتة',
+    phone: '0920000000',
     description: 'فل أوبشن، بصمة، شاشة، كاميرا خلفية، نظيفة جدًا.',
-    imageUrl: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', status: 'approved'
+    imageUrl: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
+    status: 'approved'
   }
 ];
 
@@ -165,8 +181,8 @@ function bindStaticUI() {
       .filter(item => {
         const hay = `${item.title} ${item.brand} ${item.model} ${item.city}`.toLowerCase();
         return (!q || hay.includes(q)) &&
-               (!brand || (item.brand || '').toLowerCase() === brand) &&
-               (!city || (item.city || '').toLowerCase() === city);
+          (!brand || (item.brand || '').toLowerCase() === brand) &&
+          (!city || (item.city || '').toLowerCase() === city);
       });
 
     renderListings(filtered);
@@ -301,7 +317,9 @@ async function tryFirebaseInit() {
       showToast('تم إنشاء الحساب.');
     } catch (err) {
       console.error(err);
-      showToast('تعذر إنشاء الحساب: ' + (err.code || err.message));
+      alert('تعذر إنشاء الحساب: ' + (err.code || err.message));
+    }
+  });
 
   document.getElementById('loginBtn').addEventListener('click', async () => {
     try {
@@ -315,7 +333,9 @@ async function tryFirebaseInit() {
       showToast('تم تسجيل الدخول.');
     } catch (err) {
       console.error(err);
-      showToast('فشل تسجيل الدخول.');
+      alert('فشل تسجيل الدخول: ' + (err.code || err.message));
+    }
+  });
 
   logoutBtn.addEventListener('click', async () => {
     try {
@@ -323,7 +343,10 @@ async function tryFirebaseInit() {
       showToast('تم تسجيل الخروج.');
     } catch (err) {
       console.error(err);
-      showToast('تعذر إنشاء الحساب.');
+      alert('تعذر تسجيل الخروج: ' + (err.code || err.message));
+    }
+  });
+
   document.getElementById('submitListingBtn').addEventListener('click', async () => {
     try {
       if (!auth.currentUser) return openModal('authModal');
