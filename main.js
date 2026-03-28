@@ -315,8 +315,7 @@ async function tryFirebaseInit() {
       showToast('تم تسجيل الدخول.');
     } catch (err) {
       console.error(err);
-      showToast('فشل تسجيل الدخول: ' + (err.code || err.message));
-  });
+      showToast('فشل تسجيل الدخول.');
 
   logoutBtn.addEventListener('click', async () => {
     try {
@@ -324,10 +323,7 @@ async function tryFirebaseInit() {
       showToast('تم تسجيل الخروج.');
     } catch (err) {
       console.error(err);
-      showToast('تعذر تسجيل الخروج.');
-    }
-  });
-
+      showToast('تعذر إنشاء الحساب.');
   document.getElementById('submitListingBtn').addEventListener('click', async () => {
     try {
       if (!auth.currentUser) return openModal('authModal');
