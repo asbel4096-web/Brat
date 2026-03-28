@@ -301,9 +301,7 @@ async function tryFirebaseInit() {
       showToast('تم إنشاء الحساب.');
     } catch (err) {
       console.error(err);
-      showToast('تعذر إنشاء الحساب.');
-    }
-  });
+      showToast('تعذر إنشاء الحساب: ' + (err.code || err.message));
 
   document.getElementById('loginBtn').addEventListener('click', async () => {
     try {
@@ -317,8 +315,7 @@ async function tryFirebaseInit() {
       showToast('تم تسجيل الدخول.');
     } catch (err) {
       console.error(err);
-      showToast('فشل تسجيل الدخول.');
-    }
+      showToast('فشل تسجيل الدخول: ' + (err.code || err.message));
   });
 
   logoutBtn.addEventListener('click', async () => {
