@@ -1,5 +1,5 @@
 export const firebaseSettings = {
-  apiKey: "AIzaSyDsZF0lFIBHFbZEs0W456Mvvmng-JrVtBE",
+  apiKey: "AIzaSyDsZF0lFIBHFbZEs0W456Mvvmng-JrvtBE",
   authDomain: "bratsho-car.firebaseapp.com",
   projectId: "bratsho-car",
   storageBucket: "bratsho-car.firebasestorage.app",
