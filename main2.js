@@ -385,7 +385,6 @@ async function tryFirebaseInit() {
     try {
       const btn = e.target.closest('button[data-action]');
 if (!btn || !state.isAdmin) return;
-alert('admin=' + state.isAdmin + ' | user=' + (state.user?.email || 'null'));
 
 const id = btn.dataset.id;
 const action = btn.dataset.action;
