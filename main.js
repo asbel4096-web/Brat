@@ -1,4 +1,7 @@
-import { pageTemplate, categoryCard, listingCard, listings, customSelect, activateCustomSelects } from './common.js';
+import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, activateCustomSelects } from './common.js';
+
+const allListings = getAllListings();
+const latest = allListings.slice(0, 6);
 
 const content = `
 <section class="hero-panel">
@@ -15,21 +18,21 @@ const content = `
       <label class="field"><input placeholder="ابحث: أزيرا 2023 / كمبيو / ميكانيكي متنقل"></label>
       ${customSelect('القسم', 'كل الأقسام', ['كل الأقسام','سيارات','قطع غيار','كماليات','ميكانيكي متنقل'], 'home-cat')}
       ${customSelect('المدينة', 'كل المدن', ['كل المدن','طرابلس','مصراتة','بنغازي'], 'home-city')}
-      <button class="btn btn-primary btn-block">أضف الآن</button>
+      <button class="btn btn-primary btn-block" onclick="location.href='add.html'">أضف الآن</button>
     </div>
   </div>
 </section>
 <section class="section">
   <div class="section-head"><div><h3>الأقسام الرئيسية</h3><p>نسخة أكثر ترتيبًا للمشروع مع تسلسل بصري أوضح ومساحات متوازنة.</p></div></div>
   <div class="category-list">
-    ${categoryCard('🚗','السيارات','سيدان، SUV، عائلية، اقتصادية، وارد حديث، ومركبات خاصة.','details.html?id=1')}
-    ${categoryCard('🧩','قطع الغيار','محركات، كمبيو، أبواب، فوانيس، جنوط، بطاريات، وشاشات.','details.html?id=2')}
-    ${categoryCard('🛠️','الميكانيكي المتنقل','فحص أعطال، تبديل بطارية، قطر، إنقاذ سريع، وكهرباء خفيفة.','details.html?id=3')}
+    ${categoryCard('🚗','السيارات','سيدان، SUV، عائلية، اقتصادية، وارد حديث، ومركبات خاصة.','cars.html')}
+    ${categoryCard('🧩','قطع الغيار','محركات، كمبيو، أبواب، فوانيس، جنوط، بطاريات، وشاشات.','parts.html')}
+    ${categoryCard('🛠️','الميكانيكي المتنقل','فحص أعطال، تبديل بطارية، قطر، إنقاذ سريع، وكهرباء خفيفة.','services.html')}
   </div>
 </section>
 <section class="section">
   <div class="section-head"><div><h3>أحدث الإعلانات</h3><p>كل إعلان جديد تتم إضافته من صفحة المعلن يظهر هنا مباشرة.</p></div><a class="btn btn-soft" href="my-ads.html">كل الإعلانات</a></div>
-  <div class="listing-grid">${listings.map(listingCard).join('')}</div>
+  <div class="listing-grid">${latest.map(listingCard).join('')}</div>
 </section>`;
 
 document.getElementById('app').innerHTML = pageTemplate({active:'home', title:'', subtitle:'', content});

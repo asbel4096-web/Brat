@@ -304,3 +304,11 @@ body{padding-bottom:0}
   .nav-center{transform:translateY(0)}
   .nav-center span{width:28px;height:28px;font-size:16px}
 }
+
+
+/* real add form helpers */
+#save-status{font-weight:700}
+#image-preview{grid-template-columns:repeat(2,1fr)}
+#image-preview .listing-card{overflow:hidden}
+#image-preview .listing-image{aspect-ratio:1/1}
+@media (min-width:640px){#image-preview{grid-template-columns:repeat(4,1fr)}}
