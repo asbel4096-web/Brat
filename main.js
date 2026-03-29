@@ -1,6 +1,5 @@
-import { boot, getListings, listingCard } from './common.js';
+import { boot, listings, listingCard, customSelect, activateCustomSelects } from './common.js';
 boot('home');
-const listings = await getListings();
 
 document.getElementById('app').innerHTML = `
 <main class="page">
@@ -14,32 +13,22 @@ document.getElementById('app').innerHTML = `
             <a class="hero-tag" href="parts.html">كماليات</a>
             <a class="hero-tag" href="services.html">ميكانيكي متنقل</a>
           </div>
-          <h2 class="hero-title">براتشو كار بشكل أرتب وتناسق أقوى وتجربة إعلان أسهل</h2>
-          <p class="hero-text">واجهة حديثة ومتوازنة بالأزرق والأسود والأبيض مع لمسات برتقالية، وأزرار أوضح، وبطاقات عرض مرتبة، ونظام إضافة إعلان يدعم حتى 20 صورة للمعلن.</p>
+          <h2 class="hero-title">منصة احترافية للسيارات وقطع وخدمات متنقلة في ليبيا</h2>
+          <p class="hero-text">أضف إعلانك بشكل أنيق، واربطه بالاتصال والدردشة والواتساب والموقع على الخريطة، مع واجهة حديثة باللون الأزرق الداكن والأسود والأبيض ولمسات برتقالية.</p>
 
           <div class="quick-grid">
-            <a class="quick-item" href="cars.html"><div>🚘</div><strong>سيارات للبيع</strong><span>سيارات جديدة ومستعملة ببطاقات أنيقة</span></a>
-            <a class="quick-item" href="parts.html"><div>🧩</div><strong>قطع غيار</strong><span>محركات وكمبيو وبطاريات وكماليات</span></a>
-            <a class="quick-item" href="parts.html"><div>✨</div><strong>كماليات</strong><span>شاشات وحساسات وزينة وإكسسوارات</span></a>
-            <a class="quick-item" href="services.html"><div>🛠️</div><strong>ميكانيكي متنقل</strong><span>خدمة سريعة وفحص وكهرباء خفيفة</span></a>
+            <a class="quick-item" href="cars.html"><div>🚘</div><strong>سيارات للبيع</strong><span>عرض سيارات جديدة ومستعملة</span></a>
+            <a class="quick-item" href="parts.html"><div>🧩</div><strong>قطع غيار</strong><span>محركات، كمبيو، بطاريات وجنوط</span></a>
+            <a class="quick-item" href="parts.html"><div>✨</div><strong>كماليات</strong><span>شاشات، حساسات، زينة وإكسسوارات</span></a>
+            <a class="quick-item" href="services.html"><div>🛠️</div><strong>ميكانيكي متنقل</strong><span>فحص، كهرباء، بطارية، خدمة سريعة</span></a>
           </div>
 
           <div class="search-shell">
             <div class="search-grid">
-              <label class="field"><input placeholder="ابحث: أزيرا 2023 / كمبيو / ميكانيكي متنقل"></label>
-              <label class="field">
-                <select onchange="if(this.value) location.href=this.value">
-                  <option value="">كل الأقسام</option>
-                  <option value="cars.html">سيارات</option>
-                  <option value="parts.html">قطع غيار</option>
-                  <option value="parts.html">كماليات</option>
-                  <option value="services.html">ميكانيكي متنقل</option>
-                </select>
-              </label>
-              <label class="field">
-                <select><option>كل المدن</option><option>طرابلس</option><option>مصراتة</option><option>بنغازي</option></select>
-              </label>
-              <a class="btn" href="add.html">أضف الآن</a>
+              <label class="field"><input placeholder="ابحث: سوناتا 2016 / كمبيو / فحص بطارية"></label>
+              ${customSelect('', 'كل الأقسام', ['كل الأقسام','سيارات','قطع غيار','كماليات','ميكانيكي متنقل'], 'home-section')}
+              ${customSelect('', 'كل المدن', ['كل المدن','طرابلس','مصراتة','بنغازي'], 'home-city')}
+              <button class="btn" id="goSearch">أضف الآن</button>
             </div>
           </div>
         </div>
@@ -52,7 +41,7 @@ document.getElementById('app').innerHTML = `
       <div class="section-head">
         <div>
           <h2>الأقسام الرئيسية</h2>
-          <p>نسخة أكثر ترتيبًا للمشروع مع تسلسل بصري أوضح ومساحات متوازنة.</p>
+          <p>واجهة مرتبة للمستخدم مع بطاقات واضحة وسريعة للمشاهدة.</p>
         </div>
       </div>
 
@@ -68,8 +57,8 @@ document.getElementById('app').innerHTML = `
     <div class="container">
       <div class="section-head">
         <div>
-          <h2>أحدث الإعلانات</h2>
-          <p>كل إعلان جديد تتم إضافته من صفحة المعلن يظهر هنا مباشرة.</p>
+          <h2>إعلانات مميزة</h2>
+          <p>أفضل السيارات والقطع والخدمات المعروضة الآن.</p>
         </div>
         <a class="pill" href="my-ads.html">كل الإعلانات</a>
       </div>
@@ -79,3 +68,12 @@ document.getElementById('app').innerHTML = `
   </section>
 </main>
 `;
+
+activateCustomSelects();
+document.getElementById('goSearch').onclick = ()=>{
+  const v = document.querySelector('[data-id="home-section"] .cselect-btn span').textContent.trim();
+  if(v === 'سيارات') location.href = 'cars.html';
+  else if(v === 'قطع غيار' || v === 'كماليات') location.href = 'parts.html';
+  else if(v === 'ميكانيكي متنقل') location.href = 'services.html';
+  else location.href = 'my-ads.html';
+};

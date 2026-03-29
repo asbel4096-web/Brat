@@ -1,7 +1,5 @@
-import { boot, getUserListings } from './common.js';
+import { boot } from './common.js';
 boot('dashboard');
-const userListings = await getUserListings();
-const totalViews = userListings.length * 241 + 2891;
 document.getElementById('app').innerHTML = `
 <main class="page">
   <section class="section">
@@ -14,14 +12,14 @@ document.getElementById('app').innerHTML = `
       </div>
 
       <div class="stats">
-        <article class="stat"><strong>${totalViews.toLocaleString('en-US')}</strong><span>المشاهدات</span></article>
-        <article class="stat"><strong>${userListings.length}</strong><span>إعلاناتي</span></article>
+        <article class="stat"><strong>2,891</strong><span>المشاهدات</span></article>
+        <article class="stat"><strong>0</strong><span>إعلاناتي</span></article>
         <article class="stat"><strong>8</strong><span>المفضلة</span></article>
         <article class="stat"><strong>4.9</strong><span>التقييم</span></article>
       </div>
 
       <div class="two-col">
-        <div class="profile-card card">
+        <div class="profile-card">
           <div class="profile-top">
             <div>
               <h3 class="profile-title">براتشو كار</h3>
@@ -38,7 +36,7 @@ document.getElementById('app').innerHTML = `
         </div>
 
         <div class="menu-list card">
-          <div class="menu-row"><span>الإعلانات المضافة من النموذج</span><strong>${userListings.length}</strong></div>
+          <div class="menu-row"><span>الإعلانات المضافة من النموذج</span><strong>0</strong></div>
           <div class="menu-row"><span>آخر الإعلانات المشاهدة</span><strong>7</strong></div>
           <div class="menu-row"><span>الدردشات الجديدة</span><strong>3</strong></div>
           <div class="menu-row"><span>الدعم والمساعدة</span><strong>متاح</strong></div>

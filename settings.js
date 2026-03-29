@@ -1,5 +1,5 @@
 import { boot } from './common.js';
-boot();
+boot('dashboard');
 document.getElementById('app').innerHTML = `
 <main class="page">
   <section class="section">

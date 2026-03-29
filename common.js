@@ -1,4 +1,4 @@
-const seedListings = [
+export const listings = [
   {
     id:'1',
     type:'سيارة',
@@ -9,15 +9,6 @@ const seedListings = [
     desc:'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.',
     seller:'يونس البراتشو',
     time:'الآن',
-    phone:'0912345678',
-    whatsapp:'218912345678',
-    map:'https://maps.google.com/?q=Tripoli',
-    condition:'ممتازة',
-    fuel:'بنزين',
-    transmission:'أوتوماتيك',
-    engine:'2.0',
-    year:'2016',
-    mileage:'95,000',
     cover:'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
     images:[
       'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
@@ -35,15 +26,6 @@ const seedListings = [
     desc:'كمبيو نظيف ومجرب، مناسب لعدة فئات.',
     seller:'مخزن الغيار',
     time:'منذ ساعة',
-    phone:'0920000000',
-    whatsapp:'218920000000',
-    map:'https://maps.google.com/?q=Misrata',
-    condition:'جيدة جدًا',
-    fuel:'—',
-    transmission:'—',
-    engine:'متوافق مع عدة فئات',
-    year:'2014',
-    mileage:'—',
     cover:'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
     images:['https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80']
   },
@@ -57,15 +39,6 @@ const seedListings = [
     desc:'فحص أعطال، كهرباء خفيفة، خدمة منزلية داخل طرابلس.',
     seller:'فني متنقل',
     time:'منذ 20 دقيقة',
-    phone:'0911111111',
-    whatsapp:'218911111111',
-    map:'https://maps.google.com/?q=Tripoli',
-    condition:'متوفر الآن',
-    fuel:'—',
-    transmission:'—',
-    engine:'خدمة ميدانية',
-    year:'2026',
-    mileage:'—',
     cover:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80',
     images:['https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80']
   }
@@ -77,74 +50,22 @@ export const chats = [
   {name:'سالم', text:'ممكن رقم الواتساب؟', time:'منذ ساعة', unread:1}
 ];
 
-const DB_NAME = 'bratsho-car-db';
-const STORE = 'userListings';
-
-function openDb(){
-  return new Promise((resolve,reject)=>{
-    const request = indexedDB.open(DB_NAME,1);
-    request.onupgradeneeded = ()=>{
-      const db = request.result;
-      if(!db.objectStoreNames.contains(STORE)){
-        db.createObjectStore(STORE,{keyPath:'id'});
-      }
-    };
-    request.onsuccess = ()=>resolve(request.result);
-    request.onerror = ()=>reject(request.error);
-  });
-}
-
-async function readAllUserListings(){
-  try{
-    const db = await openDb();
-    return await new Promise((resolve,reject)=>{
-      const tx = db.transaction(STORE,'readonly');
-      const store = tx.objectStore(STORE);
-      const request = store.getAll();
-      request.onsuccess = ()=>resolve(request.result || []);
-      request.onerror = ()=>reject(request.error);
-    });
-  }catch(err){
-    console.error('IndexedDB read failed', err);
-    return [];
-  }
-}
-
-export async function saveUserListing(listing){
-  const db = await openDb();
-  return await new Promise((resolve,reject)=>{
-    const tx = db.transaction(STORE,'readwrite');
-    tx.objectStore(STORE).put(listing);
-    tx.oncomplete = ()=>resolve(listing);
-    tx.onerror = ()=>reject(tx.error);
-  });
-}
-
-export async function getListings(){
-  const userListings = await readAllUserListings();
-  return [...userListings.sort((a,b)=> new Date(b.createdAt||0)-new Date(a.createdAt||0)), ...seedListings];
-}
-
-export async function getListingById(id){
-  const all = await getListings();
-  return all.find(x=>x.id===id) || all[0];
-}
-
-export async function getUserListings(){
-  const all = await readAllUserListings();
-  return all.sort((a,b)=> new Date(b.createdAt||0)-new Date(a.createdAt||0));
-}
-
 export function price(v){
-  return Number(v||0).toLocaleString('en-US') + ' د.ل';
+  return Number(v).toLocaleString('en-US') + ' د.ل';
 }
 
 export function boot(active='home'){
   mountShell(active);
+  activateCustomSelects();
+  window.addEventListener('click', e=>{
+    if(!e.target.closest('.cselect')){
+      document.querySelectorAll('.cselect.open').forEach(x=>x.classList.remove('open'));
+    }
+  });
 }
 
 function navLink(href,label,icon,activeKey,key){
-  return `<li><a href="${href}" class="${activeKey===key?'active':''}"><span class="nav-ico">${icon}</span><span>${label}</span></a></li>`;
+  return `<li><a href="${href}" class="${activeKey===key?'active':''}"><span>${icon}</span><span>${label}</span></a></li>`;
 }
 
 export function mountShell(active='home'){
@@ -155,16 +76,16 @@ export function mountShell(active='home'){
   top.innerHTML = `
     <div class="container topbar-inner">
       <div class="brand">
-        <a href="index.html" class="logo">BC</a>
+        <div class="logo">BC</div>
         <div>
           <h1 class="brand-title"><span>براتشو</span> كار</h1>
           <p class="brand-sub">سوق سيارات وقطع غيار وخدمات متنقلة بتصميم مرتب وسريع</p>
         </div>
       </div>
       <div class="top-actions">
-        <a class="btn-accent" href="add.html">＋ أضف إعلان</a>
-        <a class="btn-soft" href="messages.html">💬 دردشاتي</a>
-        <a class="btn-soft" href="dashboard.html">👤 حسابي</a>
+        <a class="btn-accent" href="add.html">+ أضف إعلان</a>
+        <a class="btn-soft" href="messages.html">دردشاتي 💬</a>
+        <a class="btn-soft" href="dashboard.html">حسابي 👤</a>
       </div>
     </div>
   `;
@@ -193,21 +114,12 @@ function sellerInitial(name='ب'){
   return String(name).trim().charAt(0) || 'ب';
 }
 
-function normalizePhone(phone=''){
-  const digits = String(phone).replace(/\D/g,'');
-  if(!digits) return '0912345678';
-  if(digits.startsWith('218')) return digits;
-  if(digits.startsWith('0')) return '218' + digits.slice(1);
-  return digits;
-}
-
 export function listingCard(item){
   return `
     <article class="listing-card card">
       <a class="listing-media" href="details.html?id=${item.id}" style="background-image:url('${item.cover}')">
         <span class="listing-fav">♡</span>
         <span class="listing-type-chip">${item.type}</span>
-        <span class="listing-image-count">${(item.images||[]).length} صورة</span>
       </a>
 
       <div class="listing-body">
@@ -229,13 +141,13 @@ export function listingCard(item){
             <div class="avatar">${sellerInitial(item.seller)}</div>
             <div>
               <div class="seller-name">${item.seller || 'صاحب الإعلان'}</div>
-              <div class="seller-sub">${item.meta || `${item.city} • ${item.year || ''}`}</div>
+              <div class="seller-sub">${item.meta}</div>
             </div>
           </div>
 
           <div class="listing-actions">
-            <a class="action-mini" href="https://wa.me/${normalizePhone(item.whatsapp || item.phone)}" target="_blank" rel="noreferrer">واتس</a>
-            <a class="action-mini" href="tel:${item.phone || '0912345678'}">اتصال</a>
+            <a class="action-mini" href="https://wa.me/218912345678">✆</a>
+            <a class="action-mini" href="tel:0912345678">☎</a>
             <a class="btn" href="details.html?id=${item.id}">عرض</a>
           </div>
         </div>
@@ -244,35 +156,57 @@ export function listingCard(item){
   `;
 }
 
-export function emptyState({title='لا توجد بيانات', text='أضف أول إعلان ليظهر هنا.', cta='أضف إعلان', href='add.html'}={}){
+export function customSelect(label, value, options, id=''){
   return `
-    <div class="empty card">
-      <div class="empty-icon">＋</div>
-      <h3>${title}</h3>
-      <p>${text}</p>
-      <a class="btn" href="${href}">${cta}</a>
+    <div class="select-row">
+      ${label ? `<div class="label-top">${label}</div>` : ''}
+      <div class="cselect" ${id ? `data-id="${id}"` : ''}>
+        <button type="button" class="cselect-btn">
+          <span>${value}</span>
+          <span>⌄</span>
+        </button>
+        <div class="cselect-list">
+          ${options.map((opt, i)=>`
+            <button type="button" class="cselect-item ${i===0?'active':''}" data-value="${opt}">
+              <b>${opt}</b>
+              ${i===0 ? '<small>✓</small>' : '<small></small>'}
+            </button>
+          `).join('')}
+        </div>
+      </div>
     </div>
   `;
 }
 
-export async function fileToDataUrl(file, maxWidth=1280, quality=.78){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.onload = ()=>{
-      const img = new Image();
-      img.onload = ()=>{
-        const ratio = Math.min(1, maxWidth / img.width);
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.round(img.width * ratio);
-        canvas.height = Math.round(img.height * ratio);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.onerror = reject;
-      img.src = reader.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+export function activateCustomSelects(root=document){
+  root.querySelectorAll('.cselect').forEach(select=>{
+    if(select.dataset.ready === '1') return;
+    select.dataset.ready = '1';
+
+    const btn = select.querySelector('.cselect-btn');
+    const value = btn.querySelector('span');
+    const items = select.querySelectorAll('.cselect-item');
+
+    btn.addEventListener('click', ev=>{
+      ev.stopPropagation();
+      document.querySelectorAll('.cselect.open').forEach(x=>{
+        if(x !== select) x.classList.remove('open');
+      });
+      select.classList.toggle('open');
+    });
+
+    items.forEach(item=>{
+      item.addEventListener('click', ev=>{
+        ev.stopPropagation();
+        items.forEach(x=>x.classList.remove('active'));
+        item.classList.add('active');
+        value.textContent = item.dataset.value;
+        items.forEach(x=>{
+          const sm = x.querySelector('small');
+          if(sm) sm.textContent = x.classList.contains('active') ? '✓' : '';
+        });
+        select.classList.remove('open');
+      });
+    });
   });
 }
