@@ -1,29 +1,37 @@
-import { bootCommon } from './common.js';
-bootCommon('add');
+import { boot } from './common.js';
+boot('add');
+
 document.getElementById('app').innerHTML = `
 <main class="page">
-  <section class="page-head"><div class="container">
-    <h2 class="page-title">أضف إعلانًا فاخرًا</h2>
-    <p class="page-sub">تجربة إضافة إعلان متعددة الخطوات، أنظف وأهدأ.</p>
-    <div class="steps-line">
-      <span class="step-chip active">1. القسم</span>
-      <span class="step-chip">2. النوع</span>
-      <span class="step-chip">3. الصور</span>
-      <span class="step-chip">4. التفاصيل</span>
-      <span class="step-chip">5. التواصل</span>
-      <span class="step-chip">6. المراجعة</span>
-    </div>
-  </div></section>
-  <section class="section"><div class="container">
-    <div class="step-card">
-      <h2 class="page-title" style="font-size:44px">ما الذي تود بيعه أو الإعلان عنه؟</h2>
-      <p class="page-sub">اختر القسم المناسب.</p>
-      <div class="grid-choices">
-        <div class="choice-card"><div class="muted">1</div><h4>سيارات ومركبات</h4><p>سيارات للبيع والإيجار.</p></div>
-        <div class="choice-card"><div class="muted">2</div><h4>قطع غيار</h4><p>محركات، كمبيو، بطاريات، جنوط.</p></div>
-        <div class="choice-card"><div class="muted">3</div><h4>خدمات متنقلة</h4><p>فحص، كهرباء، إنقاذ سريع.</p></div>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><h2>أضف إعلانًا احترافيًا</h2><p>مسار واضح وسريع لإضافة سيارة أو قطعة أو خدمة.</p></div>
       </div>
-      <div class="actions"><span></span><a class="primary-btn" href="#">التالي</a></div>
+
+      <div class="steps">
+        <span class="step active">1. القسم</span>
+        <span class="step">2. النوع</span>
+        <span class="step">3. الصور</span>
+        <span class="step">4. التفاصيل</span>
+        <span class="step">5. التواصل</span>
+        <span class="step">6. المراجعة</span>
+      </div>
+
+      <div class="card" style="padding:22px">
+        <h2 style="margin:0 0 8px;font-size:44px">اختر نوع الإعلان</h2>
+        <p class="brand-sub" style="margin-bottom:0">ابدأ من القسم الصحيح حسب نوع النشاط.</p>
+
+        <div class="option-grid" style="margin-top:18px">
+          <article class="option"><h4>سيارات للبيع</h4><p>سيارات جديدة ومستعملة ومركبات خاصة.</p></article>
+          <article class="option"><h4>قطع غيار وكماليات</h4><p>محركات، كمبيو، جنوط، شاشات، حساسات، زينة.</p></article>
+          <article class="option"><h4>ميكانيكي متنقل</h4><p>فحص، كهرباء، بطاريات، سحب ونجدة سريعة.</p></article>
+        </div>
+
+        <div style="display:flex;justify-content:end;margin-top:18px">
+          <a class="btn" href="#">التالي</a>
+        </div>
+      </div>
     </div>
-  </div></section>
-</main>`;
+  </section>
+</main>

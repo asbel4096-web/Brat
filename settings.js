@@ -1,19 +1,21 @@
-import { bootCommon } from './common.js';
-bootCommon();
+import { boot } from './common.js';
+boot();
+
 document.getElementById('app').innerHTML = `
 <main class="page">
-  <section class="page-head"><div class="container">
-    <h2 class="page-title">الإعدادات</h2>
-    <p class="page-sub">الوضع، الدولة، العملة، وإعدادات الحساب.</p>
-  </div></section>
-  <section class="section"><div class="container">
-    <div class="settings-card">
-      <div class="settings-row"><div class="settings-label">الدولة</div><div class="settings-value">ليبيا</div></div>
-      <div class="settings-row"><div class="settings-label">العملة</div><div class="settings-value">دينار</div></div>
-      <div class="settings-row"><div class="settings-label">الوضع الليلي</div><button class="soft-btn settings-action">تبديل</button></div>
-      <div class="settings-row"><div class="settings-label">إعدادات الحساب</div><div class="settings-value">←</div></div>
-      <div class="settings-row"><div class="settings-label">المساعدة</div><div class="settings-value">←</div></div>
-      <div class="settings-row"><div class="settings-label">عن التطبيق</div><div class="settings-value">براتشو كار</div></div>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><h2>الإعدادات</h2><p>إدارة الحساب، الدولة، العملة، اللغة، والوضع الليلي.</p></div>
+      </div>
+      <div class="settings-card">
+        <div class="settings-row"><strong>الدولة</strong><span>ليبيا</span></div>
+        <div class="settings-row"><strong>العملة</strong><span>دينار</span></div>
+        <div class="settings-row"><strong>اللغة</strong><span>العربية / English</span></div>
+        <div class="settings-row"><strong>الوضع الليلي</strong><span>تشغيل / إيقاف</span></div>
+        <div class="settings-row"><strong>إعدادات الحساب</strong><span>تعديل</span></div>
+        <div class="settings-row"><strong>المساعدة</strong><span>متاحة</span></div>
+      </div>
     </div>
-  </div></section>
-</main>`;
+  </section>
+</main>
