@@ -271,3 +271,36 @@ body{padding-bottom:0}
   .nav-center{transform:translateY(-3px)}
   .nav-center span{width:32px;height:32px;font-size:18px}
 }
+
+
+/* v7.4.3 bottom nav fix */
+:root{
+  --bottom-nav-h: 78px;
+  --bottom-safe: calc(var(--bottom-nav-h) + 44px + env(safe-area-inset-bottom));
+}
+.app-shell{padding:0 10px var(--bottom-safe)}
+.page-main{padding-bottom:18px}
+.section{margin:16px 0}
+.section:last-child{margin-bottom:28px}
+.listing-grid,.stats-grid,.category-list,.message-list,.dashboard-buttons{padding-bottom:8px}
+.listing-card:last-child,.surface-card:last-child,.dashboard-card:last-child,.form-shell:last-child,.empty-card:last-child{margin-bottom:10px}
+.bottom-nav{height:var(--bottom-nav-h);bottom:6px;width:min(820px,calc(100% - 18px));padding:4px 6px calc(4px + env(safe-area-inset-bottom));border-radius:24px;gap:3px;box-shadow:0 12px 28px rgba(7,13,32,.18)}
+.nav-item{min-height:40px;font-size:10px;border-radius:16px}
+.nav-item span{font-size:15px}
+.nav-center{transform:translateY(-1px);border-radius:16px}
+.nav-center span{width:30px;height:30px;font-size:17px}
+@media (max-width:640px){
+  :root{
+    --bottom-nav-h: 74px;
+    --bottom-safe: calc(var(--bottom-nav-h) + 46px + env(safe-area-inset-bottom));
+  }
+  .app-shell{padding:0 8px var(--bottom-safe)}
+  .page-main{padding-bottom:20px}
+  .section{margin:14px 0}
+  .section:last-child{margin-bottom:30px}
+  .bottom-nav{height:var(--bottom-nav-h);bottom:4px;width:calc(100% - 14px);padding:4px 6px calc(4px + env(safe-area-inset-bottom));border-radius:22px}
+  .nav-item{min-height:38px;font-size:9px}
+  .nav-item span{font-size:14px}
+  .nav-center{transform:translateY(0)}
+  .nav-center span{width:28px;height:28px;font-size:16px}
+}
