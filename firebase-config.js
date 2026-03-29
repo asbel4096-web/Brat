@@ -1,9 +1,15 @@
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+
 export const firebaseSettings = {
-  apiKey: "PUT_YOUR_API_KEY",
-  authDomain: "PUT_YOUR_AUTH_DOMAIN",
-  projectId: "PUT_YOUR_PROJECT_ID",
-  storageBucket: "PUT_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PUT_YOUR_SENDER_ID",
-  appId: "PUT_YOUR_APP_ID"
+  apiKey: 'AIzaSyDsZF0lFIBHFbZEs0W456Mvvmng-JrvtBE',
+  authDomain: 'bratsho-car.firebaseapp.com',
+  projectId: 'bratsho-car',
+  storageBucket: 'bratsho-car.firebasestorage.app',
+  messagingSenderId: '320104607081',
+  appId: '1:320104607081:web:1f25ac69df065c4d7921f8'
 };
-export const adminEmails = ["bzcars6@gmail.com"];
+
+export const app = initializeApp(firebaseSettings);
+export const db = getFirestore(app);
+export const adminEmails = ['bzcars6@gmail.com'];

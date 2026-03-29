@@ -1,4 +1,19 @@
-const STORAGE_KEY = 'bratsho_ads_v1';
+import { db } from './firebase-config.js';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+
+const STORAGE_KEY = 'bratsho_ads_v2_cache';
+const OWNER_KEY = 'bratsho_owner_id';
+const COLLECTION_NAME = 'listings';
 
 export const listings = [
   {
@@ -16,7 +31,8 @@ export const listings = [
     desc: 'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.',
     cover: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
     images: ['https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: 'الآن'
+    createdAt: 'الآن',
+    createdTs: Date.now() - 3600000
   },
   {
     id: '2',
@@ -33,7 +49,8 @@ export const listings = [
     desc: 'كمبيو نظيف ومجرب، مناسب لعدة فئات، جاهز للتركيب.',
     cover: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
     images: ['https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: 'الآن'
+    createdAt: 'الآن',
+    createdTs: Date.now() - 7200000
   },
   {
     id: '3',
@@ -50,7 +67,8 @@ export const listings = [
     desc: 'فحص أعطال، كهرباء خفيفة، خدمة سريعة داخل طرابلس.',
     cover: 'https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80',
     images: ['https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: 'الآن'
+    createdAt: 'الآن',
+    createdTs: Date.now() - 10800000
   }
 ];
 
@@ -59,6 +77,9 @@ export const messages = [
   {name:'أحمد', initial:'أ', unread:0, time:'منذ 20 دقيقة', text:'نبي تفاصيل أكثر على القطعة'},
   {name:'سالم', initial:'س', unread:1, time:'منذ ساعة', text:'ممكن رقم الواتساب؟'}
 ];
+
+let remoteCache = null;
+let remoteLoadedAt = 0;
 
 export function price(v){
   const n = Number(v || 0);
@@ -99,22 +120,100 @@ function setStorage(items){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
-export function getUserListings(){
-  return getStorage().sort((a,b)=> Number(b.createdTs || 0) - Number(a.createdTs || 0));
+function mergeUnique(...lists){
+  const map = new Map();
+  lists.flat().forEach(item => {
+    if (!item?.id) return;
+    map.set(String(item.id), item);
+  });
+  return Array.from(map.values()).sort((a, b) => Number(b.createdTs || 0) - Number(a.createdTs || 0));
 }
 
-export function getAllListings(){
-  return [...getUserListings(), ...listings];
+export function getOwnerId(){
+  let ownerId = localStorage.getItem(OWNER_KEY);
+  if (!ownerId) {
+    ownerId = `owner_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem(OWNER_KEY, ownerId);
+  }
+  return ownerId;
 }
 
-export function detailById(id){
-  return getAllListings().find(x=>String(x.id)===String(id)) || getAllListings()[0];
+function normalizeIncoming(item = {}){
+  const createdTs = Number(item.createdTs || item.createdAtMs || Date.now());
+  return {
+    id: String(item.id || `u_${createdTs}`),
+    type: item.type || 'سيارة',
+    title: item.title || 'إعلان',
+    price: Number(item.price || 0),
+    city: item.city || 'طرابلس',
+    year: item.year || 'غير محدد',
+    km: item.km || 'غير محدد',
+    seller: item.seller || 'براتشو كار',
+    sellerInitial: (item.sellerInitial || item.seller || 'ب').charAt(0),
+    phone: item.phone || '',
+    whatsapp: normalizeWhatsapp(item.whatsapp || item.phone || ''),
+    desc: item.desc || '',
+    cover: item.cover || 'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1200&q=80',
+    images: Array.isArray(item.images) && item.images.length ? item.images : (item.cover ? [item.cover] : []),
+    createdTs,
+    createdAt: item.createdAt || formatRelativeArabic(createdTs),
+    ownerId: item.ownerId || ''
+  };
 }
 
-export function saveListing(data){
-  const items = getUserListings();
-  items.unshift(data);
-  setStorage(items);
+export async function getRemoteListings(force = false){
+  if (!force && remoteCache && (Date.now() - remoteLoadedAt) < 20000) return remoteCache;
+  try {
+    const q = query(collection(db, COLLECTION_NAME), orderBy('createdTs', 'desc'), limit(50));
+    const snap = await getDocs(q);
+    remoteCache = snap.docs.map(d => normalizeIncoming({ id: d.id, ...d.data() }));
+    remoteLoadedAt = Date.now();
+    setStorage(remoteCache.filter(x => x.ownerId === getOwnerId()));
+    return remoteCache;
+  } catch (err) {
+    console.warn('Firestore read fallback to local cache', err);
+    remoteCache = getStorage().map(normalizeIncoming);
+    remoteLoadedAt = Date.now();
+    return remoteCache;
+  }
+}
+
+export async function getAllListings(force = false){
+  const remote = await getRemoteListings(force);
+  return mergeUnique(remote, listings);
+}
+
+export async function getUserListings(force = false){
+  const ownerId = getOwnerId();
+  const remote = await getRemoteListings(force);
+  return mergeUnique(remote.filter(x => x.ownerId === ownerId), getStorage().filter(x => x.ownerId === ownerId));
+}
+
+export async function detailById(id){
+  try {
+    const ref = doc(db, COLLECTION_NAME, String(id));
+    const snap = await getDoc(ref);
+    if (snap.exists()) return normalizeIncoming({ id: snap.id, ...snap.data() });
+  } catch (err) {
+    console.warn('Firestore detail fallback', err);
+  }
+  const all = await getAllListings();
+  return all.find(x => String(x.id) === String(id)) || all[0];
+}
+
+export async function saveListing(data){
+  const normalized = normalizeIncoming({ ...data, ownerId: getOwnerId() });
+  const currentLocal = getStorage().filter(x => String(x.id) !== normalized.id);
+  setStorage([normalized, ...currentLocal]);
+  await setDoc(doc(db, COLLECTION_NAME, normalized.id), {
+    ...normalized,
+    createdTs: Number(normalized.createdTs || Date.now()),
+    createdAtMs: Number(normalized.createdTs || Date.now()),
+    updatedAt: serverTimestamp()
+  });
+  remoteCache = mergeUnique([normalized], remoteCache || []);
+  remoteLoadedAt = Date.now();
+  return normalized;
 }
 
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {
@@ -153,6 +252,11 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
   </div>`;
 }
 
+function truncateText(text = '', max = 110){
+  const t = String(text || '').trim();
+  return t.length > max ? `${t.slice(0, max).trim()}...` : t;
+}
+
 export function listingCard(item){
   const wa = normalizeWhatsapp(item.whatsapp || item.phone);
   const phone = String(item.phone || '').replace(/[^\d+]/g,'');
@@ -167,7 +271,7 @@ export function listingCard(item){
     <div class="listing-body">
       <div class="listing-price">${price(item.price)}</div>
       <h3 class="listing-title"><a href="details.html?id=${safeText(item.id)}">${safeText(item.title)}</a></h3>
-      <p class="listing-desc">${safeText(item.desc)}</p>
+      <p class="listing-desc">${safeText(truncateText(item.desc))}</p>
       <div class="listing-meta">
         <span>${safeText(item.city)}</span>
         <span>${safeText(item.year || '')}</span>
@@ -229,7 +333,7 @@ export function activateCustomSelects(root=document){
   }
 }
 
-export function fileToDataUrl(file, maxW = 1280, quality = 0.82) {
+export function fileToDataUrl(file, maxW = 840, quality = 0.68) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {

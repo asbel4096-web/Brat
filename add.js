@@ -4,7 +4,7 @@ const content = `
 <section class="section">
   <div class="step-pills"><span>1. القسم</span><span>2. التفاصيل</span><span>3. الصور</span><span>4. التواصل</span><span>5. المراجعة</span></div>
   <form id="ad-form" class="form-shell">
-    <div class="section-head"><div><h3>بيانات الإعلان</h3><p>نموذج مرتب مع رفع حتى 20 صورة ومعاينة مباشرة قبل الحفظ.</p></div><span class="btn btn-soft">أساسي</span></div>
+    <div class="section-head"><div><h3>بيانات الإعلان</h3><p>نموذج مرتب مع رفع حتى 3 صور ومعاينة مباشرة قبل الحفظ على Firebase.</p></div><span class="btn btn-soft">مباشر</span></div>
     <div class="grid">
       ${customSelect('نوع الإعلان', 'سيارة', ['سيارة','قطعة غيار','خدمة'], 'ad-type')}
       ${customSelect('المدينة', 'طرابلس', ['طرابلس','مصراتة','بنغازي'], 'ad-city')}
@@ -17,7 +17,7 @@ const content = `
       <label class="field"><label>رقم الهاتف</label><input name="phone" placeholder="0912345678"></label>
       <label class="field"><label>واتساب</label><input name="whatsapp" placeholder="0912345678 أو 2189..."></label>
       <div class="search-panel">
-        <div class="section-head"><div><h3>الصور</h3><p>يمكنك رفع حتى 20 صورة. سيتم حفظ أول صورة كغلاف الإعلان.</p></div></div>
+        <div class="section-head"><div><h3>الصور</h3><p>يمكنك رفع حتى 3 صور مضغوطة للحفظ السريع على الإنترنت.</p></div></div>
         <input id="image-input" type="file" accept="image/*" multiple hidden>
         <button id="pick-images" type="button" class="btn btn-soft btn-block">رفع صور الإعلان</button>
         <div id="image-count" class="muted" style="margin-top:8px">لم يتم اختيار صور بعد.</div>
@@ -42,20 +42,20 @@ let selectedFiles = [];
 
 pickImages.addEventListener('click', ()=> imageInput.click());
 imageInput.addEventListener('change', ()=>{
-  selectedFiles = Array.from(imageInput.files || []).slice(0,20);
+  selectedFiles = Array.from(imageInput.files || []).slice(0,3);
   renderSelectedImages();
 });
 
 function renderSelectedImages(){
   imageCount.textContent = selectedFiles.length ? `تم اختيار ${selectedFiles.length} صورة.` : 'لم يتم اختيار صور بعد.';
-  imagePreview.innerHTML = selectedFiles.slice(0,4).map(file=>`
+  imagePreview.innerHTML = selectedFiles.map(file=>`
     <article class="listing-card"><div class="listing-image"><img src="${URL.createObjectURL(file)}" alt="preview"></div></article>
   `).join('');
 }
 
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
-  statusBox.textContent = 'جاري حفظ الإعلان...';
+  statusBox.textContent = 'جاري حفظ الإعلان على Firebase...';
   const fd = new FormData(form);
   const type = fd.get('ad-type') || 'سيارة';
   const city = fd.get('ad-city') || 'طرابلس';
@@ -76,7 +76,7 @@ form.addEventListener('submit', async (e)=>{
   try {
     let images = [];
     if (selectedFiles.length) {
-      images = await Promise.all(selectedFiles.slice(0,3).map(file => fileToDataUrl(file, 1100, 0.78)));
+      images = await Promise.all(selectedFiles.map(file => fileToDataUrl(file, 840, 0.68)));
     }
     const cover = images[0] || 'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1200&q=80';
     const now = Date.now();
@@ -98,11 +98,11 @@ form.addEventListener('submit', async (e)=>{
       createdTs: now,
       createdAt: formatRelativeArabic(now)
     };
-    saveListing(item);
-    statusBox.textContent = 'تم حفظ الإعلان بنجاح. جاري فتح المعاينة...';
-    setTimeout(()=>{ location.href = `details.html?id=${item.id}`; }, 400);
+    const saved = await saveListing(item);
+    statusBox.textContent = 'تم حفظ الإعلان بنجاح على Firebase. جاري فتح المعاينة...';
+    setTimeout(()=>{ location.href = `details.html?id=${saved.id}`; }, 450);
   } catch (err) {
     console.error(err);
-    statusBox.textContent = 'تعذر حفظ الصور. جرّب صورًا أقل أو بحجم أصغر.';
+    statusBox.textContent = 'تعذر الحفظ على Firebase. تأكد من تفعيل Firestore Rules ثم جرّب مرة أخرى.';
   }
 });
