@@ -19,19 +19,20 @@ document.getElementById('app').innerHTML = `
       </div>
 
       <div class="card" style="padding:22px">
-        <h2 style="margin:0 0 8px;font-size:44px">اختر نوع الإعلان</h2>
+        <h2 style="margin:0 0 8px;font-size:34px">اختر نوع الإعلان</h2>
         <p class="brand-sub" style="margin-bottom:0">ابدأ من القسم الصحيح حسب نوع النشاط.</p>
 
         <div class="option-grid" style="margin-top:18px">
-          <article class="option"><h4>سيارات للبيع</h4><p>سيارات جديدة ومستعملة ومركبات خاصة.</p></article>
-          <article class="option"><h4>قطع غيار وكماليات</h4><p>محركات، كمبيو، جنوط، شاشات، حساسات، زينة.</p></article>
-          <article class="option"><h4>ميكانيكي متنقل</h4><p>فحص، كهرباء، بطاريات، سحب ونجدة سريعة.</p></article>
+          <a class="option" href="cars.html"><h4>سيارات للبيع</h4><p>سيارات جديدة ومستعملة ومركبات خاصة.</p></a>
+          <a class="option" href="parts.html"><h4>قطع غيار وكماليات</h4><p>محركات، كمبيو، جنوط، شاشات، حساسات، زينة.</p></a>
+          <a class="option" href="services.html"><h4>ميكانيكي متنقل</h4><p>فحص، كهرباء، بطاريات، سحب ونجدة سريعة.</p></a>
         </div>
 
         <div style="display:flex;justify-content:end;margin-top:18px">
-          <a class="btn" href="#">التالي</a>
+          <a class="btn" href="cars.html">التالي</a>
         </div>
       </div>
     </div>
   </section>
 </main>
+`;

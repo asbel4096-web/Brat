@@ -23,9 +23,7 @@ export const listings = [
     meta:'مصراتة • 2014 • قطعة مستعملة',
     desc:'كمبيو نظيف ومجرب، مناسب لعدة فئات.',
     cover:'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
-    images:[
-      'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80'
-    ]
+    images:['https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80']
   },
   {
     id:'3',
@@ -36,9 +34,7 @@ export const listings = [
     meta:'طرابلس • خدمة متنقلة • سريع',
     desc:'فحص أعطال، كهرباء خفيفة، خدمة منزلية داخل طرابلس.',
     cover:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80',
-    images:[
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80'
-    ]
+    images:['https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80']
   }
 ];
 
