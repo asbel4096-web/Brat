@@ -1,212 +1,154 @@
 export const listings = [
   {
-    id:'1',
-    type:'سيارة',
-    title:'هيونداي سوناتا 2016 فل رقم 1',
-    price:37772,
-    city:'طرابلس',
-    meta:'طرابلس • 2016 • 95,000 كم',
-    desc:'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.',
-    seller:'يونس البراتشو',
-    time:'الآن',
-    cover:'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
-    images:[
-      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&q=80'
-    ]
+    id: '1',
+    type: 'سيارة',
+    title: 'هيونداي سوناتا 2016 فل رقم 1',
+    price: 37772,
+    city: 'طرابلس',
+    year: '2016',
+    km: '95,000 كم',
+    seller: 'يونس البراتشو',
+    sellerInitial: 'ي',
+    desc: 'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.',
+    cover: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80'
   },
   {
-    id:'2',
-    type:'قطعة غيار',
-    title:'كمبيو كيا أوبتيما 2014',
-    price:4500,
-    city:'مصراتة',
-    meta:'مصراتة • 2014 • قطعة مستعملة',
-    desc:'كمبيو نظيف ومجرب، مناسب لعدة فئات.',
-    seller:'مخزن الغيار',
-    time:'منذ ساعة',
-    cover:'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
-    images:['https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80']
+    id: '2',
+    type: 'قطعة غيار',
+    title: 'كمبيو كيا أوبتيما 2014',
+    price: 4500,
+    city: 'مصراتة',
+    year: '2014',
+    km: 'قطعة مستعملة',
+    seller: 'مخزن البراتشو',
+    sellerInitial: 'ب',
+    desc: 'كمبيو نظيف ومجرب، مناسب لعدة فئات، جاهز للتركيب.',
+    cover: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80'
   },
   {
-    id:'3',
-    type:'خدمة',
-    title:'ميكانيكي متنقل - فحص كمبيوتر',
-    price:120,
-    city:'طرابلس',
-    meta:'طرابلس • خدمة متنقلة • سريع',
-    desc:'فحص أعطال، كهرباء خفيفة، خدمة منزلية داخل طرابلس.',
-    seller:'فني متنقل',
-    time:'منذ 20 دقيقة',
-    cover:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80',
-    images:['https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=80']
+    id: '3',
+    type: 'خدمة',
+    title: 'ميكانيكي متنقل - فحص كمبيوتر',
+    price: 120,
+    city: 'طرابلس',
+    year: 'خدمة',
+    km: 'زيارة منزلية',
+    seller: 'فني البراتشو',
+    sellerInitial: 'ف',
+    desc: 'فحص أعطال، كهرباء خفيفة، خدمة سريعة داخل طرابلس.',
+    cover: 'https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80'
   }
 ];
 
-export const chats = [
-  {name:'محمد', text:'السلام عليكم، السيارة موجودة؟', time:'منذ 5 دقائق', unread:2},
-  {name:'أحمد', text:'نبي تفاصيل أكثر على القطعة', time:'منذ 20 دقيقة', unread:0},
-  {name:'سالم', text:'ممكن رقم الواتساب؟', time:'منذ ساعة', unread:1}
+export const messages = [
+  {name:'محمد', initial:'م', unread:2, time:'منذ 5 دقائق', text:'السلام عليكم، السيارة موجودة؟'},
+  {name:'أحمد', initial:'أ', unread:0, time:'منذ 20 دقيقة', text:'نبي تفاصيل أكثر على القطعة'},
+  {name:'سالم', initial:'س', unread:1, time:'منذ ساعة', text:'ممكن رقم الواتساب؟'}
 ];
 
 export function price(v){
   return Number(v).toLocaleString('en-US') + ' د.ل';
 }
 
-export function boot(active='home'){
-  mountShell(active);
-  activateCustomSelects();
-  window.addEventListener('click', e=>{
-    if(!e.target.closest('.cselect')){
-      document.querySelectorAll('.cselect.open').forEach(x=>x.classList.remove('open'));
-    }
-  });
-}
-
-function navLink(href,label,icon,activeKey,key){
-  return `<li><a href="${href}" class="${activeKey===key?'active':''}"><span>${icon}</span><span>${label}</span></a></li>`;
-}
-
-export function mountShell(active='home'){
-  if(document.querySelector('.topbar')) return;
-
-  const top = document.createElement('header');
-  top.className = 'topbar';
-  top.innerHTML = `
-    <div class="container topbar-inner">
-      <div class="brand">
-        <div class="logo">BC</div>
+export function pageTemplate({active='home', title='', subtitle='', content=''}) {
+  return `
+  <div class="app-shell">
+    <header class="site-header">
+      <div class="brand-wrap">
         <div>
-          <h1 class="brand-title"><span>براتشو</span> كار</h1>
+          <h1 class="brand-title">براتشو <span>كار</span></h1>
           <p class="brand-sub">سوق سيارات وقطع غيار وخدمات متنقلة بتصميم مرتب وسريع</p>
         </div>
+        <div class="logo-box">BC</div>
       </div>
-      <div class="top-actions">
-        <a class="btn-accent" href="add.html">+ أضف إعلان</a>
-        <a class="btn-soft" href="messages.html">دردشاتي 💬</a>
-        <a class="btn-soft" href="dashboard.html">حسابي 👤</a>
+      <div class="top-shortcuts">
+        <a class="shortcut-card" href="dashboard.html">حسابي <span>👤</span></a>
+        <a class="shortcut-card" href="messages.html">دردشاتي <span>💬</span></a>
+        <a class="shortcut-card shortcut-accent" href="add.html">+ أضف إعلان</a>
       </div>
-    </div>
-  `;
-  document.body.prepend(top);
+    </header>
 
-  const bottom = document.createElement('nav');
-  bottom.className = 'bottom-nav';
-  bottom.innerHTML = `
-    <ul class="bottom-grid">
-      ${navLink('index.html','الرئيسية','⌂',active,'home')}
-      ${navLink('messages.html','دردشاتي','◔',active,'messages')}
-      <li class="nav-center">
-        <a href="add.html" class="nav-add ${active==='add'?'active':''}">
-          <span class="nav-add-circle">+</span>
-          <span>أضف إعلان</span>
-        </a>
-      </li>
-      ${navLink('my-ads.html','إعلاناتي','▤',active,'myads')}
-      ${navLink('dashboard.html','حسابي','◉',active,'dashboard')}
-    </ul>
-  `;
-  document.body.append(bottom);
-}
+    <main class="page-main">
+      <section class="page-hero">
+        <h2>${title}</h2>
+        <p>${subtitle}</p>
+      </section>
+      ${content}
+    </main>
 
-function sellerInitial(name='ب'){
-  return String(name).trim().charAt(0) || 'ب';
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>الرئيسية</b></a>
+      <a href="messages.html" class="nav-item ${active==='messages'?'is-active':''}"><span>◔</span><b>دردشاتي</b></a>
+      <a href="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>أضف إعلان</b></a>
+      <a href="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>إعلاناتي</b></a>
+      <a href="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>حسابي</b></a>
+    </nav>
+  </div>`;
 }
 
 export function listingCard(item){
   return `
-    <article class="listing-card card">
-      <a class="listing-media" href="details.html?id=${item.id}" style="background-image:url('${item.cover}')">
-        <span class="listing-fav">♡</span>
-        <span class="listing-type-chip">${item.type}</span>
-      </a>
-
-      <div class="listing-body">
-        <div class="listing-topline">
-          <a href="details.html?id=${item.id}"><h3 class="listing-title">${item.title}</h3></a>
-          <div class="listing-price">${price(item.price)}</div>
-        </div>
-
-        <p class="listing-desc">${item.desc}</p>
-
-        <div class="listing-meta-grid">
-          <div class="meta-item">📍 <b>${item.city}</b></div>
-          <div class="meta-item">🕒 <span>${item.time || 'الآن'}</span></div>
-          <div class="meta-item">🏷️ <span>${item.type}</span></div>
-        </div>
-
-        <div class="seller-row">
-          <div class="seller-info">
-            <div class="avatar">${sellerInitial(item.seller)}</div>
-            <div>
-              <div class="seller-name">${item.seller || 'صاحب الإعلان'}</div>
-              <div class="seller-sub">${item.meta}</div>
-            </div>
-          </div>
-
-          <div class="listing-actions">
-            <a class="action-mini" href="https://wa.me/218912345678">✆</a>
-            <a class="action-mini" href="tel:0912345678">☎</a>
-            <a class="btn" href="details.html?id=${item.id}">عرض</a>
-          </div>
-        </div>
+  <article class="listing-card">
+    <a class="listing-image" href="details.html?id=${item.id}">
+      <img src="${item.cover}" alt="${item.title}">
+      <span class="badge dark">${item.type}</span>
+    </a>
+    <div class="listing-body">
+      <div class="listing-price">${price(item.price)}</div>
+      <h3 class="listing-title"><a href="details.html?id=${item.id}">${item.title}</a></h3>
+      <p class="listing-desc">${item.desc}</p>
+      <div class="listing-meta">
+        <span>${item.city}</span>
+        <span>${item.year}</span>
+        <span>${item.km}</span>
       </div>
-    </article>
-  `;
-}
-
-export function customSelect(label, value, options, id=''){
-  return `
-    <div class="select-row">
-      ${label ? `<div class="label-top">${label}</div>` : ''}
-      <div class="cselect" ${id ? `data-id="${id}"` : ''}>
-        <button type="button" class="cselect-btn">
-          <span>${value}</span>
-          <span>⌄</span>
-        </button>
-        <div class="cselect-list">
-          ${options.map((opt, i)=>`
-            <button type="button" class="cselect-item ${i===0?'active':''}" data-value="${opt}">
-              <b>${opt}</b>
-              ${i===0 ? '<small>✓</small>' : '<small></small>'}
-            </button>
-          `).join('')}
-        </div>
+      <div class="listing-actions">
+        <a class="btn btn-primary" href="details.html?id=${item.id}">عرض</a>
+        <a class="btn btn-soft" target="_blank" href="https://wa.me/218910000000">واتساب</a>
+        <a class="icon-btn" href="tel:+218910000000">☎</a>
       </div>
     </div>
-  `;
+  </article>`;
+}
+
+export function categoryCard(icon, title, desc, href){
+  return `<a class="category-card" href="${href}"><i>${icon}</i><div><h3>${title}</h3><p>${desc}</p></div></a>`;
+}
+
+export function detailById(id){
+  return listings.find(x=>x.id===id) || listings[0];
+}
+
+export function customSelect(label, selected, items, id){
+  const options = items.map((item, idx)=>`
+    <button type="button" class="option ${idx===0?'is-selected':''}" data-value="${item}">${item}</button>`).join('');
+  return `
+    <div class="custom-select" data-select="${id}">
+      <label>${label}</label>
+      <button type="button" class="select-trigger"><span>${selected}</span><i>⌄</i></button>
+      <div class="select-menu">${options}</div>
+    </div>`;
 }
 
 export function activateCustomSelects(root=document){
-  root.querySelectorAll('.cselect').forEach(select=>{
-    if(select.dataset.ready === '1') return;
-    select.dataset.ready = '1';
-
-    const btn = select.querySelector('.cselect-btn');
-    const value = btn.querySelector('span');
-    const items = select.querySelectorAll('.cselect-item');
-
-    btn.addEventListener('click', ev=>{
-      ev.stopPropagation();
-      document.querySelectorAll('.cselect.open').forEach(x=>{
-        if(x !== select) x.classList.remove('open');
-      });
-      select.classList.toggle('open');
+  root.querySelectorAll('.custom-select').forEach(select=>{
+    const trigger = select.querySelector('.select-trigger');
+    const menu = select.querySelector('.select-menu');
+    trigger?.addEventListener('click', e=>{
+      e.stopPropagation();
+      root.querySelectorAll('.custom-select.is-open').forEach(other=>{ if(other!==select) other.classList.remove('is-open'); });
+      select.classList.toggle('is-open');
     });
-
-    items.forEach(item=>{
-      item.addEventListener('click', ev=>{
-        ev.stopPropagation();
-        items.forEach(x=>x.classList.remove('active'));
-        item.classList.add('active');
-        value.textContent = item.dataset.value;
-        items.forEach(x=>{
-          const sm = x.querySelector('small');
-          if(sm) sm.textContent = x.classList.contains('active') ? '✓' : '';
-        });
-        select.classList.remove('open');
+    menu?.querySelectorAll('.option').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        menu.querySelectorAll('.option').forEach(o=>o.classList.remove('is-selected'));
+        opt.classList.add('is-selected');
+        trigger.querySelector('span').textContent = opt.dataset.value;
+        select.classList.remove('is-open');
       });
     });
+  });
+  document.addEventListener('click', ()=>{
+    root.querySelectorAll('.custom-select.is-open').forEach(s=>s.classList.remove('is-open'));
   });
 }

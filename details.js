@@ -1,54 +1,26 @@
-import { boot, listings, price } from './common.js';
-boot('home');
-const params = new URLSearchParams(location.search);
-const id = params.get('id') || '1';
-const item = listings.find(x=>x.id===id) || listings[0];
-
-document.getElementById('app').innerHTML = `
-<main class="page">
-  <section class="section">
-    <div class="container">
-      <div class="details-layout">
-        <div class="gallery-card">
-          <div class="main-photo" id="mainPhoto" style="background-image:url('${item.images[0]}')"></div>
-          <div class="thumb-grid">
-            ${item.images.map((src,i)=>`<button class="thumb ${i===0?'active':''}" style="background-image:url('${src}')" data-src="${src}"></button>`).join('')}
-          </div>
-        </div>
-
-        <div class="side-card">
-          <div class="pill">${item.type}</div>
-          <div class="price-big">${price(item.price)}</div>
-          <h2 class="title-big">${item.title}</h2>
-          <div class="meta-row"><span>${item.city}</span><span>•</span><span>${item.meta}</span></div>
-          <p class="desc-big">${item.desc}</p>
-          <div class="stacked">
-            <a class="btn full" href="tel:0912345678">اتصال مباشر</a>
-            <a class="btn-soft full" href="https://wa.me/218912345678">واتساب</a>
-            <a class="btn-soft full" href="https://maps.google.com/?q=Tripoli">الموقع على الخريطة</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="section" style="padding-top:16px">
-        <div class="spec-grid">
-          <article class="spec-card"><span>الحالة</span><strong>ممتازة</strong></article>
-          <article class="spec-card"><span>نوع الوقود</span><strong>بنزين</strong></article>
-          <article class="spec-card"><span>ناقل الحركة</span><strong>أوتوماتيك</strong></article>
-          <article class="spec-card"><span>المحرك</span><strong>2.0</strong></article>
-          <article class="spec-card"><span>المدينة</span><strong>${item.city}</strong></article>
-          <article class="spec-card"><span>التواصل</span><strong>واتساب / اتصال</strong></article>
-        </div>
-      </div>
+import { pageTemplate, detailById, price } from './common.js';
+const id = new URLSearchParams(location.search).get('id') || '1';
+const item = detailById(id);
+const content = `
+<section class="section">
+  <div class="detail-card">
+    <div class="detail-cover"><img src="${item.cover}" alt="${item.title}"></div>
+    <div class="listing-price">${price(item.price)}</div>
+    <h2 class="listing-title">${item.title}</h2>
+    <div class="listing-meta"><span>${item.city}</span><span>${item.year}</span><span>${item.km}</span></div>
+    <p class="listing-desc">${item.desc}</p>
+    <div class="table-list">
+      <div class="table-row"><span>النوع</span><span>${item.type}</span></div>
+      <div class="table-row"><span>المدينة</span><span>${item.city}</span></div>
+      <div class="table-row"><span>السنة</span><span>${item.year}</span></div>
+      <div class="table-row"><span>الحالة</span><span>${item.km}</span></div>
+      <div class="table-row"><span>البائع</span><span>${item.seller}</span></div>
     </div>
-  </section>
-</main>
-`;
-
-document.querySelectorAll('.thumb').forEach(btn=>{
-  btn.onclick = ()=>{
-    document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('mainPhoto').style.backgroundImage = `url('${btn.dataset.src}')`;
-  };
-});
+    <div class="detail-actions">
+      <a class="btn btn-primary" target="_blank" href="https://wa.me/218910000000">واتساب</a>
+      <a class="btn btn-soft" href="tel:+218910000000">اتصال</a>
+      <a class="icon-btn" href="messages.html">✉</a>
+    </div>
+  </div>
+</section>`;
+document.getElementById('app').innerHTML = pageTemplate({active:'home', title:'التفاصيل', subtitle:'عرض كامل للإعلان مع وسائل التواصل.', content});
