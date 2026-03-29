@@ -13,7 +13,6 @@ document.getElementById('app').innerHTML = `
             <a class="hero-tag" href="parts.html">كماليات</a>
             <a class="hero-tag" href="services.html">ميكانيكي متنقل</a>
           </div>
-
           <h2 class="hero-title">منصة احترافية للسيارات وقطع وخدمات متنقلة في ليبيا</h2>
           <p class="hero-text">أضف إعلانك بشكل أنيق، واربطه بالاتصال والدردشة والواتساب والموقع على الخريطة، مع واجهة حديثة باللون الأزرق الداكن والأسود والأبيض ولمسات برتقالية.</p>
 
@@ -74,9 +73,7 @@ document.getElementById('app').innerHTML = `
         <a class="pill" href="my-ads.html">كل الإعلانات</a>
       </div>
 
-      <div class="listing-grid">
-        ${listings.map(listingCard).join('')}
-      </div>
+      <div class="listing-grid">${listings.map(listingCard).join('')}</div>
     </div>
   </section>
 </main>

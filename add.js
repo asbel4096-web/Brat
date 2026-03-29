@@ -20,17 +20,17 @@ document.getElementById('app').innerHTML = `
         <span class="step">6. المراجعة</span>
       </div>
 
-      <div class="card" style="padding:20px">
-        <h2 style="margin:0 0 8px;font-size:clamp(28px,4vw,40px)">اختر نوع الإعلان</h2>
+      <div class="card" style="padding:18px">
+        <h2 style="margin:0 0 8px;font-size:clamp(26px,4vw,38px)">اختر نوع الإعلان</h2>
         <p class="brand-sub" style="margin-bottom:0">ابدأ من القسم الصحيح حسب نوع النشاط.</p>
 
-        <div class="option-grid" style="margin-top:18px">
+        <div class="option-grid" style="margin-top:16px">
           <a class="option" href="cars.html"><h4>سيارات للبيع</h4><p>سيارات جديدة ومستعملة ومركبات خاصة.</p></a>
           <a class="option" href="parts.html"><h4>قطع غيار وكماليات</h4><p>محركات، كمبيو، جنوط، شاشات، حساسات، زينة.</p></a>
           <a class="option" href="services.html"><h4>ميكانيكي متنقل</h4><p>فحص، كهرباء، بطاريات، سحب ونجدة سريعة.</p></a>
         </div>
 
-        <div style="display:flex;justify-content:end;margin-top:18px">
+        <div style="display:flex;justify-content:end;margin-top:16px">
           <a class="btn" href="cars.html">التالي</a>
         </div>
       </div>

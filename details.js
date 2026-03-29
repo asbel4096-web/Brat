@@ -30,7 +30,7 @@ document.getElementById('app').innerHTML = `
         </div>
       </div>
 
-      <div class="section" style="padding-top:18px">
+      <div class="section" style="padding-top:16px">
         <div class="spec-grid">
           <article class="spec-card"><span>الحالة</span><strong>ممتازة</strong></article>
           <article class="spec-card"><span>نوع الوقود</span><strong>بنزين</strong></article>

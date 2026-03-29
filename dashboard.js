@@ -28,7 +28,7 @@ document.getElementById('app').innerHTML = `
             <div class="logo">BC</div>
           </div>
 
-          <div class="stacked" style="margin-top:18px">
+          <div class="stacked" style="margin-top:16px">
             <a class="btn full" href="my-ads.html">إدارة إعلاناتي</a>
             <a class="btn-soft full" href="settings.html">إعدادات الحساب</a>
           </div>
