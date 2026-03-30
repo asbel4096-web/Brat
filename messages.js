@@ -51,43 +51,40 @@ function otherParty(chat, me){
     </div>
   `;
 
-  const content = `
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h3>دردشاتي</h3>
-          <p>كل المحادثات الحقيقية المرتبطة بإعلاناتك أو استفساراتك.</p>
-        </div>
-      </div>
-
-      <div class="chat-inbox-card">
-        <div class="chat-inbox-top">
-          <div>
-            <h3>صندوق الرسائل</h3>
-            <p>واجهة أوضح وأقرب لفكرة المحادثات الحديثة.</p>
-          </div>
-          <span class="chat-count">${chats.length}</span>
-        </div>
-        <div class="chat-rows">${listHtml}</div>
-      </div>
-    </section>
-  `;
-
   document.getElementById('app').innerHTML = pageTemplate({
     active:'messages',
     title:'دردشاتي',
     subtitle:'رسائل العملاء والاستفسارات بشكل نظيف وواضح.',
-    content
+    content: `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h3>دردشاتي</h3>
+            <p>كل المحادثات الحقيقية المرتبطة بإعلاناتك أو استفساراتك.</p>
+          </div>
+        </div>
+        <div class="chat-inbox-card">
+          <div class="chat-inbox-top">
+            <div>
+              <h3>صندوق الرسائل</h3>
+              <p>واجهة أوضح وأقرب لفكرة المحادثات الحديثة.</p>
+            </div>
+            <span class="chat-count">${chats.length}</span>
+          </div>
+          <div class="chat-rows">${listHtml}</div>
+        </div>
+      </section>
+    `
   });
 
   document.querySelectorAll('.chat-open-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const chatId = btn.getAttribute('data-chat-id');
+      const chatId = btn.dataset.chatId;
       if (!chatId) {
         alert('تعذر فتح المحادثة');
         return;
       }
-      location.href = `chat.html?id=${encodeURIComponent(chatId)}`;
+      window.location.assign(`chat.html?id=${encodeURIComponent(chatId)}&v=openv3`);
     });
   });
 })();

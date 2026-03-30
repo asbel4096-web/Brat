@@ -496,6 +496,20 @@ export async function sendChatMessage(chatId, body){
   });
 }
 
+
+export async function getChatById(chatId){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  const snap = await getDoc(doc(db, 'chats', String(chatId)));
+  if (!snap.exists()) return null;
+  const data = { id: snap.id, ...snap.data() };
+  if (!Array.isArray(data.participants) || !data.participants.includes(String(user.uid))) {
+    throw new Error('forbidden_chat');
+  }
+  return data;
+}
+
 export async function getUserChats(){
   await waitForAuthReady();
   const user = getCurrentUser();

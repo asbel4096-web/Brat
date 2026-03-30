@@ -1,4 +1,4 @@
-import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getUserChats, formatRelativeArabic, safeText } from './common.js';
+import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getChatById, formatRelativeArabic, safeText } from './common.js';
 
 function otherParty(chat, me){
   if (!chat) return 'المحادثة';
@@ -22,39 +22,73 @@ function otherParty(chat, me){
     return;
   }
 
-  const chats = await getUserChats();
-  const chat = chats.find(row => row.id === chatId) || null;
-  const chatTitle = safeText(chat?.listingTitle || 'المحادثة');
+  if (!chatId) {
+    document.getElementById('app').innerHTML = pageTemplate({
+      active:'messages',
+      title:'المحادثة',
+      subtitle:'رابط المحادثة غير صحيح.',
+      content:`<section class="section"><div class="empty-card"><div class="empty-icon">!</div><h3 class="listing-title">لا يوجد معرف محادثة</h3><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
+    });
+    return;
+  }
+
+  let chat = null;
+  try {
+    chat = await getChatById(chatId);
+  } catch (err) {
+    console.error('chat-open-error', err);
+    document.getElementById('app').innerHTML = pageTemplate({
+      active:'messages',
+      title:'المحادثة',
+      subtitle:'تعذر فتح المحادثة.',
+      content:`<section class="section"><div class="empty-card"><div class="empty-icon">⚠</div><h3 class="listing-title">تعذر فتح المحادثة</h3><p class="muted">تأكد أنك داخل الحساب الصحيح أو أن المحادثة ما زالت موجودة.</p><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
+    });
+    return;
+  }
+
+  if (!chat) {
+    document.getElementById('app').innerHTML = pageTemplate({
+      active:'messages',
+      title:'المحادثة',
+      subtitle:'المحادثة غير موجودة.',
+      content:`<section class="section"><div class="empty-card"><div class="empty-icon">💬</div><h3 class="listing-title">المحادثة غير موجودة</h3><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
+    });
+    return;
+  }
+
+  const chatTitle = safeText(chat.listingTitle || 'المحادثة');
   const peer = safeText(otherParty(chat, me));
-  const cover = safeText(chat?.listingCover || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80');
-
-  const content = `
-    <section class="section">
-      <div class="chat-screen">
-        <div class="chat-screen-head">
-          <a class="chat-back" href="messages.html">←</a>
-          <img class="chat-head-cover" src="${cover}" alt="${chatTitle}">
-          <div class="chat-head-meta">
-            <h3>${chatTitle}</h3>
-            <p>${peer}</p>
-          </div>
-        </div>
-
-        <div id="chat-messages" class="chat-thread modern-thread"></div>
-
-        <form id="chat-form" class="chat-compose modern-compose">
-          <button class="btn btn-primary send-btn" type="submit">إرسال</button>
-          <input id="chat-input" class="chat-input modern-input" placeholder="اكتب رسالتك هنا">
-        </form>
-      </div>
-    </section>
-  `;
+  const cover = safeText(chat.listingCover || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80');
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'messages',
     title:'المحادثة',
     subtitle:'واجهة محادثة أوضح وأرتب.',
-    content
+    content: `
+      <section class="section">
+        <div class="chat-screen">
+          <div class="chat-screen-head">
+            <button class="chat-back" id="go-back" type="button">←</button>
+            <img class="chat-head-cover" src="${cover}" alt="${chatTitle}">
+            <div class="chat-head-meta">
+              <h3>${chatTitle}</h3>
+              <p>${peer}</p>
+            </div>
+          </div>
+
+          <div id="chat-messages" class="chat-thread modern-thread"></div>
+
+          <form id="chat-form" class="chat-compose modern-compose">
+            <button class="btn btn-primary send-btn" type="submit">إرسال</button>
+            <input id="chat-input" class="chat-input modern-input" placeholder="اكتب رسالتك هنا">
+          </form>
+        </div>
+      </section>
+    `
+  });
+
+  document.getElementById('go-back')?.addEventListener('click', ()=> {
+    window.location.assign('messages.html?v=openv3');
   });
 
   const list = document.getElementById('chat-messages');
@@ -89,7 +123,8 @@ function otherParty(chat, me){
     try {
       await sendChatMessage(chatId, value);
       input.value = '';
-    } catch {
+    } catch (err) {
+      console.error('send-message-error', err);
       alert('تعذر إرسال الرسالة');
     } finally {
       input.disabled = false;
