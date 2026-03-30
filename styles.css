@@ -471,3 +471,32 @@ body{padding-bottom:0}
   .msg-bubble{max-width:86%}
   .send-btn{min-width:88px}
 }
+
+
+.nav-badge,.bottom-badge{
+  position:absolute;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#e63946;
+  color:#fff;
+  font-style:normal;
+  font-weight:800;
+  font-size:12px;
+  line-height:1;
+  box-shadow:0 8px 16px rgba(230,57,70,.28);
+}
+.shortcut-card,.nav-item{position:relative}
+.nav-badge{top:10px;left:12px}
+.bottom-badge{top:8px;left:18px}
+.chat-row.is-unread{
+  border-color:rgba(69,108,240,.28);
+  background:linear-gradient(135deg, rgba(69,108,240,.05), rgba(69,108,240,.02));
+}
+.unread-dot{
+  width:10px;height:10px;border-radius:999px;background:#e63946;display:inline-block;box-shadow:0 0 0 4px rgba(230,57,70,.12);
+}
+.is-unread-text{font-weight:800;color:var(--ink)}

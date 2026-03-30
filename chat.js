@@ -1,4 +1,4 @@
-import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getUserChats, formatRelativeArabic, safeText } from './common.js';
+import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getUserChats, formatRelativeArabic, safeText, markChatRead, hydrateChatBadges } from './common.js';
 
 function otherParty(chat, me){
   if (!chat) return 'المحادثة';
@@ -61,6 +61,9 @@ function otherParty(chat, me){
   const form = document.getElementById('chat-form');
   const input = document.getElementById('chat-input');
 
+  try { await markChatRead(chatId); } catch {}
+  setTimeout(() => { hydrateChatBadges(document); }, 0);
+
   const unwatch = watchChatMessages(chatId, messages => {
     list.innerHTML = messages.length ? messages.map(msg => `
       <div class="msg-wrap ${msg.senderId === me.uid ? 'mine' : 'theirs'}">
@@ -76,6 +79,8 @@ function otherParty(chat, me){
       </div>
     `;
     list.scrollTop = list.scrollHeight;
+    markChatRead(chatId).catch(()=>{});
+    hydrateChatBadges(document).catch?.(()=>{});
   });
 
   form.addEventListener('submit', async e => {
@@ -89,6 +94,8 @@ function otherParty(chat, me){
     try {
       await sendChatMessage(chatId, value);
       input.value = '';
+      await markChatRead(chatId).catch(()=>{});
+      setTimeout(() => { hydrateChatBadges(document); }, 0);
     } catch {
       alert('تعذر إرسال الرسالة');
     } finally {
