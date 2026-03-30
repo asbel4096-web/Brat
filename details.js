@@ -1,4 +1,4 @@
-import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getCurrentUser, updateListingStatus, removeListing, waitForAuthReady, createOrOpenChat } from './common.js';
+import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getCurrentUser, updateListingStatus, removeListing, waitForAuthReady } from './common.js';
 
 (async ()=>{
   await waitForAuthReady();
@@ -37,7 +37,8 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
         <div class="table-row"><span>البائع</span><span>${safeText(item.seller)}</span></div>
       </div>
       <div class="detail-actions">
-        <a class="btn btn-primary" target="_blank" href="${whatsappHref}">واتساب</a>
+        <button class="btn btn-primary" id="start-chat">مراسلة</button>
+        <a class="btn btn-soft" target="_blank" href="${whatsappHref}">واتساب</a>
         <a class="btn btn-soft" href="${phoneHref}">اتصال</a>
         <a class="icon-btn" target="_blank" href="${mapsHref}">⌖</a>
         <button class="icon-btn ${item.__favorite ? 'is-favorite' : ''}" id="fav-detail">${item.__favorite ? '♥' : '♡'}</button>
@@ -62,25 +63,6 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
       alert('تعذر تحديث المفضلة');
     } finally {
       e.currentTarget.disabled = false;
-    }
-  });
-
-
-  document.getElementById('start-chat')?.addEventListener('click', async e => {
-    e.preventDefault();
-    try {
-      const chat = await createOrOpenChat(item);
-      location.href = `chat.html?id=${chat.id}`;
-    } catch (err) {
-      if (err?.message === 'auth_required') {
-        location.href = 'dashboard.html#auth-required';
-        return;
-      }
-      if (err?.message === 'self_chat') {
-        alert('هذا إعلانك أنت.');
-        return;
-      }
-      alert('تعذر فتح المحادثة');
     }
   });
 

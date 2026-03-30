@@ -1,85 +1,4 @@
-i
-
-export function buildChatId(listingId, userA, userB){
-  return [String(listingId), String(userA), String(userB)].sort().join('__');
-}
-
-export async function createOrOpenChat(listing){
-  await waitForAuthReady();
-  const user = getCurrentUser();
-  if (!user) throw new Error('auth_required');
-  if (!listing?.ownerId) throw new Error('owner_missing');
-  if (String(listing.ownerId) === String(user.uid)) throw new Error('self_chat');
-
-  const chatId = buildChatId(listing.id, user.uid, listing.ownerId);
-  const chatRef = doc(db, 'chats', chatId);
-  const exists = await getDoc(chatRef);
-
-  const payload = {
-    chatId,
-    listingId: String(listing.id),
-    listingTitle: String(listing.title || ''),
-    listingCover: String(listing.cover || ''),
-    ownerId: String(listing.ownerId),
-    ownerEmail: String(listing.ownerEmail || ''),
-    buyerId: String(user.uid),
-    buyerEmail: String(user.email || ''),
-    participants: [String(user.uid), String(listing.ownerId)],
-    updatedTs: Date.now(),
-    updatedAt: serverTimestamp(),
-    lastMessage: exists.exists() ? (exists.data().lastMessage || '') : '',
-    lastSenderId: exists.exists() ? (exists.data().lastSenderId || '') : '',
-  };
-  await setDoc(chatRef, payload, { merge: true });
-  return { id: chatId, ...payload };
-}
-
-export async function sendChatMessage(chatId, text){
-  await waitForAuthReady();
-  const user = getCurrentUser();
-  if (!user) throw new Error('auth_required');
-  const body = String(text || '').trim();
-  if (!body) throw new Error('empty_message');
-
-  const chatRef = doc(db, 'chats', String(chatId));
-  const chatSnap = await getDoc(chatRef);
-  if (!chatSnap.exists()) throw new Error('chat_missing');
-  const chat = chatSnap.data();
-  if (!Array.isArray(chat.participants) || !chat.participants.includes(String(user.uid))) throw new Error('not_participant');
-
-  await addDoc(collection(db, 'chats', String(chatId), 'messages'), {
-    chatId: String(chatId),
-    senderId: String(user.uid),
-    senderEmail: String(user.email || ''),
-    text: body,
-    createdTs: Date.now(),
-    createdAt: serverTimestamp()
-  });
-
-  await updateDoc(chatRef, {
-    lastMessage: body,
-    lastSenderId: String(user.uid),
-    updatedTs: Date.now(),
-    updatedAt: serverTimestamp()
-  });
-}
-
-export async function getUserChats(){
-  await waitForAuthReady();
-  const user = getCurrentUser();
-  if (!user) return [];
-  const q = query(collection(db, 'chats'), where('participants', 'array-contains', String(user.uid)), orderBy('updatedTs', 'desc'), limit(50));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-}
-
-export function watchChatMessages(chatId, callback){
-  const q = query(collection(db, 'chats', String(chatId), 'messages'), orderBy('createdTs', 'asc'));
-  return onSnapshot(q, snap => {
-    callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-  });
-}
-mport { auth, db, storage } from './firebase-config.js';
+import { auth, db, storage } from './firebase-config.js';
 import {
   addDoc,
   collection,
@@ -497,6 +416,95 @@ export function authGateCard(message='سجّل دخولك أولًا لإدار�
   return `<div class="empty-card"><div class="empty-icon">🔐</div><h3 class="listing-title">الدخول مطلوب</h3><p class="muted">${message}</p><a class="btn btn-primary" href="dashboard.html#auth">${cta}</a></div>`;
 }
 
+
+export async function createOrOpenChat(item){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  if (!item?.ownerId) throw new Error('owner_missing');
+  if (item.ownerId === user.uid) throw new Error('self_chat');
+
+  const participants = [String(user.uid), String(item.ownerId)].sort();
+  const chatId = `chat_${String(item.id)}_${participants.join('_')}`;
+  const chatRef = doc(db, 'chats', chatId);
+  const snap = await getDoc(chatRef);
+
+  if (!snap.exists()) {
+    await setDoc(chatRef, {
+      id: chatId,
+      listingId: String(item.id),
+      listingTitle: String(item.title || 'محادثة'),
+      listingCover: String(item.cover || ''),
+      ownerId: String(item.ownerId),
+      ownerEmail: String(item.ownerEmail || ''),
+      buyerId: String(user.uid),
+      buyerEmail: String(user.email || ''),
+      participants,
+      lastMessage: '',
+      lastSenderId: '',
+      updatedTs: Date.now(),
+      updatedAt: serverTimestamp()
+    });
+  } else {
+    await updateDoc(chatRef, {
+      updatedTs: Date.now(),
+      updatedAt: serverTimestamp()
+    });
+  }
+
+  return { id: chatId };
+}
+
+export async function sendChatMessage(chatId, body){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  const text = String(body || '').trim();
+  if (!text) throw new Error('empty_message');
+
+  const chatRef = doc(db, 'chats', String(chatId));
+  const msgCol = collection(db, 'chats', String(chatId), 'messages');
+
+  await addDoc(msgCol, {
+    text,
+    senderId: String(user.uid),
+    senderEmail: String(user.email || ''),
+    createdTs: Date.now(),
+    createdAt: serverTimestamp()
+  });
+
+  await updateDoc(chatRef, {
+    lastMessage: text,
+    lastSenderId: String(user.uid),
+    updatedTs: Date.now(),
+    updatedAt: serverTimestamp()
+  });
+}
+
+export async function getUserChats(){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) return [];
+  const q = query(
+    collection(db, 'chats'),
+    where('participants', 'array-contains', String(user.uid)),
+    orderBy('updatedTs', 'desc'),
+    limit(50)
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+export function watchChatMessages(chatId, callback){
+  const q = query(
+    collection(db, 'chats', String(chatId), 'messages'),
+    orderBy('createdTs', 'asc')
+  );
+  return onSnapshot(q, snap => {
+    callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  });
+}
+
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {
   return `
   <div class="app-shell">
@@ -511,6 +519,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
       <div class="top-shortcuts">
         <a class="shortcut-card" href="dashboard.html">حسابي <span>👤</span></a>
         <a class="shortcut-card" href="favorites.html">المفضلة <span>♥</span></a>
+        <a class="shortcut-card" href="messages.html">دردشاتي <span>💬</span></a>
         <a class="shortcut-card shortcut-accent" href="add.html">+ أضف إعلان</a>
       </div>
     </header>
