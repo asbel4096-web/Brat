@@ -1,7 +1,7 @@
 import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, activateCustomSelects } from './common.js';
 
 (async ()=>{
-  const allListings = await getAllListings(true);
+  const allListings = await getAllListings(true, { includeHidden: false });
   const latest = allListings.slice(0, 6);
 
   const content = `
@@ -32,7 +32,7 @@ import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, 
     </div>
   </section>
   <section class="section">
-    <div class="section-head"><div><h3>أحدث الإعلانات</h3><p>كل إعلان جديد تتم إضافته من صفحة المعلن يظهر هنا مباشرة من Firebase.</p></div><a class="btn btn-soft" href="my-ads.html">كل الإعلانات</a></div>
+    <div class="section-head"><div><h3>أحدث الإعلانات</h3><p>كل إعلان منشور يظهر هنا مباشرة من Firebase. الإعلانات المخفية تبقى داخل إعلاناتي فقط.</p></div><a class="btn btn-soft" href="my-ads.html">كل الإعلانات</a></div>
     <div class="listing-grid">${latest.map(listingCard).join('')}</div>
   </section>`;
 

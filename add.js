@@ -1,10 +1,12 @@
-import { pageTemplate, customSelect, activateCustomSelects, fileToDataUrl, saveListing, normalizeWhatsapp, formatRelativeArabic } from './common.js';
+import { pageTemplate, customSelect, activateCustomSelects, fileToDataUrl, saveListing, normalizeWhatsapp, formatRelativeArabic, detailById, getOwnerId } from './common.js';
+
+const editId = new URLSearchParams(location.search).get('id');
 
 const content = `
 <section class="section">
   <div class="step-pills"><span>1. القسم</span><span>2. التفاصيل</span><span>3. الصور</span><span>4. التواصل</span><span>5. المراجعة</span></div>
   <form id="ad-form" class="form-shell">
-    <div class="section-head"><div><h3>بيانات الإعلان</h3><p>نموذج مرتب مع رفع حتى 3 صور ومعاينة مباشرة قبل الحفظ على Firebase.</p></div><span class="btn btn-soft">مباشر</span></div>
+    <div class="section-head"><div><h3>${editId ? 'تعديل الإعلان' : 'بيانات الإعلان'}</h3><p>نموذج مرتب مع رفع حتى 3 صور ومعاينة مباشرة قبل الحفظ على Firebase.</p></div><span class="btn btn-soft">${editId ? 'تعديل' : 'مباشر'}</span></div>
     <div class="grid">
       ${customSelect('نوع الإعلان', 'سيارة', ['سيارة','قطعة غيار','خدمة'], 'ad-type')}
       ${customSelect('المدينة', 'طرابلس', ['طرابلس','مصراتة','بنغازي'], 'ad-city')}
@@ -23,13 +25,13 @@ const content = `
         <div id="image-count" class="muted" style="margin-top:8px">لم يتم اختيار صور بعد.</div>
         <div id="image-preview" class="listing-grid" style="margin-top:10px"></div>
       </div>
-      <button class="btn btn-primary btn-block" type="submit">حفظ ومعاينة</button>
+      <button class="btn btn-primary btn-block" type="submit">${editId ? 'حفظ التعديلات' : 'حفظ ومعاينة'}</button>
       <div id="save-status" class="muted"></div>
     </div>
   </form>
 </section>`;
 
-document.getElementById('app').innerHTML = pageTemplate({active:'add', title:'إضافة إعلان جديد', subtitle:'مسار واضح وسريع لإضافة سيارة أو قطعة أو خدمة.', content});
+document.getElementById('app').innerHTML = pageTemplate({active:'add', title: editId ? 'تعديل إعلان' : 'إضافة إعلان جديد', subtitle:'مسار واضح وسريع لإضافة سيارة أو قطعة أو خدمة.', content});
 activateCustomSelects();
 
 const form = document.getElementById('ad-form');
@@ -39,6 +41,8 @@ const imagePreview = document.getElementById('image-preview');
 const imageCount = document.getElementById('image-count');
 const statusBox = document.getElementById('save-status');
 let selectedFiles = [];
+let existingItem = null;
+let existingImages = [];
 
 pickImages.addEventListener('click', ()=> imageInput.click());
 imageInput.addEventListener('change', ()=>{
@@ -47,15 +51,47 @@ imageInput.addEventListener('change', ()=>{
 });
 
 function renderSelectedImages(){
-  imageCount.textContent = selectedFiles.length ? `تم اختيار ${selectedFiles.length} صورة.` : 'لم يتم اختيار صور بعد.';
-  imagePreview.innerHTML = selectedFiles.map(file=>`
-    <article class="listing-card"><div class="listing-image"><img src="${URL.createObjectURL(file)}" alt="preview"></div></article>
+  const previews = selectedFiles.length ? selectedFiles.map(file => ({ src: URL.createObjectURL(file), fresh: true })) : existingImages.map(src => ({ src, fresh: false }));
+  imageCount.textContent = previews.length ? `عدد الصور الحالية ${previews.length}.` : 'لم يتم اختيار صور بعد.';
+  imagePreview.innerHTML = previews.map(item=>`
+    <article class="listing-card"><div class="listing-image"><img src="${item.src}" alt="preview"></div></article>
   `).join('');
 }
 
+function setSelectValue(name, value){
+  const hidden = form.querySelector(`input[name="${name}"]`);
+  const select = hidden?.closest('.custom-select');
+  if (!hidden || !select) return;
+  hidden.value = value;
+  const span = select.querySelector('.select-trigger span');
+  if (span) span.textContent = value;
+  select.querySelectorAll('.option').forEach(opt => opt.classList.toggle('is-selected', opt.dataset.value === value));
+}
+
+(async function initEdit(){
+  if (!editId) return;
+  existingItem = await detailById(editId);
+  if (!existingItem || (existingItem.ownerId && existingItem.ownerId !== getOwnerId())) {
+    statusBox.textContent = 'لا يمكن تعديل هذا الإعلان.';
+    return;
+  }
+  existingImages = Array.isArray(existingItem.images) ? existingItem.images.slice(0,3) : (existingItem.cover ? [existingItem.cover] : []);
+  form.title.value = existingItem.title || '';
+  form.price.value = existingItem.price || '';
+  form.year.value = existingItem.year || '';
+  form.km.value = existingItem.km || '';
+  form.seller.value = existingItem.seller || 'براتشو كار';
+  form.desc.value = existingItem.desc || '';
+  form.phone.value = existingItem.phone || '';
+  form.whatsapp.value = existingItem.whatsapp || '';
+  setSelectValue('ad-type', existingItem.type || 'سيارة');
+  setSelectValue('ad-city', existingItem.city || 'طرابلس');
+  renderSelectedImages();
+})();
+
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
-  statusBox.textContent = 'جاري حفظ الإعلان على Firebase...';
+  statusBox.textContent = editId ? 'جاري حفظ التعديلات...' : 'جاري حفظ الإعلان على Firebase...';
   const fd = new FormData(form);
   const type = fd.get('ad-type') || 'سيارة';
   const city = fd.get('ad-city') || 'طرابلس';
@@ -74,14 +110,12 @@ form.addEventListener('submit', async (e)=>{
   }
 
   try {
-    let images = [];
-    if (selectedFiles.length) {
-      images = await Promise.all(selectedFiles.map(file => fileToDataUrl(file, 840, 0.68)));
-    }
+    let images = existingImages.slice(0,3);
+    if (selectedFiles.length) images = await Promise.all(selectedFiles.map(file => fileToDataUrl(file, 840, 0.68)));
     const cover = images[0] || 'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1200&q=80';
     const now = Date.now();
     const item = {
-      id: `u_${now}`,
+      id: editId || `u_${now}`,
       type,
       title,
       price,
@@ -95,12 +129,14 @@ form.addEventListener('submit', async (e)=>{
       whatsapp,
       cover,
       images,
-      createdTs: now,
-      createdAt: formatRelativeArabic(now)
+      createdTs: existingItem?.createdTs || now,
+      createdAt: existingItem?.createdAt || formatRelativeArabic(now),
+      ownerId: existingItem?.ownerId || getOwnerId(),
+      status: existingItem?.status || 'active'
     };
     const saved = await saveListing(item);
-    statusBox.textContent = 'تم حفظ الإعلان بنجاح على Firebase. جاري فتح المعاينة...';
-    setTimeout(()=>{ location.href = `details.html?id=${saved.id}`; }, 450);
+    statusBox.textContent = editId ? 'تم تحديث الإعلان بنجاح.' : 'تم حفظ الإعلان بنجاح على Firebase. جاري فتح المعاينة...';
+    setTimeout(()=>{ location.href = `details.html?id=${saved.id}`; }, 350);
   } catch (err) {
     console.error(err);
     statusBox.textContent = 'تعذر الحفظ على Firebase. تأكد من تفعيل Firestore Rules ثم جرّب مرة أخرى.';

@@ -2,13 +2,15 @@ import { db } from './firebase-config.js';
 import {
   collection,
   doc,
+  deleteDoc,
   getDoc,
   getDocs,
   limit,
   orderBy,
   query,
   serverTimestamp,
-  setDoc
+  setDoc,
+  updateDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 const STORAGE_KEY = 'bratsho_ads_v2_cache';
@@ -157,7 +159,8 @@ function normalizeIncoming(item = {}){
     images: Array.isArray(item.images) && item.images.length ? item.images : (item.cover ? [item.cover] : []),
     createdTs,
     createdAt: item.createdAt || formatRelativeArabic(createdTs),
-    ownerId: item.ownerId || ''
+    ownerId: item.ownerId || '',
+    status: item.status || 'active'
   };
 }
 
@@ -178,15 +181,17 @@ export async function getRemoteListings(force = false){
   }
 }
 
-export async function getAllListings(force = false){
+export async function getAllListings(force = false, { includeHidden = false } = {}){
   const remote = await getRemoteListings(force);
-  return mergeUnique(remote, listings);
+  const merged = mergeUnique(remote, listings.map(x=>({ ...x, status: x.status || 'active' })));
+  return includeHidden ? merged : merged.filter(x => (x.status || 'active') !== 'hidden');
 }
 
-export async function getUserListings(force = false){
+export async function getUserListings(force = false, { includeHidden = true } = {}){
   const ownerId = getOwnerId();
   const remote = await getRemoteListings(force);
-  return mergeUnique(remote.filter(x => x.ownerId === ownerId), getStorage().filter(x => x.ownerId === ownerId));
+  const merged = mergeUnique(remote.filter(x => x.ownerId === ownerId), getStorage().filter(x => x.ownerId === ownerId));
+  return includeHidden ? merged : merged.filter(x => (x.status || 'active') !== 'hidden');
 }
 
 export async function detailById(id){
@@ -201,8 +206,32 @@ export async function detailById(id){
   return all.find(x => String(x.id) === String(id)) || all[0];
 }
 
+
+export async function updateListingStatus(id, status='hidden'){
+  const ownerId = getOwnerId();
+  const local = getStorage();
+  const current = local.find(x => String(x.id) === String(id));
+  if (current && current.ownerId && current.ownerId !== ownerId) throw new Error('not_owner');
+  const nextLocal = local.map(x => String(x.id) === String(id) ? { ...x, status } : x);
+  setStorage(nextLocal);
+  await updateDoc(doc(db, COLLECTION_NAME, String(id)), { status, updatedAt: serverTimestamp() });
+  if (remoteCache) remoteCache = remoteCache.map(x => String(x.id) === String(id) ? { ...x, status } : x);
+  return true;
+}
+
+export async function removeListing(id){
+  const ownerId = getOwnerId();
+  const local = getStorage();
+  const current = local.find(x => String(x.id) === String(id));
+  if (current && current.ownerId && current.ownerId !== ownerId) throw new Error('not_owner');
+  setStorage(local.filter(x => String(x.id) !== String(id)));
+  await deleteDoc(doc(db, COLLECTION_NAME, String(id)));
+  if (remoteCache) remoteCache = remoteCache.filter(x => String(x.id) !== String(id));
+  return true;
+}
+
 export async function saveListing(data){
-  const normalized = normalizeIncoming({ ...data, ownerId: getOwnerId() });
+  const normalized = normalizeIncoming({ ...data, ownerId: data.ownerId || getOwnerId(), status: data.status || 'active' });
   const currentLocal = getStorage().filter(x => String(x.id) !== normalized.id);
   setStorage([normalized, ...currentLocal]);
   await setDoc(doc(db, COLLECTION_NAME, normalized.id), {
@@ -270,6 +299,7 @@ export function listingCard(item){
     </a>
     <div class="listing-body">
       <div class="listing-price">${price(item.price)}</div>
+      ${(item.status || 'active') === 'hidden' ? '<div class="muted" style="margin-bottom:6px;color:#c97700;font-weight:800">مخفي من العرض العام</div>' : ''}
       <h3 class="listing-title"><a href="details.html?id=${safeText(item.id)}">${safeText(item.title)}</a></h3>
       <p class="listing-desc">${safeText(truncateText(item.desc))}</p>
       <div class="listing-meta">

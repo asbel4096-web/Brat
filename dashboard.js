@@ -1,7 +1,9 @@
 import { pageTemplate, getUserListings } from './common.js';
 
 (async ()=>{
-  const userAds = await getUserListings(true);
+  const userAds = await getUserListings(true, { includeHidden: true });
+  const activeAds = userAds.filter(x => (x.status || 'active') !== 'hidden');
+  const hiddenAds = userAds.filter(x => (x.status || 'active') === 'hidden');
   const content = `
   <section class="section">
     <div class="dashboard-card">
@@ -11,15 +13,15 @@ import { pageTemplate, getUserListings } from './common.js';
       </div>
       <div class="dashboard-buttons">
         <a class="btn btn-primary btn-block" href="my-ads.html">إدارة إعلاناتي</a>
-        <a class="btn btn-soft btn-block" href="settings.html">إعدادات الحساب</a>
+        <a class="btn btn-soft btn-block" href="add.html">إضافة إعلان جديد</a>
       </div>
     </div>
   </section>
   <section class="section stats-grid">
     <div class="stat"><div><strong>2,891</strong><span>المشاهدات</span></div></div>
-    <div class="stat"><div><strong>${userAds.length}</strong><span>إعلاناتي</span></div></div>
-    <div class="stat"><div><strong>8</strong><span>المفضلة</span></div></div>
-    <div class="stat"><div><strong>4.9</strong><span>التقييم</span></div></div>
+    <div class="stat"><div><strong>${activeAds.length}</strong><span>منشور</span></div></div>
+    <div class="stat"><div><strong>${hiddenAds.length}</strong><span>مخفي</span></div></div>
+    <div class="stat"><div><strong>${userAds.length}</strong><span>إجمالي إعلاناتي</span></div></div>
   </section>`;
   document.getElementById('app').innerHTML = pageTemplate({active:'account', title:'حسابي', subtitle:'لوحة أبسط وأوضح لمتابعة الإعلانات والحساب.', content});
 })();
