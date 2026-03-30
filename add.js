@@ -1,4 +1,4 @@
-import { pageTemplate, customSelect, activateCustomSelects, fileToDataUrl, saveListing, normalizeWhatsapp, formatRelativeArabic, detailById, getCurrentUser, authGateCard, waitForAuthReady } from './common.js';
+import { pageTemplate, customSelect, activateCustomSelects, saveListing, uploadListingImages, normalizeWhatsapp, formatRelativeArabic, detailById, getCurrentUser, authGateCard, waitForAuthReady } from './common.js';
 
 const editId = new URLSearchParams(location.search).get('id');
 
@@ -6,7 +6,7 @@ const content = `
 <section class="section">
   <div class="step-pills"><span>1. القسم</span><span>2. التفاصيل</span><span>3. الصور</span><span>4. التواصل</span><span>5. المراجعة</span></div>
   <form id="ad-form" class="form-shell">
-    <div class="section-head"><div><h3>${editId ? 'تعديل الإعلان' : 'بيانات الإعلان'}</h3><p>نموذج مرتب مع رفع حتى 3 صور ومعاينة مباشرة قبل الحفظ على Firebase.</p></div><span class="btn btn-soft">${editId ? 'تعديل' : 'مباشر'}</span></div>
+    <div class="section-head"><div><h3>${editId ? 'تعديل الإعلان' : 'بيانات الإعلان'}</h3><p>نموذج مرتب مع رفع حتى 20 صورة ومعاينة مباشرة ثم رفع حقيقي إلى Firebase Storage.</p></div><span class="btn btn-soft">${editId ? 'تعديل' : 'مباشر'}</span></div>
     <div class="grid">
       ${customSelect('نوع الإعلان', 'سيارة', ['سيارة','قطعة غيار','خدمة'], 'ad-type')}
       ${customSelect('المدينة', 'طرابلس', ['طرابلس','مصراتة','بنغازي'], 'ad-city')}
@@ -19,7 +19,7 @@ const content = `
       <label class="field"><label>رقم الهاتف</label><input name="phone" placeholder="0912345678"></label>
       <label class="field"><label>واتساب</label><input name="whatsapp" placeholder="0912345678 أو 2189..."></label>
       <div class="search-panel">
-        <div class="section-head"><div><h3>الصور</h3><p>يمكنك رفع حتى 3 صور مضغوطة للحفظ السريع على الإنترنت.</p></div></div>
+        <div class="section-head"><div><h3>الصور</h3><p>يمكنك رفع حتى 20 صورة وسيتم تخزينها فعليًا داخل Firebase Storage.</p></div></div>
         <input id="image-input" type="file" accept="image/*" multiple hidden>
         <button id="pick-images" type="button" class="btn btn-soft btn-block">رفع صور الإعلان</button>
         <div id="image-count" class="muted" style="margin-top:8px">لم يتم اختيار صور بعد.</div>
@@ -53,13 +53,13 @@ const content = `
 
   pickImages.addEventListener('click', ()=> imageInput.click());
   imageInput.addEventListener('change', ()=>{
-    selectedFiles = Array.from(imageInput.files || []).slice(0,3);
+    selectedFiles = Array.from(imageInput.files || []).slice(0,20);
     renderSelectedImages();
   });
 
   function renderSelectedImages(){
     const previews = selectedFiles.length ? selectedFiles.map(file => ({ src: URL.createObjectURL(file), fresh: true })) : existingImages.map(src => ({ src, fresh: false }));
-    imageCount.textContent = previews.length ? `عدد الصور الحالية ${previews.length}.` : 'لم يتم اختيار صور بعد.';
+    imageCount.textContent = previews.length ? `عدد الصور الحالية ${previews.length} من 20.` : 'لم يتم اختيار صور بعد.';
     imagePreview.innerHTML = previews.map(item=>`
       <article class="listing-card"><div class="listing-image"><img src="${item.src}" alt="preview"></div></article>
     `).join('');
@@ -81,7 +81,7 @@ const content = `
       statusBox.textContent = 'لا يمكن تعديل هذا الإعلان.';
       return;
     }
-    existingImages = Array.isArray(existingItem.images) ? existingItem.images.slice(0,3) : (existingItem.cover ? [existingItem.cover] : []);
+        existingImages = Array.isArray(existingItem.images) ? existingItem.images.slice(0,20) : (existingItem.cover ? [existingItem.cover] : []);
     form.title.value = existingItem.title || '';
     form.price.value = existingItem.price || '';
     form.year.value = existingItem.year || '';
@@ -116,12 +116,16 @@ const content = `
     }
 
     try {
-      let images = existingImages.slice(0,3);
-      if (selectedFiles.length) images = await Promise.all(selectedFiles.map(file => fileToDataUrl(file, 840, 0.68)));
+      const listingId = editId || `u_${now}`;
+      let images = existingImages.slice(0,20);
+      if (selectedFiles.length) {
+        statusBox.textContent = `جاري رفع ${selectedFiles.length} صورة إلى Firebase Storage...`;
+        images = await uploadListingImages(selectedFiles, listingId);
+      }
       const cover = images[0] || 'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1200&q=80';
       const now = Date.now();
       const item = {
-        id: editId || `u_${now}`,
+        id: listingId,
         type, title, price, city, year, km, seller,
         sellerInitial: seller.charAt(0) || 'ب', desc, phone, whatsapp,
         cover, images,

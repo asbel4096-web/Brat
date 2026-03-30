@@ -1,4 +1,4 @@
-import { auth, db } from './firebase-config.js';
+import { auth, db, storage } from './firebase-config.js';
 import {
   collection,
   deleteDoc,
@@ -19,6 +19,12 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes
+} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js';
 
 const STORAGE_KEY = 'bratsho_ads_v2_cache';
 const OWNER_KEY = 'bratsho_owner_id';
@@ -244,9 +250,39 @@ export async function removeListing(id){
   if (!current || current.ownerId !== user.uid) throw new Error('not_owner');
   const local = getStorage();
   setStorage(local.filter(x => String(x.id) !== String(id)));
+  await removeListingImages(current.images || []);
   await deleteDoc(doc(db, COLLECTION_NAME, String(id)));
   if (remoteCache) remoteCache = remoteCache.filter(x => String(x.id) !== String(id));
   return true;
+}
+
+
+export async function uploadListingImages(files = [], listingId = ''){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  const picked = Array.from(files || []).slice(0, 20);
+  const urls = [];
+  for (const file of picked) {
+    const cleanName = String(file.name || 'image.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
+    const fileRef = ref(storage, `listing-images/${user.uid}/${listingId}/${Date.now()}_${Math.random().toString(36).slice(2,8)}_${cleanName}`);
+    const snap = await uploadBytes(fileRef, file, { contentType: file.type || 'image/jpeg' });
+    urls.push(await getDownloadURL(snap.ref));
+  }
+  return urls;
+}
+
+export async function removeListingImages(imageUrls = []){
+  const jobs = (imageUrls || [])
+    .filter(url => typeof url === 'string' && url.includes('firebasestorage'))
+    .map(async url => {
+      try {
+        await deleteObject(ref(storage, url));
+      } catch (err) {
+        console.warn('Storage delete skipped', err);
+      }
+    });
+  await Promise.all(jobs);
 }
 
 export async function saveListing(data){

@@ -13,7 +13,7 @@ import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, 
       <span class="chip">ميكانيكي متنقل</span>
     </div>
     <h3>براتشو كار بشكل أرتب وتناسق أقوى وتجربة إعلان أسهل</h3>
-    <p>واجهة حديثة ومتوازنة بالأزرق الداكن والأسود والأبيض مع لمسات برتقالية، وبطاقات عرض مرتبة، ونظام إضافة إعلان يدعم حتى 3 صور محفوظة على Firebase.</p>
+    <p>واجهة حديثة ومتوازنة بالأزرق الداكن والأسود والأبيض مع لمسات برتقالية، وبطاقات عرض مرتبة، ونظام إضافة إعلان يدعم حتى 20 صورة محفوظة على Firebase Storage.</p>
     <div class="search-panel">
       <div class="search-grid">
         <label class="field"><input placeholder="ابحث: أزيرا 2023 / كمبيو / ميكانيكي متنقل"></label>
