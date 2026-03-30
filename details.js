@@ -1,4 +1,4 @@
-import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getCurrentUser, updateListingStatus, removeListing, waitForAuthReady } from './common.js';
+import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getCurrentUser, updateListingStatus, removeListing, waitForAuthReady, createOrOpenChat } from './common.js';
 
 (async ()=>{
   await waitForAuthReady();
@@ -62,6 +62,25 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
       alert('تعذر تحديث المفضلة');
     } finally {
       e.currentTarget.disabled = false;
+    }
+  });
+
+
+  document.getElementById('start-chat')?.addEventListener('click', async e => {
+    e.preventDefault();
+    try {
+      const chat = await createOrOpenChat(item);
+      location.href = `chat.html?id=${chat.id}`;
+    } catch (err) {
+      if (err?.message === 'auth_required') {
+        location.href = 'dashboard.html#auth-required';
+        return;
+      }
+      if (err?.message === 'self_chat') {
+        alert('هذا إعلانك أنت.');
+        return;
+      }
+      alert('تعذر فتح المحادثة');
     }
   });
 

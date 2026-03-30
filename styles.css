@@ -322,3 +322,10 @@ body{padding-bottom:0}
 .js-favorite.is-favorite,.icon-btn.is-favorite{color:#e03a66;background:#fff0f5;border-color:#ffd2df}
 .dashboard-buttons{display:grid;gap:10px}
 .empty-icon{width:72px;height:72px;border-radius:24px;background:linear-gradient(135deg,var(--blue1),var(--blue2));display:grid;place-items:center;color:#fff;font-size:34px;font-weight:900;margin:0 auto 12px}
+
+.chat-thread{display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow:auto;padding:6px 0 14px}
+.bubble{max-width:82%;padding:12px 14px;border-radius:18px;font-size:16px;line-height:1.6}
+.bubble-me{align-self:flex-start;background:linear-gradient(135deg,var(--blue1),var(--blue2));color:#fff}
+.bubble-other{align-self:flex-end;background:#eef2fb;border:1px solid var(--line)}
+.chat-compose{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:12px}
+.chat-input{width:100%;min-height:50px;border:2px solid var(--line);border-radius:18px;padding:12px 14px;font-size:16px}
