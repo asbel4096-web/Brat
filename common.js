@@ -421,32 +421,47 @@ export async function createOrOpenChat(item){
   await waitForAuthReady();
   const user = getCurrentUser();
   if (!user) throw new Error('auth_required');
-  if (!item?.ownerId) throw new Error('owner_missing');
-  if (item.ownerId === user.uid) throw new Error('self_chat');
 
-  const participants = [String(user.uid), String(item.ownerId)].sort();
-  const chatId = `chat_${String(item.id)}_${participants.join('_')}`;
+  const ownerId = String(item?.ownerId || '').trim();
+  const listingId = String(item?.id || '').trim();
+
+  if (!ownerId) throw new Error('owner_missing');
+  if (!listingId) throw new Error('listing_missing');
+  if (ownerId === user.uid) throw new Error('self_chat');
+
+  const participants = [String(user.uid), ownerId].sort();
+  const chatId = `chat_${listingId}_${participants.join('_')}`;
   const chatRef = doc(db, 'chats', chatId);
   const snap = await getDoc(chatRef);
 
+  const payload = {
+    id: chatId,
+    listingId,
+    listingTitle: String(item?.title || 'محادثة'),
+    listingCover: String(item?.cover || ''),
+    ownerId,
+    ownerEmail: String(item?.ownerEmail || ''),
+    buyerId: String(user.uid),
+    buyerEmail: String(user.email || ''),
+    participants,
+    lastMessage: snap.exists() ? String(snap.data().lastMessage || '') : '',
+    lastSenderId: snap.exists() ? String(snap.data().lastSenderId || '') : '',
+    updatedTs: Date.now(),
+    updatedAt: serverTimestamp()
+  };
+
   if (!snap.exists()) {
-    await setDoc(chatRef, {
-      id: chatId,
-      listingId: String(item.id),
-      listingTitle: String(item.title || 'محادثة'),
-      listingCover: String(item.cover || ''),
-      ownerId: String(item.ownerId),
-      ownerEmail: String(item.ownerEmail || ''),
-      buyerId: String(user.uid),
-      buyerEmail: String(user.email || ''),
-      participants,
-      lastMessage: '',
-      lastSenderId: '',
-      updatedTs: Date.now(),
-      updatedAt: serverTimestamp()
-    });
+    await setDoc(chatRef, payload);
   } else {
     await updateDoc(chatRef, {
+      participants,
+      ownerId,
+      ownerEmail: String(item?.ownerEmail || snap.data().ownerEmail || ''),
+      buyerId: String(user.uid),
+      buyerEmail: String(user.email || ''),
+      listingId,
+      listingTitle: String(item?.title || snap.data().listingTitle || 'محادثة'),
+      listingCover: String(item?.cover || snap.data().listingCover || ''),
       updatedTs: Date.now(),
       updatedAt: serverTimestamp()
     });
