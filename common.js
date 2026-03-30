@@ -111,6 +111,110 @@ export function getUserLabel(){
   return user.email || 'مستخدم';
 }
 
+function getFavoriteCache(){
+  try { return JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]'); } catch { return []; }
+}
+
+function setFavoriteCache(ids){
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(new Set((ids || []).map(String)))));
+}
+
+let favoriteIdsCache = getFavoriteCache();
+
+export async function getFavoriteIds(force = false){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) {
+    favoriteIdsCache = [];
+    setFavoriteCache([]);
+    return [];
+  }
+  if (!force && favoriteIdsCache.length) return favoriteIdsCache;
+  try {
+    const snap = await getDocs(collection(db, 'users', user.uid, 'favorites'));
+    favoriteIdsCache = snap.docs.map(d => String(d.id));
+    setFavoriteCache(favoriteIdsCache);
+    return favoriteIdsCache;
+  } catch (err) {
+    console.warn('Favorites fallback', err);
+    favoriteIdsCache = getFavoriteCache();
+    return favoriteIdsCache;
+  }
+}
+
+export async function applyFavorites(items = []){
+  const ids = new Set(await getFavoriteIds());
+  return (items || []).map(item => ({ ...item, __favorite: ids.has(String(item.id)) }));
+}
+
+export async function isFavorite(id){
+  const ids = await getFavoriteIds();
+  return ids.includes(String(id));
+}
+
+export async function toggleFavorite(itemOrId){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  const item = typeof itemOrId === 'object' ? itemOrId : await detailById(itemOrId);
+  if (!item) throw new Error('not_found');
+  const favRef = doc(db, 'users', user.uid, 'favorites', String(item.id));
+  const exists = favoriteIdsCache.includes(String(item.id));
+  if (exists) {
+    await deleteDoc(favRef);
+    favoriteIdsCache = favoriteIdsCache.filter(x => x !== String(item.id));
+  } else {
+    await setDoc(favRef, {
+      listingId: String(item.id),
+      title: String(item.title || ''),
+      cover: String(item.cover || ''),
+      createdTs: Date.now(),
+      ownerId: String(item.ownerId || '')
+    }, { merge: true });
+    favoriteIdsCache = [String(item.id), ...favoriteIdsCache.filter(x => x !== String(item.id))];
+  }
+  setFavoriteCache(favoriteIdsCache);
+  return !exists;
+}
+
+export async function getFavoriteListings(){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) return [];
+  const ids = await getFavoriteIds(true);
+  if (!ids.length) return [];
+  const all = await getAllListings(true, { includeHidden: false });
+  const map = new Map(all.map(x => [String(x.id), x]));
+  return ids.map(id => map.get(String(id))).filter(Boolean).map(x => ({ ...x, __favorite: true }));
+}
+
+export function bindFavoriteButtons(root = document){
+  root.querySelectorAll('.js-favorite').forEach(btn => {
+    if (btn.dataset.bound === '1') return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      btn.disabled = true;
+      try {
+        const next = await toggleFavorite(id);
+        btn.classList.toggle('is-favorite', next);
+        btn.setAttribute('aria-pressed', next ? 'true' : 'false');
+        btn.textContent = next ? '♥' : '♡';
+      } catch (err) {
+        if (err?.message === 'auth_required') {
+          location.href = 'dashboard.html#auth-required';
+          return;
+        }
+        alert('تعذر تحديث المفضلة');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+}
+
 export function price(v){
   const n = Number(v || 0);
   return n.toLocaleString('en-US') + ' د.ل';
