@@ -1,4 +1,4 @@
-import { pageTemplate, listingCard, getUserListings, removeListing, updateListingStatus, safeText } from './common.js';
+import { pageTemplate, listingCard, getUserListings, removeListing, updateListingStatus, safeText, authGateCard, waitForAuthReady, getCurrentUser } from './common.js';
 
 function managementBar(item){
   const hidden = (item.status || 'active') === 'hidden';
@@ -11,6 +11,11 @@ function managementBar(item){
 }
 
 async function render(){
+  await waitForAuthReady();
+  if (!getCurrentUser()) {
+    document.getElementById('app').innerHTML = pageTemplate({active:'ads', title:'إعلاناتي', subtitle:'كل الإعلانات التي أضفتها من النموذج الجديد.', content: authGateCard('سجل دخولك حتى ترى إعلانات حسابك فقط وتديرها بأمان.')});
+    return;
+  }
   const userAds = await getUserListings(true, { includeHidden: true });
   const listMarkup = userAds.length
     ? `<div class="listing-grid">${userAds.map(item => `<div class="surface-card" data-wrap="${safeText(item.id)}">${listingCard(item)}${managementBar(item)}</div>`).join('')}</div>`
@@ -23,7 +28,7 @@ async function render(){
     <div class="section-head"><div><h3>إدارة الإعلانات</h3><p>تعديل، حذف، وإخفاء أو إظهار الإعلان من نفس الصفحة.</p></div></div>
     ${listMarkup}
   </section>`;
-  document.getElementById('app').innerHTML = pageTemplate({active:'ads', title:'إعلاناتي', subtitle:'كل الإعلانات التي أضفتها من النموذج الجديد.', content});
+  document.getElementById('app').innerHTML = pageTemplate({active:'ads', title:'إعلاناتي', subtitle:'هذه الصفحة تعرض إعلانات الحساب الحالي فقط.', content});
 
   document.querySelectorAll('.js-delete').forEach(btn => btn.addEventListener('click', async ()=>{
     const id = btn.dataset.id;
@@ -32,7 +37,7 @@ async function render(){
     try {
       await removeListing(id);
       await render();
-    } catch (e) {
+    } catch {
       alert('تعذر حذف الإعلان.');
       btn.disabled = false;
     }
@@ -45,7 +50,7 @@ async function render(){
     try {
       await updateListingStatus(id, status);
       await render();
-    } catch (e) {
+    } catch {
       alert('تعذر تحديث حالة الإعلان.');
       btn.disabled = false;
     }

@@ -1,8 +1,8 @@
-import { db } from './firebase-config.js';
+import { auth, db } from './firebase-config.js';
 import {
   collection,
-  doc,
   deleteDoc,
+  doc,
   getDoc,
   getDocs,
   limit,
@@ -10,8 +10,15 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  updateDoc
+  updateDoc,
+  where
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
+} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
 
 const STORAGE_KEY = 'bratsho_ads_v2_cache';
 const OWNER_KEY = 'bratsho_owner_id';
@@ -19,58 +26,13 @@ const COLLECTION_NAME = 'listings';
 
 export const listings = [
   {
-    id: '1',
-    type: 'سيارة',
-    title: 'هيونداي سوناتا 2016 فل رقم 1',
-    price: 37772,
-    city: 'طرابلس',
-    year: '2016',
-    km: '95,000 كم',
-    seller: 'يونس البراتشو',
-    sellerInitial: 'ي',
-    phone: '0910000000',
-    whatsapp: '218910000000',
-    desc: 'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.',
-    cover: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
-    images: ['https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: 'الآن',
-    createdTs: Date.now() - 3600000
+    id: '1', type: 'سيارة', title: 'هيونداي سوناتا 2016 فل رقم 1', price: 37772, city: 'طرابلس', year: '2016', km: '95,000 كم', seller: 'يونس البراتشو', sellerInitial: 'ي', phone: '0910000000', whatsapp: '218910000000', desc: 'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.', cover: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', images: ['https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80'], createdAt: 'الآن', createdTs: Date.now() - 3600000
   },
   {
-    id: '2',
-    type: 'قطعة غيار',
-    title: 'كمبيو كيا أوبتيما 2014',
-    price: 4500,
-    city: 'مصراتة',
-    year: '2014',
-    km: 'قطعة مستعملة',
-    seller: 'مخزن البراتشو',
-    sellerInitial: 'ب',
-    phone: '0910000000',
-    whatsapp: '218910000000',
-    desc: 'كمبيو نظيف ومجرب، مناسب لعدة فئات، جاهز للتركيب.',
-    cover: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
-    images: ['https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: 'الآن',
-    createdTs: Date.now() - 7200000
+    id: '2', type: 'قطعة غيار', title: 'كمبيو كيا أوبتيما 2014', price: 4500, city: 'مصراتة', year: '2014', km: 'قطعة مستعملة', seller: 'مخزن البراتشو', sellerInitial: 'ب', phone: '0910000000', whatsapp: '218910000000', desc: 'كمبيو نظيف ومجرب، مناسب لعدة فئات، جاهز للتركيب.', cover: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80', images: ['https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80'], createdAt: 'الآن', createdTs: Date.now() - 7200000
   },
   {
-    id: '3',
-    type: 'خدمة',
-    title: 'ميكانيكي متنقل - فحص كمبيوتر',
-    price: 120,
-    city: 'طرابلس',
-    year: 'خدمة',
-    km: 'زيارة منزلية',
-    seller: 'فني البراتشو',
-    sellerInitial: 'ف',
-    phone: '0910000000',
-    whatsapp: '218910000000',
-    desc: 'فحص أعطال، كهرباء خفيفة، خدمة سريعة داخل طرابلس.',
-    cover: 'https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80',
-    images: ['https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80'],
-    createdAt: 'الآن',
-    createdTs: Date.now() - 10800000
+    id: '3', type: 'خدمة', title: 'ميكانيكي متنقل - فحص كمبيوتر', price: 120, city: 'طرابلس', year: 'خدمة', km: 'زيارة منزلية', seller: 'فني البراتشو', sellerInitial: 'ف', phone: '0910000000', whatsapp: '218910000000', desc: 'فحص أعطال، كهرباء خفيفة، خدمة سريعة داخل طرابلس.', cover: 'https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80', images: ['https://images.unsplash.com/photo-1613214149922-f1809c99b414?auto=format&fit=crop&w=1200&q=80'], createdAt: 'الآن', createdTs: Date.now() - 10800000
   }
 ];
 
@@ -82,6 +44,65 @@ export const messages = [
 
 let remoteCache = null;
 let remoteLoadedAt = 0;
+let authReadyResolved = false;
+let currentUserCache = null;
+let authReadyResolver;
+const authReady = new Promise(resolve => { authReadyResolver = resolve; });
+
+onAuthStateChanged(auth, user => {
+  currentUserCache = user || null;
+  if (!authReadyResolved) {
+    authReadyResolved = true;
+    authReadyResolver(user || null);
+  }
+});
+
+export async function waitForAuthReady(){
+  return authReady;
+}
+
+export function subscribeAuthState(callback){
+  return onAuthStateChanged(auth, callback);
+}
+
+export function getCurrentUser(){
+  return auth.currentUser || currentUserCache || null;
+}
+
+export function isLoggedIn(){
+  return !!getCurrentUser();
+}
+
+export async function signUpWithEmail(email, password){
+  const cred = await createUserWithEmailAndPassword(auth, email, password);
+  return cred.user;
+}
+
+export async function signInWithEmail(email, password){
+  const cred = await signInWithEmailAndPassword(auth, email, password);
+  return cred.user;
+}
+
+export async function signOutUser(){
+  await signOut(auth);
+}
+
+export function getOwnerId(){
+  const user = getCurrentUser();
+  if (user?.uid) return user.uid;
+  let ownerId = localStorage.getItem(OWNER_KEY);
+  if (!ownerId) {
+    ownerId = `guest_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem(OWNER_KEY, ownerId);
+  }
+  return ownerId;
+}
+
+export function getUserLabel(){
+  const user = getCurrentUser();
+  if (!user) return 'زائر';
+  return user.email || 'مستخدم';
+}
 
 export function price(v){
   const n = Number(v || 0);
@@ -111,11 +132,7 @@ export function makeMapsUrl(city=''){
 }
 
 function getStorage(){
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  } catch {
-    return [];
-  }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
 }
 
 function setStorage(items){
@@ -129,15 +146,6 @@ function mergeUnique(...lists){
     map.set(String(item.id), item);
   });
   return Array.from(map.values()).sort((a, b) => Number(b.createdTs || 0) - Number(a.createdTs || 0));
-}
-
-export function getOwnerId(){
-  let ownerId = localStorage.getItem(OWNER_KEY);
-  if (!ownerId) {
-    ownerId = `owner_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
-    localStorage.setItem(OWNER_KEY, ownerId);
-  }
-  return ownerId;
 }
 
 function normalizeIncoming(item = {}){
@@ -167,11 +175,10 @@ function normalizeIncoming(item = {}){
 export async function getRemoteListings(force = false){
   if (!force && remoteCache && (Date.now() - remoteLoadedAt) < 20000) return remoteCache;
   try {
-    const q = query(collection(db, COLLECTION_NAME), orderBy('createdTs', 'desc'), limit(50));
+    const q = query(collection(db, COLLECTION_NAME), orderBy('createdTs', 'desc'), limit(60));
     const snap = await getDocs(q);
     remoteCache = snap.docs.map(d => normalizeIncoming({ id: d.id, ...d.data() }));
     remoteLoadedAt = Date.now();
-    setStorage(remoteCache.filter(x => x.ownerId === getOwnerId()));
     return remoteCache;
   } catch (err) {
     console.warn('Firestore read fallback to local cache', err);
@@ -183,15 +190,25 @@ export async function getRemoteListings(force = false){
 
 export async function getAllListings(force = false, { includeHidden = false } = {}){
   const remote = await getRemoteListings(force);
-  const merged = mergeUnique(remote, listings.map(x=>({ ...x, status: x.status || 'active' })));
+  const merged = mergeUnique(remote, listings.map(x => ({ ...x, status: x.status || 'active' })));
   return includeHidden ? merged : merged.filter(x => (x.status || 'active') !== 'hidden');
 }
 
 export async function getUserListings(force = false, { includeHidden = true } = {}){
-  const ownerId = getOwnerId();
-  const remote = await getRemoteListings(force);
-  const merged = mergeUnique(remote.filter(x => x.ownerId === ownerId), getStorage().filter(x => x.ownerId === ownerId));
-  return includeHidden ? merged : merged.filter(x => (x.status || 'active') !== 'hidden');
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) return [];
+  try {
+    const q = query(collection(db, COLLECTION_NAME), where('ownerId', '==', user.uid), orderBy('createdTs', 'desc'), limit(60));
+    const snap = await getDocs(q);
+    const own = snap.docs.map(d => normalizeIncoming({ id: d.id, ...d.data() }));
+    setStorage(own);
+    return includeHidden ? own : own.filter(x => (x.status || 'active') !== 'hidden');
+  } catch (err) {
+    console.warn('Owner query fallback', err);
+    const own = getStorage().map(normalizeIncoming).filter(x => x.ownerId === user.uid);
+    return includeHidden ? own : own.filter(x => (x.status || 'active') !== 'hidden');
+  }
 }
 
 export async function detailById(id){
@@ -206,24 +223,26 @@ export async function detailById(id){
   return all.find(x => String(x.id) === String(id)) || all[0];
 }
 
-
 export async function updateListingStatus(id, status='hidden'){
-  const ownerId = getOwnerId();
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  const current = await detailById(id);
+  if (!current || current.ownerId !== user.uid) throw new Error('not_owner');
   const local = getStorage();
-  const current = local.find(x => String(x.id) === String(id));
-  if (current && current.ownerId && current.ownerId !== ownerId) throw new Error('not_owner');
-  const nextLocal = local.map(x => String(x.id) === String(id) ? { ...x, status } : x);
-  setStorage(nextLocal);
+  setStorage(local.map(x => String(x.id) === String(id) ? { ...x, status } : x));
   await updateDoc(doc(db, COLLECTION_NAME, String(id)), { status, updatedAt: serverTimestamp() });
   if (remoteCache) remoteCache = remoteCache.map(x => String(x.id) === String(id) ? { ...x, status } : x);
   return true;
 }
 
 export async function removeListing(id){
-  const ownerId = getOwnerId();
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  const current = await detailById(id);
+  if (!current || current.ownerId !== user.uid) throw new Error('not_owner');
   const local = getStorage();
-  const current = local.find(x => String(x.id) === String(id));
-  if (current && current.ownerId && current.ownerId !== ownerId) throw new Error('not_owner');
   setStorage(local.filter(x => String(x.id) !== String(id)));
   await deleteDoc(doc(db, COLLECTION_NAME, String(id)));
   if (remoteCache) remoteCache = remoteCache.filter(x => String(x.id) !== String(id));
@@ -231,18 +250,27 @@ export async function removeListing(id){
 }
 
 export async function saveListing(data){
-  const normalized = normalizeIncoming({ ...data, ownerId: data.ownerId || getOwnerId(), status: data.status || 'active' });
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) throw new Error('auth_required');
+  const normalized = normalizeIncoming({ ...data, ownerId: user.uid, status: data.status || 'active' });
   const currentLocal = getStorage().filter(x => String(x.id) !== normalized.id);
   setStorage([normalized, ...currentLocal]);
   await setDoc(doc(db, COLLECTION_NAME, normalized.id), {
     ...normalized,
+    ownerId: user.uid,
+    ownerEmail: user.email || '',
     createdTs: Number(normalized.createdTs || Date.now()),
     createdAtMs: Number(normalized.createdTs || Date.now()),
     updatedAt: serverTimestamp()
-  });
+  }, { merge: true });
   remoteCache = mergeUnique([normalized], remoteCache || []);
   remoteLoadedAt = Date.now();
   return normalized;
+}
+
+export function authGateCard(message='سجّل دخولك أولًا لإدارة الإعلانات والحفظ الحقيقي.', cta='فتح تسجيل الدخول'){
+  return `<div class="empty-card"><div class="empty-icon">🔐</div><h3 class="listing-title">الدخول مطلوب</h3><p class="muted">${message}</p><a class="btn btn-primary" href="dashboard.html#auth">${cta}</a></div>`;
 }
 
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {

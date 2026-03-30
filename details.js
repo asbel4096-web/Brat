@@ -1,6 +1,7 @@
-import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getOwnerId, updateListingStatus, removeListing } from './common.js';
+import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getCurrentUser, updateListingStatus, removeListing, waitForAuthReady } from './common.js';
 
 (async ()=>{
+  await waitForAuthReady();
   const id = new URLSearchParams(location.search).get('id') || '1';
   const item = await detailById(id);
   const wa = normalizeWhatsapp(item.whatsapp || item.phone);
@@ -8,7 +9,7 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
   const whatsappHref = wa ? `https://wa.me/${wa}` : `https://wa.me/218910000000`;
   const phoneHref = phone ? `tel:${phone}` : `tel:+218910000000`;
   const mapsHref = makeMapsUrl(item.city);
-  const isOwner = item.ownerId && item.ownerId === getOwnerId();
+  const isOwner = !!(item.ownerId && getCurrentUser() && item.ownerId === getCurrentUser().uid);
   const isHidden = (item.status || 'active') === 'hidden';
   const gallery = (item.images?.length ? item.images : [item.cover]).map(src=>`
     <div class="detail-cover" style="margin-top:10px"><img src="${safeText(src)}" alt="${safeText(item.title)}"></div>
@@ -46,27 +47,25 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
   </section>`;
   document.getElementById('app').innerHTML = pageTemplate({active:'home', title:'التفاصيل', subtitle:'عرض كامل للإعلان مع وسائل التواصل.', content});
 
-  const toggleBtn = document.getElementById('toggle-state');
-  const deleteBtn = document.getElementById('delete-ad');
-  toggleBtn?.addEventListener('click', async ()=>{
-    toggleBtn.disabled = true;
+  document.getElementById('toggle-state')?.addEventListener('click', async e => {
+    e.currentTarget.disabled = true;
     try {
       await updateListingStatus(item.id, isHidden ? 'active' : 'hidden');
       location.reload();
     } catch {
       alert('تعذر تحديث حالة الإعلان');
-      toggleBtn.disabled = false;
+      e.currentTarget.disabled = false;
     }
   });
-  deleteBtn?.addEventListener('click', async ()=>{
+  document.getElementById('delete-ad')?.addEventListener('click', async e => {
     if (!confirm('هل تريد حذف الإعلان؟')) return;
-    deleteBtn.disabled = true;
+    e.currentTarget.disabled = true;
     try {
       await removeListing(item.id);
       location.href = 'my-ads.html';
     } catch {
       alert('تعذر حذف الإعلان');
-      deleteBtn.disabled = false;
+      e.currentTarget.disabled = false;
     }
   });
 })();
