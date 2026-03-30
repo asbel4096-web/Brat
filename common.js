@@ -274,7 +274,7 @@ export async function uploadListingImages(files = [], listingId = ''){
 
 export async function removeListingImages(imageUrls = []){
   const jobs = (imageUrls || [])
-    .filter(url => typeof url === 'string' && url.includes('firebasestorage'))
+    .filter(url => typeof url === 'string' && (url.includes('firebasestorage') || url.includes('storage.googleapis.com')))
     .map(async url => {
       try {
         await deleteObject(ref(storage, url));
