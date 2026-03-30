@@ -40,12 +40,30 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
         <a class="btn btn-primary" target="_blank" href="${whatsappHref}">واتساب</a>
         <a class="btn btn-soft" href="${phoneHref}">اتصال</a>
         <a class="icon-btn" target="_blank" href="${mapsHref}">⌖</a>
+        <button class="icon-btn ${item.__favorite ? 'is-favorite' : ''}" id="fav-detail">${item.__favorite ? '♥' : '♡'}</button>
       </div>
       ${ownerTools}
       ${gallery}
     </div>
   </section>`;
   document.getElementById('app').innerHTML = pageTemplate({active:'home', title:'التفاصيل', subtitle:'عرض كامل للإعلان مع وسائل التواصل.', content});
+
+  document.getElementById('fav-detail')?.addEventListener('click', async e => {
+    e.currentTarget.disabled = true;
+    try {
+      const next = await toggleFavorite(item);
+      e.currentTarget.textContent = next ? '♥' : '♡';
+      e.currentTarget.classList.toggle('is-favorite', next);
+    } catch (err) {
+      if (err?.message === 'auth_required') {
+        location.href = 'dashboard.html#auth-required';
+        return;
+      }
+      alert('تعذر تحديث المفضلة');
+    } finally {
+      e.currentTarget.disabled = false;
+    }
+  });
 
   document.getElementById('toggle-state')?.addEventListener('click', async e => {
     e.currentTarget.disabled = true;

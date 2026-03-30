@@ -29,6 +29,7 @@ import {
 const STORAGE_KEY = 'bratsho_ads_v2_cache';
 const OWNER_KEY = 'bratsho_owner_id';
 const COLLECTION_NAME = 'listings';
+const FAVORITES_KEY = 'bratsho_favorites_v1';
 
 export const listings = [
   {
@@ -322,7 +323,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
       </div>
       <div class="top-shortcuts">
         <a class="shortcut-card" href="dashboard.html">حسابي <span>👤</span></a>
-        <a class="shortcut-card" href="messages.html">دردشاتي <span>💬</span></a>
+        <a class="shortcut-card" href="favorites.html">المفضلة <span>♥</span></a>
         <a class="shortcut-card shortcut-accent" href="add.html">+ أضف إعلان</a>
       </div>
     </header>
@@ -355,11 +356,13 @@ export function listingCard(item){
   const phone = String(item.phone || '').replace(/[^\d+]/g,'');
   const whatsappHref = wa ? `https://wa.me/${wa}` : `https://wa.me/218910000000`;
   const phoneHref = phone ? `tel:${phone}` : `tel:+218910000000`;
+  const favIcon = item.__favorite ? '♥' : '♡';
   return `
   <article class="listing-card">
     <a class="listing-image" href="details.html?id=${safeText(item.id)}">
       <img src="${safeText(item.cover)}" alt="${safeText(item.title)}">
       <span class="badge dark">${safeText(item.type)}</span>
+      <button type="button" class="icon-btn js-favorite ${item.__favorite ? 'is-favorite' : ''}" data-id="${safeText(item.id)}" aria-pressed="${item.__favorite ? 'true' : 'false'}" title="المفضلة" style="position:absolute;top:12px;left:12px;z-index:3">${favIcon}</button>
     </a>
     <div class="listing-body">
       <div class="listing-price">${price(item.price)}</div>

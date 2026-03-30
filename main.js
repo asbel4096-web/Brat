@@ -1,8 +1,8 @@
-import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, activateCustomSelects } from './common.js';
+import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, activateCustomSelects, applyFavorites, bindFavoriteButtons } from './common.js';
 
 (async ()=>{
   const allListings = await getAllListings(true, { includeHidden: false });
-  const latest = allListings.slice(0, 6);
+  const latest = await applyFavorites(allListings.slice(0, 6));
 
   const content = `
   <section class="hero-panel">
@@ -13,7 +13,7 @@ import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, 
       <span class="chip">ميكانيكي متنقل</span>
     </div>
     <h3>براتشو كار بشكل أرتب وتناسق أقوى وتجربة إعلان أسهل</h3>
-    <p>واجهة حديثة ومتوازنة بالأزرق الداكن والأسود والأبيض مع لمسات برتقالية، وبطاقات عرض مرتبة، ونظام إضافة إعلان يدعم حتى 20 صورة محفوظة على Firebase Storage.</p>
+    <p>واجهة حديثة ومتوازنة بالأزرق الداكن والأسود والأبيض مع لمسات برتقالية، وبطاقات عرض مرتبة، ونظام مفضلة حقيقي مرتبط بالحساب.</p>
     <div class="search-panel">
       <div class="search-grid">
         <label class="field"><input placeholder="ابحث: أزيرا 2023 / كمبيو / ميكانيكي متنقل"></label>
@@ -32,10 +32,11 @@ import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, 
     </div>
   </section>
   <section class="section">
-    <div class="section-head"><div><h3>أحدث الإعلانات</h3><p>كل إعلان منشور يظهر هنا مباشرة من Firebase. الإعلانات المخفية تبقى داخل إعلاناتي فقط.</p></div><a class="btn btn-soft" href="my-ads.html">كل الإعلانات</a></div>
+    <div class="section-head"><div><h3>أحدث الإعلانات</h3><p>كل إعلان منشور يظهر هنا مباشرة من Firebase. يمكنك الآن حفظ أي إعلان في المفضلة.</p></div><a class="btn btn-soft" href="favorites.html">المفضلة</a></div>
     <div class="listing-grid">${latest.map(listingCard).join('')}</div>
   </section>`;
 
   document.getElementById('app').innerHTML = pageTemplate({active:'home', title:'', subtitle:'', content});
   activateCustomSelects();
+  bindFavoriteButtons();
 })();

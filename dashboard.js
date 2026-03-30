@@ -1,10 +1,10 @@
-import { pageTemplate, getUserListings, signInWithEmail, signOutUser, signUpWithEmail, subscribeAuthState, waitForAuthReady, getCurrentUser, getUserLabel } from './common.js';
+import { pageTemplate, getUserListings, signInWithEmail, signOutUser, signUpWithEmail, subscribeAuthState, waitForAuthReady, getCurrentUser, getUserLabel, getFavoriteIds } from './common.js';
 
 function authForms(message=''){
   return `
   <section class="section">
     <div class="dashboard-card">
-      <div class="section-head"><div><h3>تسجيل الدخول الحقيقي</h3><p>سجّل دخولك حتى ترتبط الإعلانات بحسابك وتظهر لك فقط داخل إعلاناتي.</p></div></div>
+      <div class="section-head"><div><h3>تسجيل الدخول الحقيقي</h3><p>سجّل دخولك حتى ترتبط الإعلانات بحسابك وتظهر لك فقط داخل إعلاناتي ومفضلتك.</p></div></div>
       ${message ? `<div class="muted" style="margin-bottom:12px;color:#b42318">${message}</div>` : ''}
       <div class="auth-grid">
         <form id="login-form" class="surface-card auth-form">
@@ -35,6 +35,7 @@ async function render(){
   }
 
   const userAds = await getUserListings(true, { includeHidden: true });
+  const favoriteIds = await getFavoriteIds(true);
   const activeAds = userAds.filter(x => (x.status || 'active') !== 'hidden');
   const hiddenAds = userAds.filter(x => (x.status || 'active') === 'hidden');
   const content = `
@@ -46,6 +47,7 @@ async function render(){
       </div>
       <div class="dashboard-buttons">
         <a class="btn btn-primary btn-block" href="my-ads.html">إدارة إعلاناتي</a>
+        <a class="btn btn-soft btn-block" href="favorites.html">المفضلة</a>
         <a class="btn btn-soft btn-block" href="add.html">إضافة إعلان جديد</a>
         <button class="btn btn-soft btn-block" id="logout-btn">تسجيل الخروج</button>
       </div>
@@ -55,9 +57,9 @@ async function render(){
     <div class="stat"><div><strong>2,891</strong><span>المشاهدات</span></div></div>
     <div class="stat"><div><strong>${activeAds.length}</strong><span>منشور</span></div></div>
     <div class="stat"><div><strong>${hiddenAds.length}</strong><span>مخفي</span></div></div>
-    <div class="stat"><div><strong>${userAds.length}</strong><span>إجمالي إعلاناتي</span></div></div>
+    <div class="stat"><div><strong>${favoriteIds.length}</strong><span>المفضلة</span></div></div>
   </section>`;
-  document.getElementById('app').innerHTML = pageTemplate({active:'account', title:'حسابي', subtitle:'لوحة واضحة مرتبطة بحسابك الحقيقي وإعلاناتك فقط.', content});
+  document.getElementById('app').innerHTML = pageTemplate({active:'account', title:'حسابي', subtitle:'لوحة واضحة مرتبطة بحسابك الحقيقي وإعلاناتك ومفضلتك.', content});
   document.getElementById('logout-btn')?.addEventListener('click', async ()=>{
     await signOutUser();
     location.href = 'dashboard.html#auth';
