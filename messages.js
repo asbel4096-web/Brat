@@ -1,4 +1,4 @@
-import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, getUserChats, formatRelativeArabic, safeText, isChatUnread, hydrateChatBadges } from './common.js';
+import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, getUserChats, formatRelativeArabic, safeText } from './common.js';
 
 function otherParty(chat, me){
   if (chat.ownerId === me.uid) return chat.buyerEmail || 'العميل';
@@ -23,7 +23,6 @@ function otherParty(chat, me){
   const chats = await getUserChats();
 
   const listHtml = chats.length ? chats.map(chat => {
-    const unread = isChatUnread(chat, me.uid);
     const cover = safeText(chat.listingCover || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80');
     const title = safeText(chat.listingTitle || 'محادثة');
     const peer = safeText(otherParty(chat, me));
@@ -31,19 +30,18 @@ function otherParty(chat, me){
     const time = formatRelativeArabic(chat.updatedTs || Date.now());
     const avatar = safeText((peer || 'م').charAt(0).toUpperCase());
     return `
-      <a class="chat-row ${unread ? 'is-unread' : ''}" href="chat.html?id=${encodeURIComponent(chat.id)}">
+      <button class="chat-row chat-open-btn" type="button" data-chat-id="${safeText(chat.id)}">
         <img class="chat-row-cover" src="${cover}" alt="${title}">
         <div class="chat-row-main">
           <div class="chat-row-head">
             <strong>${title}</strong>
-            ${unread ? '<span class="unread-dot"></span>' : ''}
             <span>${time}</span>
           </div>
           <div class="chat-row-sub">${peer}</div>
-          <div class="chat-row-last ${unread ? 'is-unread-text' : ''}">${last}</div>
+          <div class="chat-row-last">${last}</div>
         </div>
         <div class="chat-row-avatar">${avatar}</div>
-      </a>
+      </button>
     `;
   }).join('') : `
     <div class="empty-card">
@@ -81,6 +79,15 @@ function otherParty(chat, me){
     subtitle:'رسائل العملاء والاستفسارات بشكل نظيف وواضح.',
     content
   });
-})();
 
-setTimeout(() => { hydrateChatBadges(document); }, 0);
+  document.querySelectorAll('.chat-open-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const chatId = btn.getAttribute('data-chat-id');
+      if (!chatId) {
+        alert('تعذر فتح المحادثة');
+        return;
+      }
+      location.href = `chat.html?id=${encodeURIComponent(chatId)}`;
+    });
+  });
+})();

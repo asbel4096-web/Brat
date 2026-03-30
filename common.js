@@ -446,7 +446,6 @@ export async function createOrOpenChat(item){
     participants,
     lastMessage: snap.exists() ? String(snap.data().lastMessage || '') : '',
     lastSenderId: snap.exists() ? String(snap.data().lastSenderId || '') : '',
-    lastReadBy: snap.exists() ? (snap.data().lastReadBy || {}) : { [user.uid]: Date.now() },
     updatedTs: Date.now(),
     updatedAt: serverTimestamp()
   };
@@ -463,7 +462,6 @@ export async function createOrOpenChat(item){
       listingId,
       listingTitle: String(item?.title || snap.data().listingTitle || 'محادثة'),
       listingCover: String(item?.cover || snap.data().listingCover || ''),
-      [`lastReadBy.${user.uid}`]: Date.now(),
       updatedTs: Date.now(),
       updatedAt: serverTimestamp()
     });
@@ -493,7 +491,6 @@ export async function sendChatMessage(chatId, body){
   await updateDoc(chatRef, {
     lastMessage: text,
     lastSenderId: String(user.uid),
-    [`lastReadBy.${user.uid}`]: Date.now(),
     updatedTs: Date.now(),
     updatedAt: serverTimestamp()
   });
@@ -523,57 +520,6 @@ export function watchChatMessages(chatId, callback){
   });
 }
 
-
-function getChatReadTs(chat, uid){
-  return Number(chat?.lastReadBy?.[uid] || 0);
-}
-
-export function isChatUnread(chat, uid){
-  if (!chat || !uid) return false;
-  const updatedTs = Number(chat.updatedTs || 0);
-  const readTs = getChatReadTs(chat, uid);
-  return String(chat.lastSenderId || '') !== String(uid) && updatedTs > readTs;
-}
-
-export async function markChatRead(chatId){
-  await waitForAuthReady();
-  const user = getCurrentUser();
-  if (!user || !chatId) return;
-  const chatRef = doc(db, 'chats', String(chatId));
-  await updateDoc(chatRef, {
-    [`lastReadBy.${user.uid}`]: Date.now(),
-    updatedAt: serverTimestamp()
-  });
-}
-
-export async function getUnreadChatCount(){
-  await waitForAuthReady();
-  const user = getCurrentUser();
-  if (!user) return 0;
-  const chats = await getUserChats();
-  return chats.filter(chat => isChatUnread(chat, user.uid)).length;
-}
-
-export async function hydrateChatBadges(root=document){
-  await waitForAuthReady();
-  const badges = [...root.querySelectorAll('.js-chat-badge')];
-  if (!badges.length) return;
-  const user = getCurrentUser();
-  if (!user) {
-    badges.forEach(el => { el.hidden = true; el.textContent = '0'; });
-    return;
-  }
-  try {
-    const count = await getUnreadChatCount();
-    badges.forEach(el => {
-      el.textContent = String(count);
-      el.hidden = !count;
-    });
-  } catch {
-    badges.forEach(el => { el.hidden = true; });
-  }
-}
-
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {
   return `
   <div class="app-shell">
@@ -588,7 +534,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
       <div class="top-shortcuts">
         <a class="shortcut-card" href="dashboard.html">حسابي <span>👤</span></a>
         <a class="shortcut-card" href="favorites.html">المفضلة <span>♥</span></a>
-        <a class="shortcut-card" href="messages.html">دردشاتي <span>💬</span><em class="nav-badge js-chat-badge" hidden>0</em></a>
+        <a class="shortcut-card" href="messages.html">دردشاتي <span>💬</span></a>
         <a class="shortcut-card shortcut-accent" href="add.html">+ أضف إعلان</a>
       </div>
     </header>
@@ -603,7 +549,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
 
     <nav class="bottom-nav">
       <a href="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>الرئيسية</b></a>
-      <a href="messages.html" class="nav-item ${active==='messages'?'is-active':''}"><span>◔</span><b>دردشاتي</b><em class="bottom-badge js-chat-badge" hidden>0</em></a>
+      <a href="messages.html" class="nav-item ${active==='messages'?'is-active':''}"><span>◔</span><b>دردشاتي</b></a>
       <a href="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>أضف إعلان</b></a>
       <a href="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>إعلاناتي</b></a>
       <a href="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>حسابي</b></a>
@@ -727,5 +673,3 @@ export function formatRelativeArabic(ts){
   const days = Math.floor(hrs / 24);
   return `منذ ${days} يوم`;
 }
-
-window.addEventListener('load', () => { setTimeout(() => { hydrateChatBadges(document); }, 0); });
