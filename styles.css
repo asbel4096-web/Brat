@@ -1222,3 +1222,38 @@ body{padding-bottom:0}
     font-size:13px;
   }
 }
+
+
+/* Top cards balance */
+.top-shortcuts{
+  align-items:stretch;
+}
+
+.shortcut-card{
+  min-height:76px;
+  padding:12px 14px;
+  font-size:16px;
+  border-radius:22px;
+}
+
+.shortcut-accent{
+  min-height:76px;
+}
+
+@media (max-width:760px){
+  .top-shortcuts{
+    gap:10px;
+  }
+
+  .shortcut-card,
+  .shortcut-accent{
+    min-height:68px;
+    padding:10px 12px;
+    font-size:15px;
+    border-radius:20px;
+  }
+
+  .shortcut-card span{
+    font-size:22px;
+  }
+}
