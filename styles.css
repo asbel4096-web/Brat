@@ -1257,3 +1257,93 @@ body{padding-bottom:0}
     font-size:22px;
   }
 }
+
+
+/* Final mobile hero and search tuning */
+@media (max-width:760px){
+  .hero-panel,
+  .home-hero-upgraded{
+    padding:14px 12px 12px;
+    border-radius:24px;
+    margin-top:14px;
+  }
+
+  .hero-chips{
+    gap:6px;
+    margin-bottom:10px;
+  }
+
+  .chip{
+    padding:6px 11px;
+    font-size:12px;
+  }
+
+  .hero-copy{
+    margin-bottom:8px;
+  }
+
+  .hero-copy h3,
+  .hero-panel h3{
+    font-size:clamp(20px,6.2vw,30px);
+    line-height:1.22;
+    margin:0 0 5px;
+  }
+
+  .hero-copy p,
+  .hero-panel p{
+    font-size:14px;
+    line-height:1.55;
+    margin:0 0 8px;
+  }
+
+  .home-search-panel,
+  .search-panel{
+    padding:10px;
+    border-radius:20px;
+  }
+
+  .home-search-grid{
+    gap:8px;
+  }
+
+  .field label,
+  .custom-select>label{
+    margin:0 0 4px;
+    font-size:13px;
+  }
+
+  .field input,
+  .field textarea,
+  .field .fake-input,
+  .select-trigger{
+    min-height:44px;
+    padding:10px 12px;
+    font-size:15px;
+    border-radius:16px;
+  }
+
+  .home-search-grid .btn{
+    min-height:46px;
+    font-size:17px;
+    border-radius:16px;
+  }
+
+  .home-stat-strip{
+    gap:8px;
+    margin-top:10px;
+  }
+
+  .home-stat-card{
+    padding:10px 6px;
+    border-radius:16px;
+  }
+
+  .home-stat-card strong{
+    font-size:22px;
+    margin-bottom:5px;
+  }
+
+  .home-stat-card span{
+    font-size:12px;
+  }
+}
