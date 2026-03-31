@@ -62,8 +62,16 @@ const TRANSLATIONS = {
     all_cities: 'كل المدن',
     cat_cars: 'سيارات',
     cat_parts: 'قطع غيار',
-    cat_accessories: 'كماليات',
-    cat_service: 'خدمة',
+    cat_accessories: 'كماليات سيارات',
+    cat_service: 'خدمات',
+    cat_small_cars: 'سيارات صغيرة',
+    cat_heavy_cars: 'سيارات ثقيلة',
+    cat_buses: 'حافلات',
+    service_diag: 'كشف أعطال',
+    service_mobile_mech: 'ميكانيكي متنقل',
+    service_tires: 'إطارات ونضائد',
+    service_mobile_tire_fix: 'إصلاح إطارات متنقل',
+    service_oils: 'زيوت ومواد مضافة',
     stat_total_ads: 'إجمالي الإعلانات',
     stat_cars: 'سيارات',
     stat_parts: 'قطع غيار',
@@ -191,8 +199,16 @@ const TRANSLATIONS = {
     all_cities: 'All Cities',
     cat_cars: 'Cars',
     cat_parts: 'Parts',
-    cat_accessories: 'Accessories',
-    cat_service: 'Service',
+    cat_accessories: 'Car Accessories',
+    cat_service: 'Services',
+    cat_small_cars: 'Small Cars',
+    cat_heavy_cars: 'Heavy Vehicles',
+    cat_buses: 'Buses',
+    service_diag: 'Diagnostics',
+    service_mobile_mech: 'Mobile Mechanic',
+    service_tires: 'Tires & Rims',
+    service_mobile_tire_fix: 'Mobile Tire Repair',
+    service_oils: 'Oils & Additives',
     stat_total_ads: 'Total Ads',
     stat_cars: 'Cars',
     stat_parts: 'Parts',
@@ -898,11 +914,9 @@ export function watchChatMessages(chatId, callback){
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {
   const lang = getLang();
   const titles = `
-      <div class="app-switcher">
+      <div class="app-switcher app-switcher-lang-only">
         <button type="button" class="switch-chip ${lang === 'ar' ? 'is-active' : ''}" data-lang="ar">العربية</button>
         <button type="button" class="switch-chip ${lang === 'en' ? 'is-active' : ''}" data-lang="en">English</button>
-        <button type="button" class="switch-chip ${getTheme() === 'light' ? 'is-active' : ''}" data-theme="light">☀ ${t('light_mode')}</button>
-        <button type="button" class="switch-chip ${getTheme() === 'dark' ? 'is-active' : ''}" data-theme="dark">☾ ${t('dark_mode')}</button>
       </div>`;
   const html = `
   <div class="app-shell">

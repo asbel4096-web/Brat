@@ -17,7 +17,7 @@ function buildContent(){
     </div>
 
     <div class="grid">
-      ${customSelect(t('ad_type'), t('cat_cars'), [t('cat_cars'),t('cat_parts'),t('cat_service')], 'ad-type')}
+      ${customSelect(t('ad_type'), t('cat_small_cars'), [t('cat_small_cars'),t('cat_heavy_cars'),t('cat_buses'),t('cat_parts'),t('cat_accessories'),t('cat_service')], 'ad-type')}
       ${customSelect(t('city'), 'طرابلس', cities, 'ad-city')}
       <label class="field"><label>${t('ad_title')}</label><input name="title" required placeholder="مثال: هيونداي أزيرا 2023 محلية وكالة"></label>
       <label class="field"><label>${t('price')}</label><input name="price" type="number" required placeholder="45000"></label>

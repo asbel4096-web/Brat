@@ -8,8 +8,9 @@ function homeLayout({ statsHtml='', listingsHtml='', loading=false } = {}){
   return `
   <section class="hero-panel home-hero-upgraded">
     <div class="hero-chips">
-      <span class="chip">${t('cat_cars')}</span>
-      <span class="chip">${t('cat_parts')}</span>
+      <span class="chip">${t('cat_small_cars')}</span>
+      <span class="chip">${t('cat_heavy_cars')}</span>
+      <span class="chip">${t('cat_buses')}</span>
       <span class="chip">${t('cat_accessories')}</span>
       <span class="chip">${t('cat_service')}</span>
     </div>
@@ -22,7 +23,7 @@ function homeLayout({ statsHtml='', listingsHtml='', loading=false } = {}){
     <div class="search-panel home-search-panel">
       <div class="search-grid home-search-grid">
         <label class="field search-wide"><label>${t('home_search')}</label><input id="home-search-input" placeholder="${t('home_search')}"></label>
-        ${customSelect(t('ad_type'), t('all_cats'), [t('all_cats'),t('cat_cars'),t('cat_parts'),t('cat_accessories'),t('cat_service')], 'home-cat')}
+        ${customSelect(t('ad_type'), t('all_cats'), [t('all_cats'),t('cat_small_cars'),t('cat_heavy_cars'),t('cat_buses'),t('cat_parts'),t('cat_accessories'),t('cat_service')], 'home-cat')}
         ${customSelect(t('city'), t('all_cities'), ['كل المدن','طرابلس','بنغازي','مصراتة','الزاوية','زليتن','صرمان','صبراتة','العجيلات','سبها','سرت','الخمس','درنة','البيضاء','طبرق','أجدابيا','المرج','غريان','نالوت','يفرن','زوارة','بني وليد','ترهونة','رقدالين','الكفرة','هون','ودان','مرزق','غات','أوباري','راس لانوف','البريقة','شحات','سوسة','القبة','توكرة','تاورغاء','مسلاتة','سلوق'], 'home-city')}
         <button class="btn btn-primary btn-block" id="home-search-btn" type="button">${t('search_now')}</button>
       </div>
@@ -40,9 +41,12 @@ function homeLayout({ statsHtml='', listingsHtml='', loading=false } = {}){
       <a class="btn btn-soft" href="add.html">${t('add_new_ad')}</a>
     </div>
     <div class="category-list home-cats-upgraded">
-      ${categoryCard('🚗',t('cat_cars'),'Sedan, SUV, family and imported cars.','cars.html')}
-      ${categoryCard('🧩',t('cat_parts'),'Engines, transmissions, doors, lights and batteries.','parts.html')}
-      ${categoryCard('🛠️',t('cat_service'),'Mobile mechanic, diagnostics and quick rescue.','services.html')}
+      ${categoryCard('🚗',t('cat_small_cars'),'سيدان، عائلية، اقتصادية ومدنية.','cars.html')}
+      ${categoryCard('🚚',t('cat_heavy_cars'),'شاحنات ومركبات ثقيلة وأعمال.','cars.html')}
+      ${categoryCard('🚌',t('cat_buses'),'حافلات ونقل ركاب وخدمات مدارس.','cars.html')}
+      ${categoryCard('🧩',t('cat_parts'),'محركات، كمبيو، أبواب، إنارة وبطاريات.','parts.html')}
+      ${categoryCard('✨',t('cat_accessories'),'فرش، شاشات، زينة وإكسسوارات سيارات.','parts.html')}
+      ${categoryCard('🛠️',t('cat_service'),'كشف أعطال، ميكانيكي متنقل، إطارات ونضائد، إصلاح متنقل، زيوت ومواد مضافة.','services.html')}
     </div>
   </section>
 

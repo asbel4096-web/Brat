@@ -2458,3 +2458,41 @@ body{padding-bottom:0}
     padding:8px 10px;
   }
 }
+
+
+/* Header language only + better dark text visibility */
+.app-switcher-lang-only{
+  grid-template-columns:1fr 1fr;
+}
+[data-theme="dark"] .switch-chip{
+  background:#15224a;
+  color:#f3f6ff;
+  border-color:#30457f;
+}
+[data-theme="dark"] .switch-chip.is-active{
+  background:linear-gradient(135deg,var(--blue1),var(--blue2));
+  color:#ffffff;
+  border-color:#6d88ff;
+}
+[data-theme="dark"] .brand-sub,
+[data-theme="dark"] .page-hero p,
+[data-theme="dark"] .field label,
+[data-theme="dark"] .custom-select>label,
+[data-theme="dark"] .muted,
+[data-theme="dark"] .settings-option small,
+[data-theme="dark"] .settings-info-row span,
+[data-theme="dark"] .chat-row-sub,
+[data-theme="dark"] .chat-row-head span{
+  color:#cfd8ff !important;
+}
+[data-theme="dark"] .hero-panel p{
+  color:#edf2ff !important;
+  opacity:1;
+}
+[data-theme="dark"] .shortcut-card{
+  color:#f6f8ff;
+}
+[data-theme="dark"] .shortcut-card span,
+[data-theme="dark"] .shortcut-card b{
+  color:inherit;
+}
