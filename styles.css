@@ -2325,3 +2325,30 @@ body{padding-bottom:0}
     font-size:24px;
   }
 }
+
+
+/* Home loading safety */
+.loading-card{
+  overflow:hidden;
+}
+.skeleton-box{
+  height:220px;
+  background:linear-gradient(90deg, rgba(69,108,240,.08), rgba(69,108,240,.16), rgba(69,108,240,.08));
+  background-size:200% 100%;
+  animation: shimmer 1.3s infinite linear;
+}
+.skeleton-line{
+  height:16px;
+  border-radius:999px;
+  margin:10px 0;
+  background:linear-gradient(90deg, rgba(69,108,240,.08), rgba(69,108,240,.16), rgba(69,108,240,.08));
+  background-size:200% 100%;
+  animation: shimmer 1.3s infinite linear;
+}
+.skeleton-line.w-70{width:70%}
+.skeleton-line.w-40{width:40%}
+.skeleton-line.w-90{width:90%}
+@keyframes shimmer{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
