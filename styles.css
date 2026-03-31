@@ -1906,3 +1906,118 @@ body{padding-bottom:0}
     width:100%;
   }
 }
+
+
+/* Favorites page bilingual upgrade */
+.favorites-hero{
+  padding:16px;
+}
+.favorites-langbar{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.favorites-langbar span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.16);
+  color:#fff;
+  font-weight:800;
+  font-size:13px;
+}
+.favorites-head{
+  align-items:start;
+}
+.favorites-en-sub{
+  margin:4px 0 6px !important;
+  color:rgba(255,255,255,.92);
+  font-size:15px !important;
+  font-weight:800 !important;
+}
+.favorites-en-sub.dark{
+  color:var(--blue2);
+}
+.favorites-browse-btn{
+  white-space:nowrap;
+}
+.favorites-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:12px;
+}
+.fav-stat{
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:22px;
+  padding:14px 10px;
+  text-align:center;
+}
+.fav-stat.good{
+  background:rgba(113,205,145,.14);
+}
+.fav-stat strong{
+  display:block;
+  font-size:30px;
+  line-height:1;
+  margin-bottom:8px;
+  color:#fff;
+}
+.fav-stat span{
+  display:block;
+  color:rgba(255,255,255,.94);
+  font-size:14px;
+  font-weight:900;
+}
+.fav-stat small{
+  display:block;
+  margin-top:4px;
+  color:rgba(255,255,255,.84);
+  font-size:12px;
+  font-weight:700;
+}
+.favorites-grid{
+  gap:16px;
+}
+.favorites-item{
+  overflow:hidden;
+  padding:0;
+}
+.favorites-item .listing-card{
+  border:0;
+  box-shadow:none;
+}
+@media (max-width:760px){
+  .favorites-hero{
+    padding:14px;
+  }
+  .favorites-langbar{
+    margin-bottom:8px;
+  }
+  .favorites-langbar span{
+    font-size:12px;
+    padding:6px 10px;
+  }
+  .favorites-en-sub{
+    font-size:13px !important;
+  }
+  .favorites-browse-btn{
+    width:100%;
+  }
+  .favorites-stats{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .fav-stat{
+    border-radius:18px;
+    padding:12px 8px;
+  }
+  .fav-stat strong{
+    font-size:26px;
+  }
+}
