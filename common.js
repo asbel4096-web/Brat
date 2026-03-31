@@ -934,10 +934,10 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
       </div>
       ${titles}
       <div class="top-shortcuts top-shortcuts-clean">
-        <a class="shortcut-card shortcut-clean" href="dashboard.html"><span>👤</span><b>${t('top_account')}</b></a>
-        <a class="shortcut-card shortcut-clean" href="favorites.html"><span>♥</span><b>${t('top_favorites')}</b></a>
-        <a class="shortcut-card shortcut-clean shortcut-card-messages" href="messages.html"><span>💬</span><b>${t('top_messages')}</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
-        <a class="shortcut-card shortcut-accent shortcut-clean" href="add.html"><span>＋</span><b>${t('top_add')}</b></a>
+        <a class="shortcut-card shortcut-clean" data-route="dashboard.html" href="dashboard.html"><span>👤</span><b>${t('top_account')}</b></a>
+        <a class="shortcut-card shortcut-clean" data-route="favorites.html" href="favorites.html"><span>♥</span><b>${t('top_favorites')}</b></a>
+        <a class="shortcut-card shortcut-clean shortcut-card-messages" data-route="messages.html" href="messages.html"><span>💬</span><b>${t('top_messages')}</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
+        <a class="shortcut-card shortcut-accent shortcut-clean" data-route="add.html" href="add.html"><span>＋</span><b>${t('top_add')}</b></a>
       </div>
     </header>
 
@@ -950,11 +950,11 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
     </main>
 
     <nav class="bottom-nav">
-      <a href="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>${t('nav_home')}</b></a>
-      <a href="messages.html" class="nav-item nav-item-messages ${active==='messages'?'is-active':''}"><span>◔</span><b>${t('nav_messages')}</b><i class="msg-badge nav-badge is-hidden" id="msg-badge-bottom">0</i></a>
-      <a href="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>${t('nav_add')}</b></a>
-      <a href="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>${t('nav_my_ads')}</b></a>
-      <a href="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>${t('nav_account')}</b></a>
+      <a href="index.html" data-route="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>${t('nav_home')}</b></a>
+      <a href="messages.html" data-route="messages.html" class="nav-item nav-item-messages ${active==='messages'?'is-active':''}"><span>◔</span><b>${t('nav_messages')}</b><i class="msg-badge nav-badge is-hidden" id="msg-badge-bottom">0</i></a>
+      <a href="add.html" data-route="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>${t('nav_add')}</b></a>
+      <a href="my-ads.html" data-route="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>${t('nav_my_ads')}</b></a>
+      <a href="dashboard.html" data-route="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>${t('nav_account')}</b></a>
     </nav>
   </div>`;
   return html;
@@ -977,23 +977,16 @@ export function initAppChrome(root=document){
     });
   }
 
-  root.querySelectorAll('a.shortcut-card[href], a.nav-item[href], .header-settings-btn[href]').forEach(link => {
+  root.querySelectorAll('a.shortcut-card[data-route], a.nav-item[data-route], .header-settings-btn[href]').forEach(link => {
     if (link.dataset.boundNav === '1') return;
     link.dataset.boundNav = '1';
     link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
+      const href = link.dataset.route || link.getAttribute('href');
       if (!href) return;
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = href;
+      window.location.assign(href);
     });
-    link.addEventListener('touchend', (e) => {
-      const href = link.getAttribute('href');
-      if (!href) return;
-      e.preventDefault();
-      e.stopPropagation();
-      window.location.href = href;
-    }, { passive: false });
   });
 }
 
