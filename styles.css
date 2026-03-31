@@ -1736,3 +1736,117 @@ body{padding-bottom:0}
     font-size:22px !important;
   }
 }
+
+
+/* My ads page upgrade */
+.myads-hero{
+  padding:16px;
+}
+.myads-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:12px;
+}
+.myads-stat{
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:22px;
+  padding:14px 10px;
+  text-align:center;
+}
+.myads-stat.good{
+  background:rgba(113, 205, 145, .14);
+}
+.myads-stat strong{
+  display:block;
+  font-size:30px;
+  line-height:1;
+  margin-bottom:8px;
+  color:#fff;
+}
+.myads-stat span{
+  color:rgba(255,255,255,.90);
+  font-size:14px;
+  font-weight:800;
+}
+.myads-grid{
+  display:grid;
+  gap:16px;
+}
+.myads-owner-card{
+  overflow:hidden;
+  padding:0 0 14px;
+}
+.myads-owner-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px 14px 0;
+}
+.myads-owner-price{
+  color:#48a86a;
+  font-size:clamp(24px,4.5vw,32px);
+  font-weight:900;
+}
+.myads-status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:94px;
+  padding:8px 14px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:14px;
+}
+.myads-status.is-active{
+  background:#eaf7ef;
+  color:#22824b;
+  border:1px solid #bfe3ca;
+}
+.myads-status.is-hidden{
+  background:#fff3e8;
+  color:#b85c00;
+  border:1px solid #f2cfaa;
+}
+.myads-owner-card .listing-card{
+  border:0;
+  box-shadow:none;
+  background:transparent;
+}
+.myads-owner-card .listing-body{
+  padding-top:8px;
+}
+.myads-managebar{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  padding:0 14px;
+}
+.myads-managebar .btn{
+  min-height:48px;
+}
+.myads-managebar .danger{
+  color:#b42318;
+}
+@media (max-width:760px){
+  .myads-stats{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .myads-stat{
+    border-radius:18px;
+    padding:12px 8px;
+  }
+  .myads-stat strong{
+    font-size:26px;
+  }
+  .myads-owner-top{
+    padding:12px 12px 0;
+  }
+  .myads-managebar{
+    padding:0 12px;
+    grid-template-columns:1fr;
+  }
+}
