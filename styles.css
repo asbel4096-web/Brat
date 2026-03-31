@@ -1650,3 +1650,59 @@ body{padding-bottom:0}
     padding:0 12px;
   }
 }
+
+
+/* Unify detail page action buttons */
+.detail-actions,
+.detail-actions-main{
+  align-items:stretch;
+}
+
+.detail-actions-main{
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+}
+
+.detail-actions .btn,
+.detail-actions .icon-btn,
+.detail-actions-main .btn,
+.detail-actions-main .icon-btn{
+  min-height:50px;
+  border-radius:18px;
+  font-weight:800;
+  font-size:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  box-shadow:0 8px 18px rgba(16,25,63,.05);
+}
+
+.detail-actions .icon-btn,
+.detail-actions-main .icon-btn{
+  width:100%;
+  height:auto;
+  background:#eef2fb;
+  color:var(--text);
+  border:2px solid var(--line);
+}
+
+.detail-actions .btn-soft,
+.detail-actions-main .btn-soft{
+  background:#f7f9ff;
+}
+
+@media (max-width:760px){
+  .detail-actions-main{
+    grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+    gap:8px;
+  }
+
+  .detail-actions .btn,
+  .detail-actions .icon-btn,
+  .detail-actions-main .btn,
+  .detail-actions-main .icon-btn{
+    min-height:46px;
+    font-size:15px;
+    border-radius:16px;
+  }
+}
