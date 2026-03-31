@@ -520,3 +520,46 @@ body{padding-bottom:0}
   font-weight:900;
   margin-top:8px;
 }
+
+
+.chat-toast-holder{
+  position:sticky;
+  top:10px;
+  z-index:20;
+  display:flex;
+  justify-content:center;
+  pointer-events:none;
+}
+.chat-toast{
+  opacity:0;
+  transform:translateY(-8px);
+  transition:.2s ease;
+  background:linear-gradient(135deg,var(--blue1),var(--blue2));
+  color:#fff;
+  padding:10px 16px;
+  border-radius:999px;
+  box-shadow:var(--shadow);
+  font-weight:800;
+  margin-top:10px;
+}
+.chat-toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.chat-row.has-unread{
+  border-color:#cdd8ff;
+  box-shadow:0 10px 24px rgba(69,108,240,.10);
+}
+.chat-unread-pill{
+  display:inline-grid;
+  place-items:center;
+  min-width:28px;
+  height:28px;
+  padding:0 8px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--blue1),var(--blue2));
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  margin-top:8px;
+}

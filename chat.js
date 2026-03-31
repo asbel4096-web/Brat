@@ -7,6 +7,41 @@ function otherParty(chat, me){
   return chat.buyerEmail || chat.ownerEmail || 'المحادثة';
 }
 
+function playMessageTone(){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(660, ctx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.22);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.24);
+    setTimeout(() => { try{ ctx.close(); }catch{} }, 350);
+  }catch{}
+}
+
+function showToast(text){
+  const holder = document.getElementById('chat-toast-holder');
+  if (!holder) return;
+  const toast = document.createElement('div');
+  toast.className = 'chat-toast';
+  toast.textContent = text;
+  holder.appendChild(toast);
+  setTimeout(()=> toast.classList.add('show'), 20);
+  setTimeout(()=>{
+    toast.classList.remove('show');
+    setTimeout(()=> toast.remove(), 220);
+  }, 2400);
+}
+
 (async ()=>{
   await waitForAuthReady();
   const chatId = new URLSearchParams(location.search).get('id');
@@ -76,6 +111,7 @@ function otherParty(chat, me){
             </div>
           </div>
 
+          <div id="chat-toast-holder" class="chat-toast-holder"></div>
           <div id="chat-messages" class="chat-thread modern-thread"></div>
 
           <form id="chat-form" class="chat-compose modern-compose">
@@ -87,18 +123,18 @@ function otherParty(chat, me){
     `
   });
 
-  document.getElementById('go-back')?.addEventListener('click', ()=> {
-    window.location.assign('messages.html?v=openv3');
-  });
-
   const list = document.getElementById('chat-messages');
   const form = document.getElementById('chat-form');
   const input = document.getElementById('chat-input');
+  let previousLastId = null;
+  let firstPaintDone = false;
+  let originalTitle = document.title || 'براتشو كار';
 
-  mountUnreadBadges();
-  markChatRead(chatId).catch(()=>{});
+  document.getElementById('go-back')?.addEventListener('click', ()=> {
+    window.location.assign('messages.html?v=notifyv1');
+  });
 
-  const unwatch = watchChatMessages(chatId, messages => {
+  const unwatch = watchChatMessages(chatId, async messages => {
     list.innerHTML = messages.length ? messages.map(msg => `
       <div class="msg-wrap ${msg.senderId === me.uid ? 'mine' : 'theirs'}">
         <div class="msg-bubble ${msg.senderId === me.uid ? 'msg-me' : 'msg-other'}">
@@ -112,8 +148,28 @@ function otherParty(chat, me){
         <p class="muted">ابدأ أول رسالة الآن.</p>
       </div>
     `;
+
     list.scrollTop = list.scrollHeight;
-    markChatRead(chatId).catch(()=>{});
+
+    const last = messages[messages.length - 1] || null;
+
+    if (!firstPaintDone) {
+      firstPaintDone = true;
+      previousLastId = last?.id || null;
+    } else if (last && last.id !== previousLastId) {
+      previousLastId = last.id;
+      if (last.senderId !== me.uid) {
+        playMessageTone();
+        showToast('وصلتك رسالة جديدة');
+        document.title = '🔔 رسالة جديدة';
+        setTimeout(()=> { document.title = originalTitle; }, 2200);
+      }
+    }
+
+    try {
+      await markChatRead(chatId);
+      mountUnreadBadges();
+    } catch {}
   });
 
   form.addEventListener('submit', async e => {
@@ -137,5 +193,8 @@ function otherParty(chat, me){
     }
   });
 
-  window.addEventListener('beforeunload', () => { try { unwatch(); } catch {} });
+  window.addEventListener('beforeunload', () => {
+    try { unwatch(); } catch {}
+    document.title = originalTitle;
+  });
 })();
