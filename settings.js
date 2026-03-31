@@ -1,4 +1,4 @@
-import { pageTemplate, waitForAuthReady, getCurrentUser, getUserLabel, t, getLang, getTheme, initAppChrome, signOutUser } from './common.js';
+import { pageTemplate, waitForAuthReady, getCurrentUser, getUserLabel, t, getLang, setLang, getTheme, setTheme, initAppChrome, signOutUser } from './common.js';
 
 function card(title, subtitle, body){
   return `<section class="section"><div class="surface-card settings-card"><div class="section-head"><div><h3>${title}</h3>${subtitle ? `<p>${subtitle}</p>` : ''}</div></div>${body}</div></section>`;
@@ -11,22 +11,28 @@ function card(title, subtitle, body){
   const theme = getTheme();
 
   const content = `
-    ${card('', '', `
+    ${card(t('app_settings'), t('settings_sub'), `
       <div class="settings-grid">
-        <div class="settings-option settings-option-static">
+        <div class="settings-option">
           <div>
             <strong>${t('language')}</strong>
-            <small>${t('current_language')}</small>
+            <small>${t('current_language')}: ${lang === 'en' ? 'English' : 'العربية'}</small>
           </div>
-          <div class="settings-value-badge">${lang === 'en' ? 'English' : 'العربية'}</div>
+          <div class="settings-actions">
+            <button class="btn ${lang === 'ar' ? 'btn-primary' : 'btn-soft'}" id="lang-ar">العربية</button>
+            <button class="btn ${lang === 'en' ? 'btn-primary' : 'btn-soft'}" id="lang-en">English</button>
+          </div>
         </div>
 
-        <div class="settings-option settings-option-static">
+        <div class="settings-option">
           <div>
             <strong>${t('appearance')}</strong>
-            <small>${t('current_theme')}</small>
+            <small>${t('current_theme')}: ${theme === 'dark' ? t('dark_mode') : t('light_mode')}</small>
           </div>
-          <div class="settings-value-badge">${theme === 'dark' ? t('dark_mode') : t('light_mode')}</div>
+          <div class="settings-actions">
+            <button class="btn ${theme === 'light' ? 'btn-primary' : 'btn-soft'}" id="theme-light">☀ ${t('light_mode')}</button>
+            <button class="btn ${theme === 'dark' ? 'btn-primary' : 'btn-soft'}" id="theme-dark">☾ ${t('dark_mode')}</button>
+          </div>
         </div>
 
         <div class="settings-option settings-option-static">
@@ -67,6 +73,22 @@ function card(title, subtitle, body){
 
   initAppChrome();
 
+  document.getElementById('lang-ar')?.addEventListener('click', ()=>{
+    setLang('ar');
+    location.reload();
+  });
+  document.getElementById('lang-en')?.addEventListener('click', ()=>{
+    setLang('en');
+    location.reload();
+  });
+  document.getElementById('theme-light')?.addEventListener('click', ()=>{
+    setTheme('light');
+    location.reload();
+  });
+  document.getElementById('theme-dark')?.addEventListener('click', ()=>{
+    setTheme('dark');
+    location.reload();
+  });
   document.getElementById('logout-settings')?.addEventListener('click', async ()=>{
     try {
       await signOutUser();

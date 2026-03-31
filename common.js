@@ -907,6 +907,9 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
   const html = `
   <div class="app-shell">
     <header class="site-header">
+      <div class="header-toolbar">
+        <a class="header-settings-btn" href="settings.html" aria-label="${t('settings')}">⚙</a>
+      </div>
       <div class="brand-wrap">
         <div class="brand-copy">
           <h1 class="brand-title">براتشو <span>كار</span></h1>
@@ -955,8 +958,13 @@ export function initLanguageUI(root=document){
   root.querySelectorAll('[data-lang]').forEach(btn => {
     if (btn.dataset.boundLang === '1') return;
     btn.dataset.boundLang = '1';
-    btn.addEventListener('click', () => {
-      setLang(btn.dataset.lang);
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const next = btn.dataset.lang === 'en' ? 'en' : 'ar';
+      setLang(next);
+      try {
+        applyTheme(document);
+      } catch {}
       location.reload();
     });
   });
@@ -964,8 +972,13 @@ export function initLanguageUI(root=document){
   root.querySelectorAll('[data-theme]').forEach(btn => {
     if (btn.dataset.boundTheme === '1') return;
     btn.dataset.boundTheme = '1';
-    btn.addEventListener('click', () => {
-      setTheme(btn.dataset.theme);
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const next = btn.dataset.theme === 'dark' ? 'dark' : 'light';
+      setTheme(next);
+      try {
+        applyTheme(document);
+      } catch {}
       location.reload();
     });
   });
