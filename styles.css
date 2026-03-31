@@ -2496,3 +2496,50 @@ body{padding-bottom:0}
 [data-theme="dark"] .shortcut-card b{
   color:inherit;
 }
+
+
+/* Fix non responsive buttons */
+.site-header,
+.header-toolbar,
+.brand-wrap,
+.app-switcher,
+.top-shortcuts,
+.bottom-nav{
+  position:relative;
+  z-index:30;
+}
+.app-switcher,
+.top-shortcuts,
+.bottom-nav,
+.shortcut-card,
+.nav-item,
+.header-settings-btn{
+  pointer-events:auto !important;
+}
+.shortcut-card,
+.nav-item,
+.header-settings-btn{
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  cursor:pointer;
+}
+.shortcut-card *,
+.nav-item *,
+.header-settings-btn *{
+  pointer-events:none;
+}
+.top-shortcuts-clean{
+  margin-bottom:8px;
+}
+.bottom-nav{
+  z-index:80;
+}
+.nav-item{
+  position:relative;
+  z-index:81;
+}
+@media (max-width:760px){
+  .top-shortcuts-clean{
+    margin-bottom:10px;
+  }
+}

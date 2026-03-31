@@ -972,9 +972,29 @@ export function initAppChrome(root=document){
     settingsBtn.dataset.boundSettings = '1';
     settingsBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      window.location.href = 'settings.html?v=headerfix1';
+      e.stopPropagation();
+      window.location.href = 'settings.html?v=clickfix1';
     });
   }
+
+  root.querySelectorAll('a.shortcut-card[href], a.nav-item[href], .header-settings-btn[href]').forEach(link => {
+    if (link.dataset.boundNav === '1') return;
+    link.dataset.boundNav = '1';
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = href;
+    });
+    link.addEventListener('touchend', (e) => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = href;
+    }, { passive: false });
+  });
 }
 
 export function initLanguageUI(root=document){
