@@ -1143,3 +1143,82 @@ body{padding-bottom:0}
     margin-top: 6px;
   }
 }
+
+
+/* Lighten hero on mobile */
+@media (max-width:760px){
+  .home-hero-upgraded,
+  .hero-panel{
+    padding:16px 14px 14px;
+    border-radius:26px;
+  }
+
+  .hero-chips{
+    gap:6px;
+    margin-bottom:12px;
+  }
+
+  .chip{
+    padding:7px 12px;
+    font-size:13px;
+  }
+
+  .hero-copy{
+    margin-bottom:10px;
+  }
+
+  .hero-copy h3,
+  .hero-panel h3{
+    font-size:clamp(22px,6.6vw,32px);
+    line-height:1.28;
+    margin:0 0 6px;
+  }
+
+  .hero-copy p,
+  .hero-panel p{
+    font-size:15px;
+    line-height:1.65;
+    margin:0 0 10px;
+  }
+
+  .home-search-panel,
+  .search-panel{
+    padding:12px;
+    border-radius:22px;
+  }
+
+  .field input,
+  .field textarea,
+  .field .fake-input,
+  .select-trigger{
+    min-height:48px;
+    padding:12px 14px;
+    font-size:16px;
+    border-radius:18px;
+  }
+
+  .home-search-grid .btn{
+    min-height:50px;
+    font-size:18px;
+    border-radius:18px;
+  }
+
+  .home-stat-strip{
+    gap:10px;
+    margin-top:12px;
+  }
+
+  .home-stat-card{
+    padding:12px 8px;
+    border-radius:18px;
+  }
+
+  .home-stat-card strong{
+    font-size:24px;
+    margin-bottom:6px;
+  }
+
+  .home-stat-card span{
+    font-size:13px;
+  }
+}
