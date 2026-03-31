@@ -1,4 +1,4 @@
-import { pageTemplate, listingCard, getFavoriteListings, bindFavoriteButtons, authGateCard, waitForAuthReady, getCurrentUser } from './common.js';
+import { pageTemplate, listingCard, getFavoriteListings, bindFavoriteButtons, authGateCard, waitForAuthReady, getCurrentUser, t, initLanguageUI } from './common.js';
 
 function statCard(num, ar, en, accent=''){
   return `<div class="fav-stat ${accent}"><strong>${num}</strong><span>${ar}</span><small>${en}</small></div>`;
@@ -9,8 +9,8 @@ async function render(){
   if (!getCurrentUser()) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'account',
-      title:'المفضلة / Favorites',
-      subtitle:'احفظ الإعلانات التي أعجبتك للرجوع إليها لاحقًا مع واجهة عربية وإنجليزية.',
+      title:t('favorites_title'),
+      subtitle:t('favorites_sub'),
       content: authGateCard('سجل دخولك حتى تظهر لك مفضلتك الخاصة على حسابك.')
     });
     return;
@@ -56,10 +56,11 @@ async function render(){
     </section>`;
   document.getElementById('app').innerHTML = pageTemplate({
     active:'account',
-    title:'المفضلة / Favorites',
-    subtitle:'قائمة الإعلانات التي حفظتها على حسابك الحقيقي مع لمسة ثنائية اللغة.',
+    title:t('favorites_title'),
+    subtitle:t('favorites_sub'),
     content
   });
   bindFavoriteButtons();
 }
 render();
+initLanguageUI();

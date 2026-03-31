@@ -1,4 +1,4 @@
-import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getCurrentUser, updateListingStatus, removeListing, waitForAuthReady, toggleFavorite, createOrOpenChat } from './common.js';
+import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsUrl, getCurrentUser, updateListingStatus, removeListing, waitForAuthReady, toggleFavorite, createOrOpenChat, t, initLanguageUI } from './common.js';
 
 (async ()=>{
   await waitForAuthReady();
@@ -47,20 +47,20 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
       ${(item.status || 'active') === 'hidden' ? '<p class="muted" style="color:#c97700;font-weight:800;margin-top:10px">هذا الإعلان مخفي حاليًا من العرض العام.</p>' : ''}
 
       <div class="detail-actions detail-actions-main">
-        <button class="btn btn-primary" id="start-chat">مراسلة</button>
-        <a class="btn btn-soft" target="_blank" href="${whatsappHref}">واتساب</a>
-        <a class="btn btn-soft" href="${phoneHref}">اتصال</a>
+        <button class="btn btn-primary" id="start-chat">${t('message')}</button>
+        <a class="btn btn-soft" target="_blank" href="${whatsappHref}">${t('whatsapp')}</a>
+        <a class="btn btn-soft" href="${phoneHref}">${t('call')}</a>
         <a class="icon-btn icon-btn-map" target="_blank" href="${mapsHref}" title="الخريطة">⌖</a>
         <button class="icon-btn icon-btn-fav ${item.__favorite ? 'is-favorite' : ''}" id="fav-detail" title="المفضلة">${item.__favorite ? '♥' : '♡'}</button>
       </div>
 
       <div class="table-list detail-table">
-        <div class="table-row"><span>النوع</span><span>${safeText(item.type)}</span></div>
-        <div class="table-row"><span>المدينة</span><span>${safeText(item.city)}</span></div>
-        <div class="table-row"><span>السنة</span><span>${safeText(item.year)}</span></div>
-        <div class="table-row"><span>الحالة</span><span>${safeText(item.km)}</span></div>
-        <div class="table-row"><span>البائع</span><span>${safeText(item.seller)}</span></div>
-        ${item.mapLocation ? `<div class="table-row"><span>الموقع</span><span>${safeText(item.mapLocation)}</span></div>` : ''}
+        <div class="table-row"><span>${t('type')}</span><span>${safeText(item.type)}</span></div>
+        <div class="table-row"><span>${t('city')}</span><span>${safeText(item.city)}</span></div>
+        <div class="table-row"><span>${t('year')}</span><span>${safeText(item.year)}</span></div>
+        <div class="table-row"><span>${t('condition')}</span><span>${safeText(item.km)}</span></div>
+        <div class="table-row"><span>${t('seller')}</span><span>${safeText(item.seller)}</span></div>
+        ${item.mapLocation ? `<div class="table-row"><span>${t('location')}</span><span>${safeText(item.mapLocation)}</span></div>` : ''}
       </div>
 
       ${ownerTools}
@@ -73,8 +73,8 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'home',
-    title:'التفاصيل',
-    subtitle:'عرض كامل للإعلان مع وسائل التواصل.',
+    title:t('details'),
+    subtitle:t('full_ad_view'),
     content
   });
 
@@ -133,4 +133,5 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
       e.currentTarget.disabled = false;
     }
   });
+initLanguageUI();
 })();

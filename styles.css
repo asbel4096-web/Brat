@@ -2021,3 +2021,31 @@ body{padding-bottom:0}
     font-size:26px;
   }
 }
+
+
+/* Full bilingual system */
+.lang-switcher{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.lang-chip{
+  border:2px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:999px;
+  padding:8px 14px;
+  font:inherit;
+  font-weight:800;
+  cursor:pointer;
+}
+.lang-chip.is-active{
+  background:linear-gradient(135deg,var(--blue1),var(--blue2));
+  color:#fff;
+  border-color:transparent;
+}
+.favorites-en-sub.dark,
+.myads-en-sub{
+  letter-spacing:.2px;
+}

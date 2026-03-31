@@ -1,4 +1,4 @@
-import { pageTemplate, listingCard, getUserListings, removeListing, updateListingStatus, safeText, authGateCard, waitForAuthReady, getCurrentUser, price } from './common.js';
+import { pageTemplate, listingCard, getUserListings, removeListing, updateListingStatus, safeText, authGateCard, waitForAuthReady, getCurrentUser, price, t, initLanguageUI } from './common.js';
 
 function summaryCard(num, label, sublabel='', accent=''){
   return `<div class="myads-stat ${accent}"><strong>${num}</strong><span>${label}</span><small>${sublabel}</small></div>`;
@@ -32,8 +32,8 @@ async function render(){
   if (!getCurrentUser()) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'ads',
-      title:'إعلاناتي / My Ads',
-      subtitle:'كل الإعلانات التي أضفتها من النموذج الجديد مع واجهة عربية وإنجليزية.',
+      title:t('my_ads'),
+      subtitle:t('my_ads_sub'),
       content: authGateCard('سجل دخولك حتى ترى إعلانات حسابك فقط وتديرها بأمان.')
     });
     return;
@@ -83,8 +83,8 @@ async function render(){
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'ads',
-    title:'إعلاناتي / My Ads',
-    subtitle:'هذه الصفحة تعرض إعلانات الحساب الحالي فقط مع تسميات عربية وإنجليزية.',
+    title:t('my_ads'),
+    subtitle:t('my_ads_sub'),
     content
   });
 
@@ -95,6 +95,7 @@ async function render(){
     try {
       await removeListing(id);
       await render();
+initLanguageUI();
     } catch {
       alert('تعذر حذف الإعلان.');
       btn.disabled = false;
@@ -108,6 +109,7 @@ async function render(){
     try {
       await updateListingStatus(id, status);
       await render();
+initLanguageUI();
     } catch {
       alert('تعذر تحديث حالة الإعلان.');
       btn.disabled = false;
@@ -116,3 +118,4 @@ async function render(){
 }
 
 render();
+initLanguageUI();
