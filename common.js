@@ -596,8 +596,9 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
   <div class="app-shell">
     <header class="site-header">
       <div class="brand-wrap">
-        <div>
+        <div class="brand-copy">
           <h1 class="brand-title">براتشو <span>كار</span></h1>
+          <p class="brand-en">Bratsho Car</p>
           <p class="brand-sub">سوق سيارات وقطع غيار وخدمات متنقلة بتصميم مرتب وسريع</p>
         </div>
         <div class="logo-box">BC</div>

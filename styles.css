@@ -1039,3 +1039,70 @@ body{padding-bottom:0}
     grid-template-columns:repeat(2,1fr);
   }
 }
+
+
+/* Homepage final clean + brand resize */
+.brand-wrap{
+  grid-template-columns:1fr 78px;
+  gap:12px;
+}
+.brand-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0;
+}
+.logo-box{
+  width:78px;
+  height:78px;
+  border-radius:22px;
+  font-size:31px;
+}
+.brand-title{
+  margin:0 0 4px;
+  font-size:clamp(26px,4.8vw,42px);
+}
+.brand-en{
+  margin:0 0 4px;
+  color:var(--blue2);
+  font-weight:800;
+  font-size:clamp(15px,2.4vw,20px);
+  letter-spacing:.4px;
+}
+.brand-sub{
+  margin:0;
+}
+.top-shortcuts{
+  grid-template-columns:repeat(4,1fr);
+}
+.home-hero-upgraded{
+  padding:18px;
+}
+.home-search-panel{
+  margin-top:10px;
+}
+.home-search-grid .btn{
+  min-height:56px;
+  font-size:20px;
+}
+@media (max-width:760px){
+  .brand-wrap{
+    grid-template-columns:1fr 64px;
+    gap:10px;
+  }
+  .logo-box{
+    width:64px;
+    height:64px;
+    border-radius:18px;
+    font-size:25px;
+  }
+  .brand-title{
+    font-size:clamp(24px,8vw,34px);
+  }
+  .brand-en{
+    font-size:14px;
+  }
+  .top-shortcuts{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
