@@ -908,7 +908,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
   <div class="app-shell">
     <header class="site-header">
       <div class="header-toolbar">
-        <a class="header-settings-btn" href="settings.html" aria-label="${t('settings')}">⚙</a>
+        <a class="header-settings-btn" id="header-settings-btn" href="settings.html?v=headerfix1" aria-label="${t('settings')}" title="${t('settings')}"><span>⚙</span></a>
       </div>
       <div class="brand-wrap">
         <div class="brand-copy">
@@ -919,11 +919,11 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
         <div class="logo-box">BC</div>
       </div>
       ${titles}
-      <div class="top-shortcuts top-shortcuts-4">
-        <a class="shortcut-card" href="dashboard.html">${t('top_account')} <span>👤</span></a>
-        <a class="shortcut-card" href="favorites.html">${t('top_favorites')} <span>♥</span></a>
-        <a class="shortcut-card shortcut-card-messages" href="messages.html">${t('top_messages')} <span>💬</span><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
-        <a class="shortcut-card shortcut-accent" href="add.html">+ ${t('top_add')}</a>
+      <div class="top-shortcuts top-shortcuts-clean">
+        <a class="shortcut-card shortcut-clean" href="dashboard.html"><span>👤</span><b>${t('top_account')}</b></a>
+        <a class="shortcut-card shortcut-clean" href="favorites.html"><span>♥</span><b>${t('top_favorites')}</b></a>
+        <a class="shortcut-card shortcut-clean shortcut-card-messages" href="messages.html"><span>💬</span><b>${t('top_messages')}</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
+        <a class="shortcut-card shortcut-accent shortcut-clean" href="add.html"><span>＋</span><b>${t('top_add')}</b></a>
       </div>
     </header>
 
@@ -952,6 +952,15 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
 export function initAppChrome(root=document){
   applyTheme(root);
   initLanguageUI(root);
+
+  const settingsBtn = root.getElementById ? root.getElementById('header-settings-btn') : document.getElementById('header-settings-btn');
+  if (settingsBtn && settingsBtn.dataset.boundSettings !== '1') {
+    settingsBtn.dataset.boundSettings = '1';
+    settingsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'settings.html?v=headerfix1';
+    });
+  }
 }
 
 export function initLanguageUI(root=document){
