@@ -974,3 +974,68 @@ body{padding-bottom:0}
     min-height:88px;
   }
 }
+
+
+/* Homepage upgrade */
+.home-hero-upgraded{
+  padding:20px;
+}
+.hero-copy{
+  margin-bottom:14px;
+}
+.home-search-panel{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.14);
+}
+.home-search-grid{
+  grid-template-columns:1.4fr 1fr 1fr .9fr;
+  align-items:end;
+}
+.search-wide{
+  grid-column:auto;
+}
+.home-stat-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:14px;
+}
+.home-stat-card{
+  background:rgba(255,255,255,.11);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:22px;
+  padding:14px 10px;
+  text-align:center;
+}
+.home-stat-card strong{
+  display:block;
+  font-size:28px;
+  line-height:1;
+  margin-bottom:8px;
+  color:#fff;
+}
+.home-stat-card span{
+  color:rgba(255,255,255,.88);
+  font-weight:700;
+  font-size:14px;
+}
+.home-cats-upgraded .category-card{
+  min-height:210px;
+}
+.home-list-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+#home-listing-grid .empty-card{
+  grid-column:1/-1;
+}
+
+@media (max-width:760px){
+  .home-search-grid{
+    grid-template-columns:1fr;
+  }
+  .home-stat-strip{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
