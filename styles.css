@@ -1106,3 +1106,12 @@ body{padding-bottom:0}
     grid-template-columns:repeat(2,1fr);
   }
 }
+
+
+/* Libya cities + final header polish */
+.logo-box{
+  letter-spacing:-1px;
+}
+.brand-en{
+  text-transform:none;
+}
