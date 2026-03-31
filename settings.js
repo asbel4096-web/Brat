@@ -59,7 +59,7 @@ function card(title, subtitle, body){
       <div class="settings-info-list">
         <div class="settings-info-row"><span>${t('language')}</span><b>${lang === 'en' ? 'English' : 'العربية'}</b></div>
         <div class="settings-info-row"><span>${t('appearance')}</span><b>${theme === 'dark' ? t('dark_mode') : t('light_mode')}</b></div>
-        <div class="settings-info-row"><span>Version</span><b>v2 UI</b></div>
+        <div class="settings-info-row"><span>Version</span><b>v2.1 Pro</b></div>
       </div>
     `)}
   `;
@@ -73,22 +73,10 @@ function card(title, subtitle, body){
 
   initAppChrome();
 
-  document.getElementById('lang-ar')?.addEventListener('click', ()=>{
-    setLang('ar');
-    location.reload();
-  });
-  document.getElementById('lang-en')?.addEventListener('click', ()=>{
-    setLang('en');
-    location.reload();
-  });
-  document.getElementById('theme-light')?.addEventListener('click', ()=>{
-    setTheme('light');
-    location.reload();
-  });
-  document.getElementById('theme-dark')?.addEventListener('click', ()=>{
-    setTheme('dark');
-    location.reload();
-  });
+  document.getElementById('lang-ar')?.addEventListener('click', ()=> { setLang('ar'); location.reload(); });
+  document.getElementById('lang-en')?.addEventListener('click', ()=> { setLang('en'); location.reload(); });
+  document.getElementById('theme-light')?.addEventListener('click', ()=> { setTheme('light'); location.reload(); });
+  document.getElementById('theme-dark')?.addEventListener('click', ()=> { setTheme('dark'); location.reload(); });
   document.getElementById('logout-settings')?.addEventListener('click', async ()=>{
     try {
       await signOutUser();

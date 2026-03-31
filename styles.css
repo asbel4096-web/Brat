@@ -2565,3 +2565,143 @@ body{padding-bottom:0}
   user-select:none;
   -webkit-user-select:none;
 }
+
+
+/* Professional cleanup pack */
+html, body{
+  min-height:100%;
+}
+body{
+  overflow-x:hidden;
+}
+.app-shell{
+  padding-bottom:180px;
+}
+.site-header,
+.header-toolbar,
+.brand-wrap,
+.app-switcher,
+.top-shortcuts,
+.bottom-nav{
+  position:relative;
+  z-index:20;
+}
+.header-toolbar{
+  display:flex;
+  justify-content:flex-start;
+  margin-bottom:8px;
+}
+.header-settings-btn{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  background:#eef2fb;
+  border:2px solid var(--line);
+  display:grid;
+  place-items:center;
+  color:var(--blue2);
+  font-size:24px;
+  font-weight:900;
+  box-shadow:0 8px 20px rgba(16,25,63,.05);
+  z-index:30;
+}
+.header-settings-btn *{
+  pointer-events:none;
+}
+.app-switcher-lang-only{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.switch-chip{
+  min-height:44px;
+  border:2px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:999px;
+  padding:8px 12px;
+  font:inherit;
+  font-weight:900;
+}
+.switch-chip.is-active{
+  background:linear-gradient(135deg,var(--blue1),var(--blue2));
+  color:#fff;
+  border-color:transparent;
+}
+.top-shortcuts-clean{
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+.shortcut-clean{
+  min-height:74px;
+  padding:0 16px;
+  justify-content:space-between;
+  border-radius:22px;
+}
+.shortcut-clean span{
+  font-size:28px;
+}
+.shortcut-clean b{
+  font-size:17px;
+}
+.shortcut-card,
+.nav-item,
+.header-settings-btn{
+  pointer-events:auto !important;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.shortcut-card *,
+.nav-item *{
+  pointer-events:none;
+}
+.bottom-nav{
+  position:fixed;
+  right:50%;
+  transform:translateX(50%);
+  width:min(820px, calc(100% - 16px));
+  bottom:calc(env(safe-area-inset-bottom, 0px) + 72px);
+  z-index:90;
+}
+.nav-item{
+  min-height:52px;
+}
+@media (min-width:761px){
+  .top-shortcuts-clean{
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+@media (max-width:760px){
+  .app-shell{
+    padding:0 10px 190px;
+  }
+  .brand-wrap{
+    grid-template-columns:1fr 84px;
+    gap:10px;
+  }
+  .logo-box{
+    width:84px;
+    height:84px;
+    font-size:34px;
+    border-radius:20px;
+  }
+  .brand-title{
+    font-size:clamp(28px, 7.6vw, 42px);
+  }
+  .brand-sub{
+    font-size:13px;
+  }
+  .bottom-nav{
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 86px);
+    border-radius:24px;
+    padding:6px;
+    width:calc(100% - 16px);
+  }
+  .nav-item{
+    min-height:50px;
+    font-size:12px;
+  }
+}

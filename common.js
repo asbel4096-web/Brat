@@ -922,7 +922,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
   <div class="app-shell">
     <header class="site-header">
       <div class="header-toolbar">
-        <a class="header-settings-btn" id="header-settings-btn" href="settings.html?v=headerfix1" aria-label="${t('settings')}" title="${t('settings')}"><span>⚙</span></a>
+        <a class="header-settings-btn" id="header-settings-btn" href="settings.html?v=propack1" aria-label="${t('settings')}" title="${t('settings')}"><span>⚙</span></a>
       </div>
       <div class="brand-wrap">
         <div class="brand-copy">
@@ -934,10 +934,10 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
       </div>
       ${titles}
       <div class="top-shortcuts top-shortcuts-clean">
-        <a class="shortcut-card shortcut-clean" data-route="dashboard.html" href="dashboard.html"><span>👤</span><b>${t('top_account')}</b></a>
-        <a class="shortcut-card shortcut-clean" data-route="favorites.html" href="favorites.html"><span>♥</span><b>${t('top_favorites')}</b></a>
-        <a class="shortcut-card shortcut-clean shortcut-card-messages" data-route="messages.html" href="messages.html"><span>💬</span><b>${t('top_messages')}</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
-        <a class="shortcut-card shortcut-accent shortcut-clean" data-route="add.html" href="add.html"><span>＋</span><b>${t('top_add')}</b></a>
+        <a class="shortcut-card shortcut-clean" data-route="dashboard.html" data-route="dashboard.html" href="dashboard.html"><span>👤</span><b>${t('top_account')}</b></a>
+        <a class="shortcut-card shortcut-clean" data-route="favorites.html" data-route="favorites.html" href="favorites.html"><span>♥</span><b>${t('top_favorites')}</b></a>
+        <a class="shortcut-card shortcut-clean shortcut-card-messages" data-route="messages.html" data-route="messages.html" href="messages.html"><span>💬</span><b>${t('top_messages')}</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
+        <a class="shortcut-card shortcut-accent shortcut-clean" data-route="add.html" data-route="add.html" href="add.html"><span>＋</span><b>${t('top_add')}</b></a>
       </div>
     </header>
 
@@ -973,11 +973,11 @@ export function initAppChrome(root=document){
     settingsBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = 'settings.html?v=clickfix1';
+      window.location.assign('settings.html?v=propack1');
     });
   }
 
-  root.querySelectorAll('a.shortcut-card[data-route], a.nav-item[data-route], .header-settings-btn[href]').forEach(link => {
+  root.querySelectorAll('a.shortcut-card[data-route], a.nav-item[data-route]').forEach(link => {
     if (link.dataset.boundNav === '1') return;
     link.dataset.boundNav = '1';
     link.addEventListener('click', (e) => {
