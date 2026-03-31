@@ -1,4 +1,4 @@
-import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, getUserChats, formatRelativeArabic, safeText } from './common.js';
+import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, getUserChats, formatRelativeArabic, safeText, mountUnreadBadges } from './common.js';
 
 function otherParty(chat, me){
   if (chat.ownerId === me.uid) return chat.buyerEmail || 'العميل';
@@ -30,7 +30,7 @@ function otherParty(chat, me){
     const time = formatRelativeArabic(chat.updatedTs || Date.now());
     const avatar = safeText((peer || 'م').charAt(0).toUpperCase());
     return `
-      <button class="chat-row chat-open-btn" type="button" data-chat-id="${safeText(chat.id)}">
+      <button class="chat-row chat-open-btn ${chat.unreadCount > 0 ? 'has-unread' : ''}" type="button" data-chat-id="${safeText(chat.id)}">
         <img class="chat-row-cover" src="${cover}" alt="${title}">
         <div class="chat-row-main">
           <div class="chat-row-head">
@@ -39,6 +39,7 @@ function otherParty(chat, me){
           </div>
           <div class="chat-row-sub">${peer}</div>
           <div class="chat-row-last">${last}</div>
+          ${chat.unreadCount > 0 ? `<span class="chat-unread-pill">${chat.unreadCount}</span>` : ''}
         </div>
         <div class="chat-row-avatar">${avatar}</div>
       </button>
@@ -88,3 +89,6 @@ function otherParty(chat, me){
     });
   });
 })();
+
+
+mountUnreadBadges();

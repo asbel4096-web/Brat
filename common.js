@@ -6,6 +6,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  increment,
+  initializeFirestore,
   limit,
   onSnapshot,
   orderBy,
@@ -434,6 +436,11 @@ export async function createOrOpenChat(item){
   const chatRef = doc(db, 'chats', chatId);
   const snap = await getDoc(chatRef);
 
+  const unreadCounts = {
+    [ownerId]: snap.exists() ? Number((snap.data().unreadCounts || {})[ownerId] || 0) : 0,
+    [String(user.uid)]: 0
+  };
+
   const payload = {
     id: chatId,
     listingId,
@@ -444,6 +451,7 @@ export async function createOrOpenChat(item){
     buyerId: String(user.uid),
     buyerEmail: String(user.email || ''),
     participants,
+    unreadCounts,
     lastMessage: snap.exists() ? String(snap.data().lastMessage || '') : '',
     lastSenderId: snap.exists() ? String(snap.data().lastSenderId || '') : '',
     updatedTs: Date.now(),
@@ -462,6 +470,7 @@ export async function createOrOpenChat(item){
       listingId,
       listingTitle: String(item?.title || snap.data().listingTitle || 'محادثة'),
       listingCover: String(item?.cover || snap.data().listingCover || ''),
+      [`unreadCounts.${String(user.uid)}`]: 0,
       updatedTs: Date.now(),
       updatedAt: serverTimestamp()
     });
@@ -478,6 +487,14 @@ export async function sendChatMessage(chatId, body){
   if (!text) throw new Error('empty_message');
 
   const chatRef = doc(db, 'chats', String(chatId));
+  const snap = await getDoc(chatRef);
+  if (!snap.exists()) throw new Error('chat_missing');
+
+  const chat = snap.data();
+  const participants = Array.isArray(chat.participants) ? chat.participants.map(String) : [];
+  if (!participants.includes(String(user.uid))) throw new Error('forbidden_chat');
+
+  const otherId = participants.find(id => id !== String(user.uid)) || '';
   const msgCol = collection(db, 'chats', String(chatId), 'messages');
 
   await addDoc(msgCol, {
@@ -488,12 +505,18 @@ export async function sendChatMessage(chatId, body){
     createdAt: serverTimestamp()
   });
 
-  await updateDoc(chatRef, {
+  const updates = {
     lastMessage: text,
     lastSenderId: String(user.uid),
+    [`unreadCounts.${String(user.uid)}`]: 0,
     updatedTs: Date.now(),
     updatedAt: serverTimestamp()
-  });
+  };
+  if (otherId) {
+    updates[`unreadCounts.${otherId}`] = increment(1);
+  }
+
+  await updateDoc(chatRef, updates);
 }
 
 
@@ -521,7 +544,41 @@ export async function getUserChats(){
     limit(50)
   );
   const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return snap.docs.map(d => {
+    const data = { id: d.id, ...d.data() };
+    data.unreadCount = Number((data.unreadCounts || {})[String(user.uid)] || 0);
+    return data;
+  });
+}
+
+export async function markChatRead(chatId){
+  await waitForAuthReady();
+  const user = getCurrentUser();
+  if (!user) return;
+  await updateDoc(doc(db, 'chats', String(chatId)), {
+    [`unreadCounts.${String(user.uid)}`]: 0
+  });
+}
+
+export function watchUnreadTotal(callback){
+  const user = getCurrentUser();
+  if (!user) {
+    callback(0);
+    return () => {};
+  }
+  const q = query(
+    collection(db, 'chats'),
+    where('participants', 'array-contains', String(user.uid)),
+    orderBy('updatedTs', 'desc'),
+    limit(50)
+  );
+  return onSnapshot(q, snap => {
+    const total = snap.docs.reduce((sum, d) => {
+      const data = d.data() || {};
+      return sum + Number((data.unreadCounts || {})[String(user.uid)] || 0);
+    }, 0);
+    callback(total);
+  }, () => callback(0));
 }
 
 export function watchChatMessages(chatId, callback){
@@ -548,7 +605,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
       <div class="top-shortcuts">
         <a class="shortcut-card" href="dashboard.html">حسابي <span>👤</span></a>
         <a class="shortcut-card" href="favorites.html">المفضلة <span>♥</span></a>
-        <a class="shortcut-card" href="messages.html">دردشاتي <span>💬</span></a>
+        <a class="shortcut-card shortcut-card-messages" href="messages.html">دردشاتي <span>💬</span><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
         <a class="shortcut-card shortcut-accent" href="add.html">+ أضف إعلان</a>
       </div>
     </header>
@@ -563,12 +620,33 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
 
     <nav class="bottom-nav">
       <a href="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>الرئيسية</b></a>
-      <a href="messages.html" class="nav-item ${active==='messages'?'is-active':''}"><span>◔</span><b>دردشاتي</b></a>
+      <a href="messages.html" class="nav-item nav-item-messages ${active==='messages'?'is-active':''}"><span>◔</span><b>دردشاتي</b><i class="msg-badge nav-badge is-hidden" id="msg-badge-bottom">0</i></a>
       <a href="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>أضف إعلان</b></a>
       <a href="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>إعلاناتي</b></a>
       <a href="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>حسابي</b></a>
     </nav>
   </div>`;
+}
+
+
+export async function mountUnreadBadges(){
+  await waitForAuthReady();
+  const top = document.getElementById('msg-badge-top');
+  const bottom = document.getElementById('msg-badge-bottom');
+  const apply = (count) => {
+    [top, bottom].forEach(el => {
+      if (!el) return;
+      const value = Number(count || 0);
+      el.textContent = String(value);
+      el.classList.toggle('is-hidden', value <= 0);
+    });
+  };
+  const user = getCurrentUser();
+  if (!user) {
+    apply(0);
+    return () => {};
+  }
+  return watchUnreadTotal(apply);
 }
 
 function truncateText(text = '', max = 110){
