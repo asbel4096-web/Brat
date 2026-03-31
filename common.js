@@ -898,9 +898,11 @@ export function watchChatMessages(chatId, callback){
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {
   const lang = getLang();
   const titles = `
-      <div class="lang-switcher">
-        <button type="button" class="lang-chip ${lang === 'ar' ? 'is-active' : ''}" data-lang="ar">العربية</button>
-        <button type="button" class="lang-chip ${lang === 'en' ? 'is-active' : ''}" data-lang="en">English</button>
+      <div class="app-switcher">
+        <button type="button" class="switch-chip ${lang === 'ar' ? 'is-active' : ''}" data-lang="ar">العربية</button>
+        <button type="button" class="switch-chip ${lang === 'en' ? 'is-active' : ''}" data-lang="en">English</button>
+        <button type="button" class="switch-chip ${getTheme() === 'light' ? 'is-active' : ''}" data-theme="light">☀ ${t('light_mode')}</button>
+        <button type="button" class="switch-chip ${getTheme() === 'dark' ? 'is-active' : ''}" data-theme="dark">☾ ${t('dark_mode')}</button>
       </div>`;
   const html = `
   <div class="app-shell">
@@ -955,6 +957,15 @@ export function initLanguageUI(root=document){
     btn.dataset.boundLang = '1';
     btn.addEventListener('click', () => {
       setLang(btn.dataset.lang);
+      location.reload();
+    });
+  });
+
+  root.querySelectorAll('[data-theme]').forEach(btn => {
+    if (btn.dataset.boundTheme === '1') return;
+    btn.dataset.boundTheme = '1';
+    btn.addEventListener('click', () => {
+      setTheme(btn.dataset.theme);
       location.reload();
     });
   });
