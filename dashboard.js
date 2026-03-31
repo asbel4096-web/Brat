@@ -1,4 +1,4 @@
-import { pageTemplate, getUserListings, signInWithEmail, signOutUser, signUpWithEmail, subscribeAuthState, waitForAuthReady, getCurrentUser, getUserLabel, getFavoriteIds, getUserChats, t, initLanguageUI } from './common.js';
+import { pageTemplate, getUserListings, signInWithEmail, signOutUser, signUpWithEmail, waitForAuthReady, getCurrentUser, getUserLabel, getFavoriteIds, getUserChats, t, initLanguageUI } from './common.js';
 
 function authForms(message=''){
   return `
@@ -6,12 +6,12 @@ function authForms(message=''){
     <div class="account-auth-wrap">
       <div class="account-auth-intro">
         <div class="hero-chips">
-          <span class="chip">حساب حقيقي</span>
-          <span class="chip">إعلاناتك</span>
+          <span class="chip">Firebase</span>
+          <span class="chip">${t('manage_my_ads')}</span>
           <span class="chip">${t('favorites')}</span>
         </div>
-        <h3>سجّل ${t('login_btn')}ك إلى حسابك</h3>
-        <p>ادخل بحسابك الحقيقي حتى ترتبط الإعلانات والمفضلة و${t('chats')} بنفس الحساب بشكل واضح ومرتب.</p>
+        <h3>${t('login')} / ${t('signup')}</h3>
+        <p>${t('create_or_login')}</p>
       </div>
 
       <div class="auth-grid">
@@ -25,8 +25,8 @@ function authForms(message=''){
         <form id="signup-form" class="surface-card auth-form luxury-auth">
           <h3 class="listing-title">${t('signup')}</h3>
           <label class="field"><label>${t('email')}</label><input name="email" type="email" required placeholder="name@email.com"></label>
-          <label class="field"><label>${t('password')}</label><input name="password" type="password" required minlength="6" placeholder="6 أحرف أو أكثر"></label>
-          <button class="btn btn-soft btn-block" type="submit">${t('signup')} جديد</button>
+          <label class="field"><label>${t('password')}</label><input name="password" type="password" required minlength="6" placeholder="6+"></label>
+          <button class="btn btn-soft btn-block" type="submit">${t('signup_btn')}</button>
         </form>
       </div>
 
@@ -43,18 +43,52 @@ function shortEmail(email=''){
   return e.slice(0, 25) + '...';
 }
 
+function bindAuthForms(){
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+  const status = document.getElementById('auth-status');
+
+  loginForm?.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    status.textContent = '...';
+    const fd = new FormData(loginForm);
+    try {
+      await signInWithEmail(String(fd.get('email') || '').trim(), String(fd.get('password') || ''));
+      location.href = 'dashboard.html';
+    } catch {
+      status.textContent = 'تعذر تسجيل الدخول / Login failed';
+    }
+  });
+
+  signupForm?.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    status.textContent = '...';
+    const fd = new FormData(signupForm);
+    try {
+      await signUpWithEmail(String(fd.get('email') || '').trim(), String(fd.get('password') || ''));
+      location.href = 'dashboard.html';
+    } catch {
+      status.textContent = 'تعذر إنشاء الحساب / Signup failed';
+    }
+  });
+}
+
 async function render(){
   await waitForAuthReady();
   const user = getCurrentUser();
 
   if (!user) {
+    const msg = location.hash === '#auth-required'
+      ? `${t('login')} أولًا قبل إضافة إعلان أو إدارة إعلاناتك.`
+      : '';
     document.getElementById('app').innerHTML = pageTemplate({
       active:'account',
       title:t('account'),
       subtitle:t('create_or_login'),
-      content: authForms(location.hash === '#auth-required' ? 'يجب ${t('login')} أولًا قبل إضافة إعلان أو إدارة إعلاناتك.' : '')
+      content: authForms(msg)
     });
     bindAuthForms();
+    initLanguageUI();
     return;
   }
 
@@ -87,7 +121,7 @@ async function render(){
 
       <div class="account-mini-actions clean-four">
         <a class="account-mini-btn" href="favorites.html">
-          <span>المفضلة</span>
+          <span>${t('favorites')}</span>
           <strong>${favoriteIds.length}</strong>
         </a>
         <a class="account-mini-btn" href="messages.html">
@@ -117,11 +151,11 @@ async function render(){
     <div class="account-summary-grid">
       <div class="summary-card">
         <h4>${t('quick_summary')}</h4>
-        <p>حسابك مربوط الآن بإعلاناتك الحقيقية، ويمكنك إدارة المنشور والمخفي و${t('chats')} من مكان واحد.</p>
+        <p>حسابك مربوط الآن بإعلاناتك الحقيقية ويمكنك إدارة المنشور والمخفي والدردشات من مكان واحد.</p>
       </div>
       <div class="summary-card">
         <h4>${t('last_status')}</h4>
-        <p>${activeAds.length > 0 ? `لديك ${activeAds.length} إعلان ظاهر حاليًا في المنصة.` : 'لا توجد إعلانات منشورة حاليًا.'}</p>
+        <p>لديك ${activeAds.length} إعلان ظاهر حاليًا في المنصة.</p>
       </div>
     </div>
   </section>`;
@@ -134,51 +168,15 @@ async function render(){
   });
 
   document.getElementById('logout-btn')?.addEventListener('click', async ()=>{
-    await signOutUser();
-    location.href = 'dashboard.html#auth';
-  });
-}
-
-function bindAuthForms(){
-  const status = document.getElementById('auth-status');
-  document.getElementById('login-form')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    status.textContent = 'جاري ${t('login')}...';
-    status.className = 'account-status';
     try {
-      await signInWithEmail(String(fd.get('email')||'').trim(), String(fd.get('password')||''));
-      status.textContent = 'تم ${t('login')} بنجاح.';
-      status.className = 'account-status success';
-      setTimeout(render, 250);
-    } catch (err) {
-      status.textContent = 'فشل ${t('login')}. تأكد من البريد و${t('password')}.';
-      status.className = 'account-status error';
+      await signOutUser();
+      location.href = 'dashboard.html';
+    } catch {
+      alert('تعذر تسجيل الخروج');
     }
   });
 
-  document.getElementById('signup-form')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    status.textContent = 'جاري إنشاء الحساب...';
-    status.className = 'account-status';
-    try {
-      await signUpWithEmail(String(fd.get('email')||'').trim(), String(fd.get('password')||''));
-      status.textContent = 'تم إنشاء الحساب و${t('login')} مباشرة.';
-      status.className = 'account-status success';
-      setTimeout(render, 250);
-    } catch (err) {
-      status.textContent = 'تعذر إنشاء الحساب. جرب بريدًا آخر أو كلمة مرور أقوى.';
-      status.className = 'account-status error';
-    }
-  });
+  initLanguageUI();
 }
-
-subscribeAuthState(() => {
-  if (document.hidden) return;
-  render();
-initLanguageUI();
-});
 
 render();
-initLanguageUI();

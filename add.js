@@ -1,22 +1,24 @@
 import { pageTemplate, customSelect, activateCustomSelects, saveListing, uploadListingImages, removeListingImages, normalizeWhatsapp, formatRelativeArabic, detailById, getCurrentUser, authGateCard, waitForAuthReady, t, initLanguageUI } from './common.js';
 
 const editId = new URLSearchParams(location.search).get('id');
+const cities = ['طرابلس','بنغازي','مصراتة','الزاوية','زليتن','صرمان','صبراتة','العجيلات','سبها','سرت','الخمس','درنة','البيضاء','طبرق','أجدابيا','المرج','غريان','نالوت','يفرن','زوارة','بني وليد','ترهونة','رقدالين','الكفرة','هون','ودان','مرزق','غات','أوباري','راس لانوف','البريقة','شحات','سوسة','القبة','توكرة','تاورغاء','مسلاتة','سلوق'];
 
-const content = `
+function buildContent(){
+  return `
 <section class="section">
   <div class="step-pills"><span>${t('step_category')}</span><span>${t('step_details')}</span><span>${t('step_images')}</span><span>${t('step_contact')}</span><span>${t('step_review')}</span></div>
   <form id="ad-form" class="form-shell">
     <div class="section-head">
       <div>
-        <h3>${editId ? 'تعديل الإعلان مع تحديث ${t('images')}' : '${t('ad_data')}'}</h3>
-        <p>${editId ? 'يمكنك حذف ${t('images')} القديمة وإضافة صور جديدة ثم حفظ التعديلات على نفس الإعلان.' : 'نموذج مرتب مع رفع حتى 20 صورة ومعاينة ${t('direct')}ة ثم رفع حقيقي إلى Firebase Storage.'}</p>
+        <h3>${editId ? `${t('edit')} ${t('images')}` : t('ad_data')}</h3>
+        <p>${editId ? 'يمكنك حذف الصور القديمة وإضافة صور جديدة ثم حفظ التعديلات على نفس الإعلان.' : 'نموذج مرتب مع رفع حتى 20 صورة ومعاينة مباشرة ثم رفع حقيقي إلى Firebase Storage.'}</p>
       </div>
-      <span class="btn btn-soft">${editId ? 'تعديل' : '${t('direct')}'}</span>
+      <span class="btn btn-soft">${editId ? t('edit') : t('direct')}</span>
     </div>
 
     <div class="grid">
-      ${customSelect('نوع الإعلان', 'سيارة', ['سيارة','قطعة غيار','خدمة'], 'ad-type')}
-      ${customSelect('المدينة', 'طرابلس', ['طرابلس','بنغازي','مصراتة','الزاوية','زليتن','صرمان','صبراتة','العجيلات','سبها','سرت','الخمس','درنة','البيضاء','طبرق','أجدابيا','المرج','غريان','نالوت','يفرن','زوارة','بني وليد','ترهونة','رقدالين','الكفرة','هون','ودان','مرزق','غات','أوباري','راس لانوف','البريقة','شحات','سوسة','القبة','توكرة','تاورغاء','مسلاتة','سلوق'], 'ad-city')}
+      ${customSelect(t('ad_type'), t('cat_cars'), [t('cat_cars'),t('cat_parts'),t('cat_service')], 'ad-type')}
+      ${customSelect(t('city'), 'طرابلس', cities, 'ad-city')}
       <label class="field"><label>${t('ad_title')}</label><input name="title" required placeholder="مثال: هيونداي أزيرا 2023 محلية وكالة"></label>
       <label class="field"><label>${t('price')}</label><input name="price" type="number" required placeholder="45000"></label>
       <label class="field"><label>${t('year_or_status')}</label><input name="year" placeholder="مثال: 2023 أو خدمة"></label>
@@ -32,38 +34,40 @@ const content = `
         <div class="section-head">
           <div>
             <h3>${t('images')}</h3>
-            <p>${editId ? 'في وضع التعديل: يمكنك الاحتفاظ ب${t('images')} الحالية أو حذف بعضها ثم إضافة صور جديدة.' : 'يمكنك رفع حتى 20 صورة وسيتم تخزينها فعليًا داخل Firebase Storage.'}</p>
+            <p>${editId ? 'في وضع التعديل: يمكنك الاحتفاظ بالصور الحالية أو حذف بعضها ثم إضافة صور جديدة.' : 'يمكنك رفع حتى 20 صورة وسيتم تخزينها فعليًا داخل Firebase Storage.'}</p>
           </div>
         </div>
         <input id="image-input" type="file" accept="image/*" multiple hidden>
-        <button id="pick-images" type="button" class="btn btn-soft btn-block">${editId ? 'إضافة صور جديدة' : '${t('upload_images')}'}</button>
+        <button id="pick-images" type="button" class="btn btn-soft btn-block">${editId ? 'إضافة صور جديدة' : t('upload_images')}</button>
         <div id="image-count" class="muted" style="margin-top:8px">لم يتم اختيار صور بعد.</div>
         <div id="image-preview" class="listing-grid" style="margin-top:10px"></div>
       </div>
 
-      <button class="btn btn-primary btn-block" type="submit">${editId ? 'حفظ التعديلات' : '${t('save_preview')}'}</button>
+      <button class="btn btn-primary btn-block" type="submit">${editId ? 'حفظ التعديلات' : t('save_preview')}</button>
       <div id="save-status" class="muted"></div>
     </div>
   </form>
 </section>`;
+}
 
 (async function init(){
   await waitForAuthReady();
   if (!getCurrentUser()) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'add',
-      title:'${t('add_ad_title')}',
-      subtitle:'سجل الدخول أولًا حتى يحفظ الإعلان على حسابك الحقيقي.',
-      content: authGateCard('لا يمكن إضافة أو ${t('edit')} بدون تسجيل الدخول.','افتح تسجيل الدخول')
+      title: editId ? t('edit') : t('add_ad_title'),
+      subtitle:t('add_ad_sub'),
+      content: authGateCard('لا يمكن إضافة أو تعديل إعلان بدون تسجيل الدخول.','فتح تسجيل الدخول')
     });
+    initLanguageUI();
     return;
   }
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'add',
-    title: editId ? '${t('edit')}' : '${t('add_ad_title')}',
-    subtitle:'${t('add_ad_sub')}',
-    content
+    title: editId ? t('edit') : t('add_ad_title'),
+    subtitle:t('add_ad_sub'),
+    content: buildContent()
   });
   activateCustomSelects();
   initLanguageUI();
@@ -87,32 +91,20 @@ const content = `
     const remainingSlots = Math.max(0, 20 - keptImages.length - pendingFiles.length);
     const allowed = fresh.slice(0, remainingSlots);
     pendingFiles = [...pendingFiles, ...allowed].slice(0, 20);
-    if (fresh.length > allowed.length) {
-      statusBox.textContent = `تم الوصول إلى الحد الأقصى 20 صورة. تم إضافة ${allowed.length} صورة فقط.`;
-    } else {
-      statusBox.textContent = '';
-    }
+    statusBox.textContent = fresh.length > allowed.length
+      ? `تم الوصول إلى الحد الأقصى 20 صورة. تم إضافة ${allowed.length} صورة فقط.`
+      : '';
     imageInput.value = '';
     renderSelectedImages();
   });
 
   function renderSelectedImages(){
-    const currentItems = keptImages.map((src, idx) => ({
-      key: `old_${idx}`,
-      src,
-      label: 'حالياً',
-      kind: 'existing'
-    }));
-    const pendingItems = pendingFiles.map((file, idx) => ({
-      key: `new_${idx}`,
-      src: URL.createObjectURL(file),
-      label: 'جديد',
-      kind: 'pending'
-    }));
+    const currentItems = keptImages.map((src, idx) => ({ key:`old_${idx}`, src, label:'حالياً', kind:'existing' }));
+    const pendingItems = pendingFiles.map((file, idx) => ({ key:`new_${idx}`, src:URL.createObjectURL(file), label:'جديد', kind:'pending' }));
     const items = [...currentItems, ...pendingItems];
 
     imageCount.textContent = items.length
-      ? `عدد ${t('images')} الحالية ${items.length} من 20. يمكنك حذف أي صورة قبل الحفظ.`
+      ? `عدد الصور الحالية ${items.length} من 20. يمكنك حذف أي صورة قبل الحفظ.`
       : 'لم يتم اختيار صور بعد.';
 
     imagePreview.innerHTML = items.map(item => `
@@ -125,7 +117,7 @@ const content = `
             class="icon-btn js-remove-image"
             data-kind="${item.kind}"
             data-key="${item.key}"
-            title="حذف ${t('images')}ة"
+            title="حذف الصورة"
             style="position:absolute;top:10px;left:10px;background:#fff;color:#b42318;border:1px solid rgba(180,35,24,.15);z-index:3"
           >✕</button>
         </div>
@@ -183,7 +175,7 @@ const content = `
     form.whatsapp.value = existingItem.whatsapp || '';
     if (form.mapLocation) form.mapLocation.value = existingItem.mapLocation || '';
     if (form.mapLink) form.mapLink.value = existingItem.mapLink || '';
-    setSelectValue('ad-type', existingItem.type || 'سيارة');
+    setSelectValue('ad-type', existingItem.type || t('cat_cars'));
     setSelectValue('ad-city', existingItem.city || 'طرابلس');
     renderSelectedImages();
   }
@@ -193,12 +185,12 @@ const content = `
     statusBox.textContent = editId ? 'جاري حفظ التعديلات...' : 'جاري حفظ الإعلان على Firebase...';
 
     const fd = new FormData(form);
-    const type = fd.get('ad-type') || 'سيارة';
+    const type = fd.get('ad-type') || t('cat_cars');
     const city = fd.get('ad-city') || 'طرابلس';
     const title = String(fd.get('title') || '').trim();
     const price = Number(fd.get('price') || 0);
-    const year = String(fd.get('year') || '').trim() || (type === 'خدمة' ? 'خدمة' : 'غير محدد');
-    const km = String(fd.get('km') || '').trim() || (type === 'قطعة غيار' ? 'قطعة' : 'غير محدد');
+    const year = String(fd.get('year') || '').trim() || (type === t('cat_service') ? t('cat_service') : 'غير محدد');
+    const km = String(fd.get('km') || '').trim() || (type === t('cat_parts') ? 'قطعة' : 'غير محدد');
     const seller = String(fd.get('seller') || getCurrentUser()?.email || 'براتشو كار').trim();
     const desc = String(fd.get('desc') || '').trim();
     const phone = String(fd.get('phone') || '').trim();
@@ -207,7 +199,7 @@ const content = `
     const mapLink = String(fd.get('mapLink') || '').trim();
 
     if (!title || !desc || !price) {
-      statusBox.textContent = 'أكمل الحقول الأساسية: العنوان و${t('price')} و${t('description')}.';
+      statusBox.textContent = 'أكمل الحقول الأساسية: العنوان والسعر والوصف.';
       return;
     }
 
@@ -243,19 +235,15 @@ const content = `
       const saved = await saveListing(item);
 
       if (removedImages.length) {
-        statusBox.textContent = 'تم حفظ التعديل. جاري تنظيف ${t('images')} المحذوفة...';
-        try {
-          await removeListingImages(removedImages);
-        } catch (cleanupErr) {
-          console.warn('cleanup skipped', cleanupErr);
-        }
+        statusBox.textContent = 'تم حفظ التعديل. جاري تنظيف الصور المحذوفة...';
+        try { await removeListingImages(removedImages); } catch {}
       }
 
-      statusBox.textContent = editId ? 'تم تحديث الإعلان و${t('images')} بنجاح.' : 'تم حفظ الإعلان بنجاح على حسابك.';
+      statusBox.textContent = editId ? 'تم تحديث الإعلان والصور بنجاح.' : 'تم حفظ الإعلان بنجاح على حسابك.';
       setTimeout(()=>{ location.href = `details.html?id=${saved.id}`; }, 350);
     } catch (err) {
       console.error(err);
-      statusBox.textContent = err?.message === 'auth_required' ? 'سجل الدخول أولًا.' : 'تعذر الحفظ أو رفع ${t('images')}.';
+      statusBox.textContent = err?.message === 'auth_required' ? 'سجل الدخول أولًا.' : 'تعذر الحفظ أو رفع الصور.';
     }
   });
 })();

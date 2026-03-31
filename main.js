@@ -1,4 +1,4 @@
-import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, activateCustomSelects, applyFavorites, bindFavoriteButtons, t, initLanguageUI } from './common.js';
+import { pageTemplate, categoryCard, listingCard, getAllListings, customSelect, activateCustomSelects, applyFavorites, bindFavoriteButtons, t, initLanguageUI, getLang } from './common.js';
 
 function statCard(number, label){
   return `<div class="home-stat-card"><strong>${number}</strong><span>${label}</span></div>`;
