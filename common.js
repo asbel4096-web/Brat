@@ -241,8 +241,10 @@ export function normalizeWhatsapp(raw=''){
   return digits;
 }
 
-export function makeMapsUrl(city=''){
-  const q = encodeURIComponent(city || 'ليبيا');
+export function makeMapsUrl(value=''){
+  const raw = String(value || '').trim();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const q = encodeURIComponent(raw || 'ليبيا');
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
@@ -278,6 +280,8 @@ function normalizeIncoming(item = {}){
     phone: item.phone || '',
     whatsapp: normalizeWhatsapp(item.whatsapp || item.phone || ''),
     desc: item.desc || '',
+    mapLocation: item.mapLocation || item.city || 'طرابلس',
+    mapLink: item.mapLink || '',
     cover: item.cover || 'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1200&q=80',
     images: Array.isArray(item.images) && item.images.length ? item.images : (item.cover ? [item.cover] : []),
     createdTs,

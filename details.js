@@ -8,18 +8,21 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
   const phone = String(item.phone || '').replace(/[^\d+]/g,'');
   const whatsappHref = wa ? `https://wa.me/${wa}` : `https://wa.me/218910000000`;
   const phoneHref = phone ? `tel:${phone}` : `tel:+218910000000`;
-  const mapsHref = makeMapsUrl(item.city);
+  const mapsHref = item.mapLink || makeMapsUrl(item.mapLocation || item.city);
   const isOwner = !!(item.ownerId && getCurrentUser() && item.ownerId === getCurrentUser().uid);
   const isHidden = (item.status || 'active') === 'hidden';
+
   const ownerTools = isOwner ? `
     <div class="detail-actions" style="margin-top:10px">
       <a class="btn btn-primary" href="add.html?id=${safeText(item.id)}">تعديل</a>
       <button class="btn btn-soft" id="toggle-state">${isHidden ? 'إظهار الإعلان' : 'إخفاء الإعلان'}</button>
       <button class="icon-btn" id="delete-ad">🗑</button>
     </div>` : '';
+
   const gallery = (item.images?.length ? item.images : [item.cover]).map(src=>`
     <div class="detail-thumb"><img src="${safeText(src)}" alt="${safeText(item.title)}"></div>
   `).join('');
+
   const content = `
   <section class="section">
     <div class="detail-card detail-card-upgraded">
@@ -47,8 +50,8 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
         <button class="btn btn-primary" id="start-chat">مراسلة</button>
         <a class="btn btn-soft" target="_blank" href="${whatsappHref}">واتساب</a>
         <a class="btn btn-soft" href="${phoneHref}">اتصال</a>
-        <a class="icon-btn" target="_blank" href="${mapsHref}">⌖</a>
-        <button class="icon-btn ${item.__favorite ? 'is-favorite' : ''}" id="fav-detail">${item.__favorite ? '♥' : '♡'}</button>
+        <a class="icon-btn icon-btn-map" target="_blank" href="${mapsHref}" title="الخريطة">⌖</a>
+        <button class="icon-btn icon-btn-fav ${item.__favorite ? 'is-favorite' : ''}" id="fav-detail" title="المفضلة">${item.__favorite ? '♥' : '♡'}</button>
       </div>
 
       <div class="table-list detail-table">
@@ -57,6 +60,7 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
         <div class="table-row"><span>السنة</span><span>${safeText(item.year)}</span></div>
         <div class="table-row"><span>الحالة</span><span>${safeText(item.km)}</span></div>
         <div class="table-row"><span>البائع</span><span>${safeText(item.seller)}</span></div>
+        ${item.mapLocation ? `<div class="table-row"><span>الموقع</span><span>${safeText(item.mapLocation)}</span></div>` : ''}
       </div>
 
       ${ownerTools}
@@ -66,7 +70,13 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
       </div>
     </div>
   </section>`;
-  document.getElementById('app').innerHTML = pageTemplate({active:'home', title:'التفاصيل', subtitle:'عرض كامل للإعلان مع وسائل التواصل.', content});
+
+  document.getElementById('app').innerHTML = pageTemplate({
+    active:'home',
+    title:'التفاصيل',
+    subtitle:'عرض كامل للإعلان مع وسائل التواصل.',
+    content
+  });
 
   document.getElementById('start-chat')?.addEventListener('click', async e => {
     e.currentTarget.disabled = true;
@@ -111,6 +121,7 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
       e.currentTarget.disabled = false;
     }
   });
+
   document.getElementById('delete-ad')?.addEventListener('click', async e => {
     if (!confirm('هل تريد حذف الإعلان؟')) return;
     e.currentTarget.disabled = true;

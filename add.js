@@ -16,7 +16,7 @@ const content = `
 
     <div class="grid">
       ${customSelect('نوع الإعلان', 'سيارة', ['سيارة','قطعة غيار','خدمة'], 'ad-type')}
-      ${customSelect('المدينة', 'طرابلس', ['طرابلس','مصراتة','بنغازي'], 'ad-city')}
+      ${customSelect('المدينة', 'طرابلس', ['طرابلس','بنغازي','مصراتة','الزاوية','زليتن','صرمان','صبراتة','العجيلات','سبها','سرت','الخمس','درنة','البيضاء','طبرق','أجدابيا','المرج','غريان','نالوت','يفرن','زوارة','بني وليد','ترهونة','رقدالين','الكفرة','هون','ودان','مرزق','غات','أوباري','راس لانوف','البريقة','شحات','سوسة','القبة','توكرة','تاورغاء','مسلاتة','سلوق'], 'ad-city')}
       <label class="field"><label>عنوان الإعلان</label><input name="title" required placeholder="مثال: هيونداي أزيرا 2023 محلية وكالة"></label>
       <label class="field"><label>السعر</label><input name="price" type="number" required placeholder="45000"></label>
       <label class="field"><label>السنة أو الحالة</label><input name="year" placeholder="مثال: 2023 أو خدمة"></label>
@@ -25,6 +25,8 @@ const content = `
       <label class="field"><label>الوصف</label><textarea name="desc" required placeholder="اكتب تفاصيل السيارة أو القطعة أو الخدمة بشكل مرتب وواضح."></textarea></label>
       <label class="field"><label>رقم الهاتف</label><input name="phone" placeholder="0912345678"></label>
       <label class="field"><label>واتساب</label><input name="whatsapp" placeholder="0912345678 أو 2189..."></label>
+      <label class="field"><label>اسم الموقع أو الحي</label><input name="mapLocation" placeholder="مثال: حي الأندلس، طرابلس"></label>
+      <label class="field"><label>رابط الخريطة</label><input name="mapLink" placeholder="الصق رابط Google Maps هنا - اختياري"></label>
 
       <div class="search-panel">
         <div class="section-head">
@@ -178,6 +180,8 @@ const content = `
     form.desc.value = existingItem.desc || '';
     form.phone.value = existingItem.phone || '';
     form.whatsapp.value = existingItem.whatsapp || '';
+    if (form.mapLocation) form.mapLocation.value = existingItem.mapLocation || '';
+    if (form.mapLink) form.mapLink.value = existingItem.mapLink || '';
     setSelectValue('ad-type', existingItem.type || 'سيارة');
     setSelectValue('ad-city', existingItem.city || 'طرابلس');
     renderSelectedImages();
@@ -198,6 +202,8 @@ const content = `
     const desc = String(fd.get('desc') || '').trim();
     const phone = String(fd.get('phone') || '').trim();
     const whatsapp = normalizeWhatsapp(String(fd.get('whatsapp') || phone || '').trim());
+    const mapLocation = String(fd.get('mapLocation') || city || '').trim();
+    const mapLink = String(fd.get('mapLink') || '').trim();
 
     if (!title || !desc || !price) {
       statusBox.textContent = 'أكمل الحقول الأساسية: العنوان والسعر والوصف.';
@@ -226,7 +232,7 @@ const content = `
         id: listingId,
         type, title, price, city, year, km, seller,
         sellerInitial: seller.charAt(0) || 'ب',
-        desc, phone, whatsapp,
+        desc, phone, whatsapp, mapLocation, mapLink,
         cover, images,
         createdTs: existingItem?.createdTs || now,
         createdAt: existingItem?.createdAt || formatRelativeArabic(now),
