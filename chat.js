@@ -1,31 +1,10 @@
-import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getChatById, formatRelativeArabic, safeText, markChatRead, mountUnreadBadges, t, initLanguageUI } from './common.js';
+import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getChatById, formatRelativeArabic, safeText, markChatRead, mountUnreadBadges, t, initAppChrome } from './common.js';
 
 function otherParty(chat, me){
-  if (!chat) return 'المحادثة';
+  if (!chat) return t('conversation');
   if (chat.ownerId === me.uid) return chat.buyerEmail || 'العميل';
   if (chat.buyerId === me.uid) return chat.ownerEmail || 'صاحب الإعلان';
-  return chat.buyerEmail || chat.ownerEmail || 'المحادثة';
-}
-
-function playMessageTone(){
-  try{
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (!Ctx) return;
-    const ctx = new Ctx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, ctx.currentTime);
-    osc.frequency.linearRampToValueAtTime(660, ctx.currentTime + 0.12);
-    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.22);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.24);
-    setTimeout(() => { try{ ctx.close(); }catch{} }, 350);
-  }catch{}
+  return chat.buyerEmail || chat.ownerEmail || t('conversation');
 }
 
 function setChatViewportHeight(){
@@ -33,23 +12,16 @@ function setChatViewportHeight(){
   document.documentElement.style.setProperty('--chat-vh', `${vh}px`);
 }
 
-function showToast(text){
-  const holder = document.getElementById('chat-toast-holder');
-  if (!holder) return;
-  const toast = document.createElement('div');
-  toast.className = 'chat-toast';
-  toast.textContent = text;
-  holder.appendChild(toast);
-  setTimeout(()=> toast.classList.add('show'), 20);
-  setTimeout(()=>{
-    toast.classList.remove('show');
-    setTimeout(()=> toast.remove(), 220);
-  }, 2400);
+function scrollChatBottom(smooth=false){
+  const list = document.getElementById('chat-messages');
+  if (!list) return;
+  list.scrollTo({ top: list.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
 }
 
 (async ()=>{
   setChatViewportHeight();
   window.addEventListener('resize', setChatViewportHeight);
+
   await waitForAuthReady();
   const chatId = new URLSearchParams(location.search).get('id');
   const me = getCurrentUser();
@@ -58,9 +30,10 @@ function showToast(text){
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
       title:t('conversation'),
-      subtitle:'الدردشات الحقيقية بين المشتري وصاحب الإعلان.',
+      subtitle:t('conversation_sub'),
       content: authGateCard('سجّل الدخول حتى تفتح المحادثات.')
     });
+    initAppChrome();
     return;
   }
 
@@ -68,9 +41,10 @@ function showToast(text){
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
       title:t('conversation'),
-      subtitle:'رابط المحادثة غير صحيح.',
-      content:`<section class="section"><div class="empty-card"><div class="empty-icon">!</div><h3 class="listing-title">لا يوجد معرف محادثة</h3><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
+      subtitle:t('conversation_sub'),
+      content:`<section class="section"><div class="empty-card"><div class="empty-icon">!</div><h3 class="listing-title">لا يوجد معرف محادثة</h3><a class="btn btn-primary" href="messages.html">${t('messages_title')}</a></div></section>`
     });
+    initAppChrome();
     return;
   }
 
@@ -78,29 +52,19 @@ function showToast(text){
   try {
     chat = await getChatById(chatId);
   } catch (err) {
-    console.error('chat-open-error', err);
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
       title:t('conversation'),
-      subtitle:'تعذر فتح المحادثة.',
-      content:`<section class="section"><div class="empty-card"><div class="empty-icon">⚠</div><h3 class="listing-title">تعذر فتح المحادثة</h3><p class="muted">تأكد أنك داخل الحساب الصحيح أو أن المحادثة ما زالت موجودة.</p><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
+      subtitle:t('conversation_sub'),
+      content:`<section class="section"><div class="empty-card"><div class="empty-icon">⚠</div><h3 class="listing-title">تعذر فتح المحادثة</h3><p class="muted">تأكد أنك داخل الحساب الصحيح أو أن المحادثة ما زالت موجودة.</p><a class="btn btn-primary" href="messages.html">${t('messages_title')}</a></div></section>`
     });
+    initAppChrome();
     return;
   }
 
-  if (!chat) {
-    document.getElementById('app').innerHTML = pageTemplate({
-      active:'messages',
-      title:t('conversation'),
-      subtitle:'المحادثة غير موجودة.',
-      content:`<section class="section"><div class="empty-card"><div class="empty-icon">💬</div><h3 class="listing-title">المحادثة غير موجودة</h3><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
-    });
-    return;
-  }
-
-  const chatTitle = safeText(chat.listingTitle || 'المحادثة');
+  const chatTitle = safeText(chat?.listingTitle || t('conversation'));
   const peer = safeText(otherParty(chat, me));
-  const cover = safeText(chat.listingCover || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80');
+  const cover = safeText(chat?.listingCover || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80');
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'messages',
@@ -108,104 +72,84 @@ function showToast(text){
     subtitle:t('conversation_sub'),
     content: `
       <section class="section">
-        <div class="chat-screen">
-          <div class="chat-screen-head">
-            <button class="chat-back" id="go-back" type="button">←</button>
-            <img class="chat-head-cover" src="${cover}" alt="${chatTitle}">
-            <div class="chat-head-meta">
-              <h3>${chatTitle}</h3>
-              <p>${peer}</p>
+        <div class="chat-shell">
+          <header class="chat-header-card">
+            <div class="chat-header-main">
+              <button type="button" class="icon-btn chat-back-btn" id="chat-back">←</button>
+              <img class="chat-header-cover" src="${cover}" alt="${chatTitle}">
+              <div class="chat-header-copy">
+                <h3>${chatTitle}</h3>
+                <p>${peer}</p>
+              </div>
             </div>
-          </div>
+          </header>
 
-          <div id="chat-toast-holder" class="chat-toast-holder"></div>
-          <div id="chat-messages" class="chat-thread modern-thread"></div>
+          <div id="chat-messages" class="chat-messages-panel"></div>
 
-          <form id="chat-form" class="chat-compose modern-compose">
+          <form id="chat-form" class="chat-compose-bar">
+            <input id="chat-input" class="chat-input modern-input" placeholder="${t('write_message')}" autocomplete="off">
             <button class="btn btn-primary send-btn" type="submit">${t('send')}</button>
-            <input id="chat-input" class="chat-input modern-input" placeholder="${t('write_message')}">
           </form>
         </div>
       </section>
     `
   });
 
-  const list = document.getElementById('chat-messages');
+  initAppChrome();
+  mountUnreadBadges();
+
+  document.getElementById('chat-back')?.addEventListener('click', ()=> history.back());
+
+  const messagesEl = document.getElementById('chat-messages');
   const form = document.getElementById('chat-form');
   const input = document.getElementById('chat-input');
-  let previousLastId = null;
-  let firstPaintDone = false;
-  let originalTitle = document.title || 'براتشو كار';
 
-  document.getElementById('go-back')?.addEventListener('click', ()=> {
-    window.location.assign('messages.html?v=notifyv1');
-  });
+  let firstPaint = true;
 
-  const unwatch = watchChatMessages(chatId, async messages => {
-    list.innerHTML = messages.length ? messages.map(msg => `
-      <div class="msg-wrap ${msg.senderId === me.uid ? 'mine' : 'theirs'}">
-        <div class="msg-bubble ${msg.senderId === me.uid ? 'msg-me' : 'msg-other'}">
-          <div class="msg-text">${safeText(msg.text)}</div>
-          <div class="msg-time">${formatRelativeArabic(msg.createdTs || Date.now())}</div>
+  function bubble(msg){
+    const mine = msg.senderId === me.uid;
+    const time = formatRelativeArabic(msg.createdTs || Date.now());
+    return `
+      <article class="chat-bubble-wrap ${mine ? 'mine' : 'other'}">
+        <div class="chat-bubble ${mine ? 'mine' : 'other'}">
+          <div class="chat-bubble-text">${safeText(msg.text || '')}</div>
+          <div class="chat-bubble-time">${time}</div>
         </div>
-      </div>
-    `).join('') : `
-      <div class="chat-empty-thread">
-        <div class="empty-icon">💬</div>
-        <p class="muted">ابدأ أول رسالة الآن.</p>
-      </div>
+      </article>
     `;
+  }
 
-    requestAnimationFrame(() => {
-      list.scrollTop = list.scrollHeight;
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    });
+  const unsubscribe = watchChatMessages(chatId, async rows => {
+    messagesEl.innerHTML = rows.length
+      ? rows.map(bubble).join('')
+      : `<div class="empty-card chat-empty-card"><div class="empty-icon">💬</div><h3 class="listing-title">${t('conversation')}</h3><p class="muted">${t('messages_sub')}</p></div>`;
 
-    const last = messages[messages.length - 1] || null;
-
-    if (!firstPaintDone) {
-      firstPaintDone = true;
-      previousLastId = last?.id || null;
-    } else if (last && last.id !== previousLastId) {
-      previousLastId = last.id;
-      if (last.senderId !== me.uid) {
-        playMessageTone();
-        showToast('وصلتك رسالة جديدة');
-        document.title = '🔔 رسالة جديدة';
-        setTimeout(()=> { document.title = originalTitle; }, 2200);
-      }
+    if (firstPaint) {
+      scrollChatBottom(false);
+      firstPaint = false;
+    } else {
+      scrollChatBottom(true);
     }
 
-    try {
-      await markChatRead(chatId);
-      mountUnreadBadges();
-    } catch {}
+    try { await markChatRead(chatId); } catch {}
   });
 
-  form.addEventListener('submit', async e => {
+  form?.addEventListener('submit', async e => {
     e.preventDefault();
-    const value = input.value.trim();
-    if (!value) return;
-
-    input.disabled = true;
-    form.querySelector('.send-btn').disabled = true;
-
+    const text = String(input.value || '').trim();
+    if (!text) return;
+    form.querySelector('button[type="submit"]').disabled = true;
     try {
-      await sendChatMessage(chatId, value);
+      await sendChatMessage(chatId, text);
       input.value = '';
-    } catch (err) {
-      console.error('send-message-error', err);
+      input.focus();
+      scrollChatBottom(true);
+    } catch {
       alert('تعذر إرسال الرسالة');
     } finally {
-      input.disabled = false;
-      form.querySelector('.send-btn').disabled = false;
-      input.focus();
+      form.querySelector('button[type="submit"]').disabled = false;
     }
   });
 
-  window.addEventListener('beforeunload', () => {
-    try { unwatch(); } catch {}
-    document.title = originalTitle;
-  });
-initLanguageUI();
+  window.addEventListener('beforeunload', ()=> { try { unsubscribe && unsubscribe(); } catch {} });
 })();
