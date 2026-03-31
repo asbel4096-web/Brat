@@ -1519,3 +1519,134 @@ body{padding-bottom:0}
     border-radius:16px;
   }
 }
+
+
+/* Details page upgrade */
+.detail-card-upgraded{
+  padding:14px;
+}
+.detail-hero{
+  display:grid;
+  gap:14px;
+}
+.detail-cover-main{
+  margin-bottom:0;
+  border-radius:30px;
+  overflow:hidden;
+  box-shadow:0 14px 30px rgba(16,25,63,.10);
+}
+.detail-cover-main img{
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
+}
+.detail-headline{
+  padding:2px 2px 0;
+}
+.detail-topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.detail-type-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--blue1),var(--blue2));
+  color:#fff;
+  font-weight:900;
+  font-size:14px;
+}
+.detail-title{
+  margin:4px 0 8px;
+  font-size:clamp(24px,4.6vw,34px);
+  line-height:1.22;
+}
+.detail-desc{
+  margin:0 0 10px;
+  line-height:1.8;
+  font-size:16px;
+}
+.detail-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.detail-pills span{
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#f7f9ff;
+  color:var(--muted);
+  font-weight:800;
+  font-size:13px;
+}
+.detail-actions-main{
+  grid-template-columns:1fr 1fr 1fr 48px 48px;
+  gap:8px;
+  margin-top:14px;
+}
+.detail-actions-main .btn,
+.detail-actions-main .icon-btn{
+  min-height:48px;
+  border-radius:18px;
+}
+.detail-table{
+  margin-top:14px;
+  border-top:none;
+  background:#fff;
+  border:2px solid var(--line);
+  border-radius:24px;
+  overflow:hidden;
+  padding:0 14px;
+}
+.detail-gallery{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+.detail-thumb{
+  border-radius:22px;
+  overflow:hidden;
+  background:#eef2fb;
+  border:2px solid var(--line);
+}
+.detail-thumb img{
+  width:100%;
+  aspect-ratio:16/11;
+  object-fit:cover;
+  display:block;
+}
+@media (max-width:760px){
+  .detail-card-upgraded{
+    padding:12px;
+  }
+  .detail-cover-main{
+    border-radius:24px;
+  }
+  .detail-title{
+    font-size:clamp(22px,7vw,30px);
+  }
+  .detail-desc{
+    font-size:15px;
+    line-height:1.75;
+  }
+  .detail-actions-main{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+  .detail-actions-main .icon-btn{
+    width:100%;
+    height:auto;
+  }
+  .detail-gallery{
+    grid-template-columns:1fr;
+  }
+  .detail-table{
+    padding:0 12px;
+  }
+}
