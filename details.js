@@ -11,9 +11,6 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
   const mapsHref = makeMapsUrl(item.city);
   const isOwner = !!(item.ownerId && getCurrentUser() && item.ownerId === getCurrentUser().uid);
   const isHidden = (item.status || 'active') === 'hidden';
-  const gallery = (item.images?.length ? item.images : [item.cover]).map(src=>`
-    <div class="detail-cover" style="margin-top:10px"><img src="${safeText(src)}" alt="${safeText(item.title)}"></div>
-  `).join('');
   const ownerTools = isOwner ? `
     <div class="detail-actions" style="margin-top:10px">
       <a class="btn btn-primary" href="add.html?id=${safeText(item.id)}">تعديل</a>
