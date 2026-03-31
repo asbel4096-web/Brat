@@ -1850,3 +1850,59 @@ body{padding-bottom:0}
     grid-template-columns:1fr;
   }
 }
+
+
+/* Final touch for my ads + bilingual labels */
+.myads-langbar{
+  display:flex;
+  gap:8px;
+  justify-content:flex-start;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.myads-langbar span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.16);
+  color:#fff;
+  font-weight:800;
+  font-size:13px;
+}
+.myads-head-final{
+  align-items:start;
+}
+.myads-en-sub{
+  margin:4px 0 6px !important;
+  color:rgba(255,255,255,.92) !important;
+  font-size:15px !important;
+  font-weight:800 !important;
+}
+.myads-addbtn{
+  white-space:nowrap;
+}
+.myads-stat small{
+  display:block;
+  margin-top:4px;
+  color:rgba(255,255,255,.84);
+  font-size:12px;
+  font-weight:700;
+}
+@media (max-width:760px){
+  .myads-langbar{
+    margin-bottom:8px;
+  }
+  .myads-langbar span{
+    font-size:12px;
+    padding:6px 10px;
+  }
+  .myads-en-sub{
+    font-size:13px !important;
+  }
+  .myads-addbtn{
+    width:100%;
+  }
+}

@@ -1,16 +1,16 @@
 import { pageTemplate, listingCard, getUserListings, removeListing, updateListingStatus, safeText, authGateCard, waitForAuthReady, getCurrentUser, price } from './common.js';
 
-function summaryCard(num, label, accent=''){
-  return `<div class="myads-stat ${accent}"><strong>${num}</strong><span>${label}</span></div>`;
+function summaryCard(num, label, sublabel='', accent=''){
+  return `<div class="myads-stat ${accent}"><strong>${num}</strong><span>${label}</span><small>${sublabel}</small></div>`;
 }
 
 function managementBar(item){
   const hidden = (item.status || 'active') === 'hidden';
   return `
     <div class="myads-managebar">
-      <a class="btn btn-primary" href="add.html?id=${safeText(item.id)}">تعديل</a>
-      <button class="btn btn-soft js-toggle" data-id="${safeText(item.id)}" data-status="${hidden ? 'active' : 'hidden'}">${hidden ? 'إظهار الإعلان' : 'إخفاء الإعلان'}</button>
-      <button class="btn btn-soft js-delete danger" data-id="${safeText(item.id)}">حذف</button>
+      <a class="btn btn-primary" href="add.html?id=${safeText(item.id)}">تعديل / Edit</a>
+      <button class="btn btn-soft js-toggle" data-id="${safeText(item.id)}" data-status="${hidden ? 'active' : 'hidden'}">${hidden ? 'إظهار / Show' : 'إخفاء / Hide'}</button>
+      <button class="btn btn-soft js-delete danger" data-id="${safeText(item.id)}">حذف / Delete</button>
     </div>`;
 }
 
@@ -32,8 +32,8 @@ async function render(){
   if (!getCurrentUser()) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'ads',
-      title:'إعلاناتي',
-      subtitle:'كل الإعلانات التي أضفتها من النموذج الجديد.',
+      title:'إعلاناتي / My Ads',
+      subtitle:'كل الإعلانات التي أضفتها من النموذج الجديد مع واجهة عربية وإنجليزية.',
       content: authGateCard('سجل دخولك حتى ترى إعلانات حسابك فقط وتديرها بأمان.')
     });
     return;
@@ -50,17 +50,22 @@ async function render(){
   const content = `
   <section class="section">
     <div class="hero-panel myads-hero">
-      <div class="section-head">
+      <div class="myads-langbar">
+        <span>العربية</span>
+        <span>English</span>
+      </div>
+      <div class="section-head myads-head-final">
         <div>
           <h3>إدارة إعلاناتي</h3>
+          <p class="myads-en-sub">Manage My Ads</p>
           <p>لوحة أنظف لإدارة إعلاناتك، مع حالة الإعلان وتعديل سريع وإخفاء أو حذف من نفس الصفحة.</p>
         </div>
-        <a class="btn btn-soft" href="add.html">إضافة إعلان جديد</a>
+        <a class="btn btn-soft myads-addbtn" href="add.html">إضافة إعلان جديد / New Ad</a>
       </div>
       <div class="myads-stats">
-        ${summaryCard(userAds.length, 'إجمالي الإعلانات')}
-        ${summaryCard(activeAds.length, 'إعلانات منشورة', 'good')}
-        ${summaryCard(hiddenAds.length, 'إعلانات مخفية')}
+        ${summaryCard(userAds.length, 'إجمالي الإعلانات', 'Total Ads')}
+        ${summaryCard(activeAds.length, 'إعلانات منشورة', 'Published Ads', 'good')}
+        ${summaryCard(hiddenAds.length, 'إعلانات مخفية', 'Hidden Ads')}
       </div>
     </div>
   </section>
@@ -69,6 +74,7 @@ async function render(){
     <div class="section-head">
       <div>
         <h3>قائمة الإعلانات</h3>
+        <p class="myads-en-sub">Ads List</p>
         <p>كل إعلان يعرض حالته الحالية مع أدوات الإدارة أسفل البطاقة مباشرة.</p>
       </div>
     </div>
@@ -77,8 +83,8 @@ async function render(){
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'ads',
-    title:'إعلاناتي',
-    subtitle:'هذه الصفحة تعرض إعلانات الحساب الحالي فقط.',
+    title:'إعلاناتي / My Ads',
+    subtitle:'هذه الصفحة تعرض إعلانات الحساب الحالي فقط مع تسميات عربية وإنجليزية.',
     content
   });
 
