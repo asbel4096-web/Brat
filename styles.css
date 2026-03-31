@@ -1475,3 +1475,47 @@ body{padding-bottom:0}
     grid-template-columns:1fr 1fr 44px;
   }
 }
+
+
+/* Unify listing card action buttons */
+.listing-actions{
+  grid-template-columns:1fr 1fr 1fr;
+}
+
+.listing-actions .btn,
+.listing-actions .icon-btn{
+  min-height:48px;
+  border-radius:18px;
+  font-weight:800;
+  font-size:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.listing-actions .icon-btn{
+  width:100%;
+  height:auto;
+  background:#eef2fb;
+  color:var(--text);
+  border:2px solid var(--line);
+  box-shadow:0 6px 18px rgba(16,25,63,.05);
+}
+
+.listing-actions .icon-btn:hover{
+  transform:translateY(-1px);
+}
+
+@media (max-width:760px){
+  .listing-actions{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .listing-actions .btn,
+  .listing-actions .icon-btn{
+    min-height:46px;
+    font-size:15px;
+    border-radius:16px;
+  }
+}
