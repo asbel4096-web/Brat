@@ -28,6 +28,11 @@ function playMessageTone(){
   }catch{}
 }
 
+function setChatViewportHeight(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--chat-vh', `${vh}px`);
+}
+
 function showToast(text){
   const holder = document.getElementById('chat-toast-holder');
   if (!holder) return;
@@ -43,6 +48,8 @@ function showToast(text){
 }
 
 (async ()=>{
+  setChatViewportHeight();
+  window.addEventListener('resize', setChatViewportHeight);
   await waitForAuthReady();
   const chatId = new URLSearchParams(location.search).get('id');
   const me = getCurrentUser();
@@ -149,7 +156,10 @@ function showToast(text){
       </div>
     `;
 
-    list.scrollTop = list.scrollHeight;
+    requestAnimationFrame(() => {
+      list.scrollTop = list.scrollHeight;
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    });
 
     const last = messages[messages.length - 1] || null;
 

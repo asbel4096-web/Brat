@@ -640,3 +640,56 @@ body{padding-bottom:0}
     font-size:12px;
   }
 }
+
+
+/* Final chat polish */
+:root{
+  --chat-vh: 1vh;
+}
+
+.chat-screen{
+  min-height: calc(var(--chat-vh, 1vh) * 76);
+}
+
+.modern-thread{
+  min-height: calc(var(--chat-vh, 1vh) * 42);
+  max-height: calc(var(--chat-vh, 1vh) * 50);
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+  padding-bottom: 22px;
+}
+
+.modern-compose{
+  position: sticky;
+  bottom: 0;
+  z-index: 8;
+}
+
+.chat-screen-head{
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width:640px){
+  .chat-screen{
+    min-height: calc(var(--chat-vh, 1vh) * 79);
+    border-radius: 28px;
+  }
+
+  .modern-thread{
+    min-height: calc(var(--chat-vh, 1vh) * 46);
+    max-height: calc(var(--chat-vh, 1vh) * 54);
+    padding: 14px 12px 26px;
+  }
+
+  .modern-compose{
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .modern-input{
+    min-height: 52px;
+  }
+}
