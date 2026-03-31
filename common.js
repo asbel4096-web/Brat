@@ -151,7 +151,22 @@ const TRANSLATIONS = {
     write_message: 'اكتب رسالتك هنا',
     my_favorite_ads: 'إعلاناتي المفضلة',
     manage_ads: 'إدارة إعلاناتي',
-    browse: 'تصفح'
+    browse: 'تصفح',
+    settings: 'الإعدادات',
+    app_settings: 'إعدادات التطبيق',
+    settings_sub: 'تحكم باللغة والمظهر وبعض الخيارات الأساسية من مكان واحد.',
+    appearance: 'المظهر',
+    dark_mode: 'الوضع الليلي',
+    light_mode: 'الوضع النهاري',
+    language: 'اللغة',
+    app_info: 'معلومات التطبيق',
+    notifications: 'الإشعارات',
+    account_settings: 'إعدادات الحساب',
+    current_theme: 'المظهر الحالي',
+    current_language: 'اللغة الحالية',
+    enabled: 'مفعل',
+    disabled: 'غير مفعل',
+    open_settings: 'فتح الإعدادات'
   },
   en: {
     language_name: 'Arabic',
@@ -265,7 +280,22 @@ const TRANSLATIONS = {
     write_message: 'Write your message here',
     my_favorite_ads: 'My Favorite Ads',
     manage_ads: 'Manage My Ads',
-    browse: 'Browse'
+    browse: 'Browse',
+    settings: 'Settings',
+    app_settings: 'App Settings',
+    settings_sub: 'Control language, appearance, and core options from one place.',
+    appearance: 'Appearance',
+    dark_mode: 'Dark Mode',
+    light_mode: 'Light Mode',
+    language: 'Language',
+    app_info: 'App Info',
+    notifications: 'Notifications',
+    account_settings: 'Account Settings',
+    current_theme: 'Current Theme',
+    current_language: 'Current Language',
+    enabled: 'Enabled',
+    disabled: 'Disabled',
+    open_settings: 'Open Settings'
   }
 };
 
@@ -285,6 +315,24 @@ export function t(key){
 
 export function bidi(ar, en){
   return getLang() === 'en' ? en : ar;
+}
+
+
+const THEME_KEY = 'bratsho_theme_v1';
+
+export function getTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  return saved === 'dark' ? 'dark' : 'light';
+}
+
+export function setTheme(theme){
+  localStorage.setItem(THEME_KEY, theme === 'dark' ? 'dark' : 'light');
+}
+
+export function applyTheme(root=document){
+  const theme = getTheme();
+  root.documentElement?.setAttribute('data-theme', theme);
+  root.body?.setAttribute('data-theme', theme);
 }
 
 export const listings = [
@@ -866,7 +914,7 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
         <div class="logo-box">BC</div>
       </div>
       ${titles}
-      <div class="top-shortcuts">
+      <div class="top-shortcuts top-shortcuts-4">
         <a class="shortcut-card" href="dashboard.html">${t('top_account')} <span>👤</span></a>
         <a class="shortcut-card" href="favorites.html">${t('top_favorites')} <span>♥</span></a>
         <a class="shortcut-card shortcut-card-messages" href="messages.html">${t('top_messages')} <span>💬</span><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
@@ -894,6 +942,12 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
 }
 
 
+
+
+export function initAppChrome(root=document){
+  applyTheme(root);
+  initLanguageUI(root);
+}
 
 export function initLanguageUI(root=document){
   root.querySelectorAll('[data-lang]').forEach(btn => {

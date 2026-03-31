@@ -114,9 +114,10 @@ async function render(){
         <div class="account-avatar">${(getUserLabel().charAt(0) || 'ب').toUpperCase()}</div>
       </div>
 
-      <div class="account-main-actions">
+      <div class="account-main-actions account-main-actions-3">
         <a class="btn btn-primary btn-block" href="my-ads.html">${t('manage_my_ads')}</a>
         <a class="btn btn-soft btn-block" href="add.html">${t('new_ad')}</a>
+        <a class="btn btn-soft btn-block" href="settings.html">${t('open_settings')}</a>
       </div>
 
       <div class="account-mini-actions clean-four">
