@@ -1347,3 +1347,131 @@ body{padding-bottom:0}
     font-size:12px;
   }
 }
+
+
+/* Listing cards upgrade */
+.listing-grid{
+  grid-template-columns:1fr;
+  gap:16px;
+}
+.listing-card-upgraded{
+  overflow:hidden;
+  border-radius:30px;
+  box-shadow:0 16px 36px rgba(16,25,63,.09);
+}
+.listing-image{
+  aspect-ratio:16/9;
+}
+.listing-image::after{
+  content:'';
+  position:absolute;
+  inset:auto 0 0 0;
+  height:38%;
+  background:linear-gradient(180deg, transparent, rgba(10,18,52,.10));
+  pointer-events:none;
+}
+.card-fav{
+  position:absolute;
+  top:12px;
+  left:12px;
+  z-index:3;
+  background:rgba(255,255,255,.94);
+}
+.listing-body{
+  padding:14px;
+}
+.listing-topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:6px;
+}
+.mini-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 12px;
+  border-radius:999px;
+  background:#eef2ff;
+  color:var(--blue1);
+  font-weight:900;
+  font-size:13px;
+  white-space:nowrap;
+}
+.listing-price{
+  color:#48a86a;
+  font-size:clamp(24px,4.6vw,32px);
+  font-weight:900;
+}
+.listing-title{
+  margin:4px 0 6px;
+  font-size:clamp(22px,4vw,28px);
+  line-height:1.28;
+}
+.listing-title a{
+  display:block;
+}
+.listing-desc{
+  margin:0 0 10px;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.75;
+}
+.listing-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 10px;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:12px;
+}
+.listing-meta span{
+  background:#f7f9ff;
+  border:1px solid var(--line);
+  padding:7px 10px;
+  border-radius:999px;
+  font-weight:700;
+}
+.listing-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 48px;
+  gap:8px;
+  align-items:center;
+}
+.listing-actions .btn,
+.listing-actions .icon-btn{
+  min-height:46px;
+}
+@media (max-width:760px){
+  .listing-card-upgraded{
+    border-radius:26px;
+  }
+  .listing-image{
+    aspect-ratio:16/9.4;
+  }
+  .listing-body{
+    padding:12px;
+  }
+  .listing-price{
+    font-size:clamp(22px,7vw,28px);
+  }
+  .listing-title{
+    font-size:clamp(20px,6vw,25px);
+  }
+  .listing-desc{
+    font-size:14px;
+    line-height:1.7;
+  }
+  .listing-meta{
+    gap:7px 8px;
+    margin-bottom:10px;
+  }
+  .listing-meta span{
+    padding:6px 9px;
+    font-size:12px;
+  }
+  .listing-actions{
+    grid-template-columns:1fr 1fr 44px;
+  }
+}

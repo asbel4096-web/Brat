@@ -662,21 +662,24 @@ export function listingCard(item){
   const phoneHref = phone ? `tel:${phone}` : `tel:+218910000000`;
   const favIcon = item.__favorite ? '♥' : '♡';
   return `
-  <article class="listing-card">
+  <article class="listing-card listing-card-upgraded">
     <a class="listing-image" href="details.html?id=${safeText(item.id)}">
       <img src="${safeText(item.cover)}" alt="${safeText(item.title)}">
       <span class="badge dark">${safeText(item.type)}</span>
-      <button type="button" class="icon-btn js-favorite ${item.__favorite ? 'is-favorite' : ''}" data-id="${safeText(item.id)}" aria-pressed="${item.__favorite ? 'true' : 'false'}" title="المفضلة" style="position:absolute;top:12px;left:12px;z-index:3">${favIcon}</button>
+      <button type="button" class="icon-btn js-favorite card-fav ${item.__favorite ? 'is-favorite' : ''}" data-id="${safeText(item.id)}" aria-pressed="${item.__favorite ? 'true' : 'false'}" title="المفضلة">${favIcon}</button>
     </a>
     <div class="listing-body">
-      <div class="listing-price">${price(item.price)}</div>
+      <div class="listing-topline">
+        <div class="listing-price">${price(item.price)}</div>
+        <span class="mini-pill">${safeText(item.city)}</span>
+      </div>
       ${(item.status || 'active') === 'hidden' ? '<div class="muted" style="margin-bottom:6px;color:#c97700;font-weight:800">مخفي من العرض العام</div>' : ''}
       <h3 class="listing-title"><a href="details.html?id=${safeText(item.id)}">${safeText(item.title)}</a></h3>
-      <p class="listing-desc">${safeText(truncateText(item.desc))}</p>
+      <p class="listing-desc">${safeText(truncateText(item.desc, 95))}</p>
       <div class="listing-meta">
-        <span>${safeText(item.city)}</span>
         <span>${safeText(item.year || '')}</span>
         <span>${safeText(item.km || '')}</span>
+        <span>${safeText(item.seller || 'براتشو')}</span>
       </div>
       <div class="listing-actions">
         <a class="btn btn-primary" href="details.html?id=${safeText(item.id)}">عرض</a>
