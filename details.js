@@ -104,7 +104,7 @@ import { pageTemplate, detailById, price, safeText, normalizeWhatsapp, makeMapsU
     try {
       const chat = await createOrOpenChat(item);
       if (!chat?.id) throw new Error('missing_chat_id');
-      location.href = `chat.html?id=${encodeURIComponent(chat.id)}`;
+     alert(chat.id);
     } catch (err) {
       console.error('start-chat-error', err, item);
       alert('تعذر فتح المحادثة');
