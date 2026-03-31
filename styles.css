@@ -940,3 +940,37 @@ body{padding-bottom:0}
     grid-template-columns:1fr;
   }
 }
+
+
+/* Account final cleanup */
+.account-mini-actions.clean-four{
+  grid-template-columns:repeat(4,1fr);
+}
+.account-mini-btn.neutral{
+  background:#f9fbff;
+}
+.account-mini-btn{
+  min-height:96px;
+  padding:10px;
+}
+.account-mini-btn strong{
+  display:block;
+  line-height:1;
+}
+.account-hero-card{
+  padding:20px;
+}
+.account-main-actions .btn{
+  min-height:60px;
+}
+.account-stats .stat{
+  min-height:150px;
+}
+@media (max-width:640px){
+  .account-mini-actions.clean-four{
+    grid-template-columns:repeat(2,1fr);
+  }
+  .account-mini-btn{
+    min-height:88px;
+  }
+}

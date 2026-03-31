@@ -85,7 +85,7 @@ async function render(){
         <a class="btn btn-soft btn-block" href="add.html">إضافة إعلان جديد</a>
       </div>
 
-      <div class="account-mini-actions">
+      <div class="account-mini-actions clean-four">
         <a class="account-mini-btn" href="favorites.html">
           <span>المفضلة</span>
           <strong>${favoriteIds.length}</strong>
@@ -94,6 +94,10 @@ async function render(){
           <span>الدردشات</span>
           <strong>${chats.length}</strong>
         </a>
+        <div class="account-mini-btn neutral">
+          <span>غير مقروء</span>
+          <strong>${unreadCount}</strong>
+        </div>
         <button class="account-mini-btn danger" id="logout-btn" type="button">
           <span>تسجيل الخروج</span>
           <strong>⎋</strong>
