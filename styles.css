@@ -1115,3 +1115,31 @@ body{padding-bottom:0}
 .brand-en{
   text-transform:none;
 }
+
+
+/* Mobile hero top spacing */
+@media (max-width: 760px){
+  .site-header{
+    padding-top: 20px;
+  }
+
+  .page-main{
+    padding-top: 8px;
+  }
+
+  .hero-panel,
+  .home-hero-upgraded{
+    margin-top: 18px;
+    padding-top: 24px;
+  }
+
+  .hero-chips{
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+
+  .hero-copy h3,
+  .hero-panel h3{
+    margin-top: 6px;
+  }
+}
