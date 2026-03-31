@@ -1,7 +1,7 @@
 import { pageTemplate, waitForAuthReady, getCurrentUser, getUserLabel, t, getLang, setLang, getTheme, setTheme, initAppChrome, signOutUser } from './common.js';
 
 function card(title, subtitle, body){
-  return `<section class="section"><div class="surface-card settings-card"><div class="section-head"><div><h3>${title}</h3><p>${subtitle}</p></div></div>${body}</div></section>`;
+  return `<section class="section"><div class="surface-card settings-card"><div class="section-head"><div><h3>${title}</h3>${subtitle ? `<p>${subtitle}</p>` : ''}</div></div>${body}</div></section>`;
 }
 
 (async ()=>{
@@ -11,7 +11,7 @@ function card(title, subtitle, body){
   const theme = getTheme();
 
   const content = `
-    ${card(t('app_settings'), t('settings_sub'), `
+    ${card('', '', `
       <div class="settings-grid">
         <div class="settings-option">
           <div>

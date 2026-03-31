@@ -2174,3 +2174,42 @@ body{padding-bottom:0}
     grid-template-columns:1fr;
   }
 }
+
+
+/* Final settings cleanup */
+.settings-card > .section-head:empty{
+  display:none;
+}
+.settings-card{
+  padding:14px;
+}
+.settings-card .section-head{
+  margin-bottom:8px;
+}
+.settings-card .section-head h3{
+  font-size:clamp(24px,3.8vw,32px);
+}
+.settings-grid{
+  gap:10px;
+}
+.settings-option{
+  background:rgba(69,108,240,.035);
+}
+[data-theme="dark"] .settings-option{
+  background:rgba(69,108,240,.07);
+}
+@media (max-width:760px){
+  .settings-card{
+    padding:12px;
+  }
+  .settings-option{
+    padding:12px;
+    border-radius:20px;
+  }
+  .settings-option strong{
+    font-size:17px;
+  }
+  .settings-option small{
+    font-size:13px;
+  }
+}
