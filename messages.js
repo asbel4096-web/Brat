@@ -13,8 +13,8 @@ function otherParty(chat, me){
   if (!me) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
-      title:t('messages_title'),
-      subtitle:t('messages_sub'),
+      title:'دردشاتي',
+      subtitle:'رسائل العملاء والاستفسارات بشكل نظيف وواضح.',
       content: authGateCard('سجّل الدخول حتى تظهر لك محادثات حسابك الحقيقي.')
     });
     return;
@@ -26,7 +26,7 @@ function otherParty(chat, me){
     const cover = safeText(chat.listingCover || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80');
     const title = safeText(chat.listingTitle || 'محادثة');
     const peer = safeText(otherParty(chat, me));
-    const last = safeText(chat.lastMessage || 'Start chat');
+    const last = safeText(chat.lastMessage || 'ابدأ المحادثة الآن');
     const time = formatRelativeArabic(chat.updatedTs || Date.now());
     const avatar = safeText((peer || 'م').charAt(0).toUpperCase());
     return `
@@ -47,28 +47,28 @@ function otherParty(chat, me){
   }).join('') : `
     <div class="empty-card">
       <div class="empty-icon">💬</div>
-      <h3 class="listing-title">No chats yet</h3>
-      <p class="muted">Tap Message on any ad to create a chat here.</p>
+      <h3 class="listing-title">لا توجد محادثات بعد</h3>
+      <p class="muted">عند الضغط على زر مراسلة داخل الإعلان ستظهر المحادثة هنا.</p>
     </div>
   `;
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'messages',
-    title:t('messages_title'),
-    subtitle:t('messages_sub'),
+    title:'دردشاتي',
+    subtitle:'رسائل العملاء والاستفسارات بشكل نظيف وواضح.',
     content: `
       <section class="section">
         <div class="section-head">
           <div>
-            <h3>${t('messages_title')}</h3>
+            <h3>دردشاتي</h3>
             <p>كل المحادثات الحقيقية المرتبطة بإعلاناتك أو استفساراتك.</p>
           </div>
         </div>
         <div class="chat-inbox-card">
           <div class="chat-inbox-top">
             <div>
-              <h3>${t('inbox')}</h3>
-              <p>${t('messages_sub')}</p>
+              <h3>صندوق الرسائل</h3>
+              <p>واجهة أوضح وأقرب لفكرة المحادثات الحديثة.</p>
             </div>
             <span class="chat-count">${chats.length}</span>
           </div>
@@ -88,7 +88,6 @@ function otherParty(chat, me){
       window.location.assign(`chat.html?id=${encodeURIComponent(chatId)}&v=openv3`);
     });
   });
-initLanguageUI();
 })();
 
 

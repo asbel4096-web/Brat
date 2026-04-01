@@ -1,4 +1,4 @@
-import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getChatById, formatRelativeArabic, safeText, markChatRead, mountUnreadBadges, t, initLanguageUI } from './common.js';
+import { pageTemplate, authGateCard, waitForAuthReady, getCurrentUser, watchChatMessages, sendChatMessage, getChatById, formatRelativeArabic, safeText, markChatRead, mountUnreadBadges } from './common.js';
 
 function otherParty(chat, me){
   if (!chat) return 'المحادثة';
@@ -57,7 +57,7 @@ function showToast(text){
   if (!me) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
-      title:t('conversation'),
+      title:'المحادثة',
       subtitle:'الدردشات الحقيقية بين المشتري وصاحب الإعلان.',
       content: authGateCard('سجّل الدخول حتى تفتح المحادثات.')
     });
@@ -67,7 +67,7 @@ function showToast(text){
   if (!chatId) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
-      title:t('conversation'),
+      title:'المحادثة',
       subtitle:'رابط المحادثة غير صحيح.',
       content:`<section class="section"><div class="empty-card"><div class="empty-icon">!</div><h3 class="listing-title">لا يوجد معرف محادثة</h3><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
     });
@@ -81,7 +81,7 @@ function showToast(text){
     console.error('chat-open-error', err);
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
-      title:t('conversation'),
+      title:'المحادثة',
       subtitle:'تعذر فتح المحادثة.',
       content:`<section class="section"><div class="empty-card"><div class="empty-icon">⚠</div><h3 class="listing-title">تعذر فتح المحادثة</h3><p class="muted">تأكد أنك داخل الحساب الصحيح أو أن المحادثة ما زالت موجودة.</p><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
     });
@@ -91,7 +91,7 @@ function showToast(text){
   if (!chat) {
     document.getElementById('app').innerHTML = pageTemplate({
       active:'messages',
-      title:t('conversation'),
+      title:'المحادثة',
       subtitle:'المحادثة غير موجودة.',
       content:`<section class="section"><div class="empty-card"><div class="empty-icon">💬</div><h3 class="listing-title">المحادثة غير موجودة</h3><a class="btn btn-primary" href="messages.html">العودة إلى دردشاتي</a></div></section>`
     });
@@ -104,8 +104,8 @@ function showToast(text){
 
   document.getElementById('app').innerHTML = pageTemplate({
     active:'messages',
-    title:t('conversation'),
-    subtitle:t('conversation_sub'),
+    title:'المحادثة',
+    subtitle:'واجهة محادثة أوضح وأرتب.',
     content: `
       <section class="section">
         <div class="chat-screen">
@@ -122,8 +122,8 @@ function showToast(text){
           <div id="chat-messages" class="chat-thread modern-thread"></div>
 
           <form id="chat-form" class="chat-compose modern-compose">
-            <button class="btn btn-primary send-btn" type="submit">${t('send')}</button>
-            <input id="chat-input" class="chat-input modern-input" placeholder="${t('write_message')}">
+            <button class="btn btn-primary send-btn" type="submit">إرسال</button>
+            <input id="chat-input" class="chat-input modern-input" placeholder="اكتب رسالتك هنا">
           </form>
         </div>
       </section>
@@ -207,5 +207,4 @@ function showToast(text){
     try { unwatch(); } catch {}
     document.title = originalTitle;
   });
-initLanguageUI();
 })();
