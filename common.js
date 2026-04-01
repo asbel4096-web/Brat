@@ -35,6 +35,322 @@ const OWNER_KEY = 'bratsho_owner_id';
 const COLLECTION_NAME = 'listings';
 const FAVORITES_KEY = 'bratsho_favorites_v1';
 
+
+const LANG_KEY = 'bratsho_lang_v1';
+
+const TRANSLATIONS = {
+  ar: {
+    language_name: 'العربية',
+    language_english: 'English',
+    brand_tagline: 'سوق سيارات وقطع غيار وخدمات متنقلة بتصميم مرتب وسريع',
+    nav_home: 'الرئيسية',
+    nav_messages: 'دردشاتي',
+    nav_add: 'أضف إعلان',
+    nav_my_ads: 'إعلاناتي',
+    nav_account: 'حسابي',
+    top_account: 'حسابي',
+    top_favorites: 'المفضلة',
+    top_messages: 'دردشاتي',
+    top_add: 'أضف إعلان',
+    home_title: 'براتشو كار بشكل أنظف وأوضح وتجربة أسرع',
+    home_subtitle: 'بطاقات أوضح، بحث أسرع، وفرز أسهل بين مدن ليبيا حتى يصل الزبون للإعلان المناسب بسرعة.',
+    home_search: 'بحث سريع',
+    search_now: 'ابحث الآن',
+    ad_type: 'القسم',
+    city: 'المدينة',
+    all_cats: 'كل الأقسام',
+    all_cities: 'كل المدن',
+    cat_cars: 'سيارات',
+    cat_parts: 'قطع غيار',
+    cat_accessories: 'كماليات سيارات',
+    cat_service: 'خدمات',
+    cat_small_cars: 'سيارات صغيرة',
+    cat_heavy_cars: 'سيارات ثقيلة',
+    cat_buses: 'حافلات',
+    service_diag: 'كشف أعطال',
+    service_mobile_mech: 'ميكانيكي متنقل',
+    service_tires: 'إطارات ونضائد',
+    service_mobile_tire_fix: 'إصلاح إطارات متنقل',
+    service_oils: 'زيوت ومواد مضافة',
+    stat_total_ads: 'إجمالي الإعلانات',
+    stat_cars: 'سيارات',
+    stat_parts: 'قطع غيار',
+    stat_services: 'خدمات',
+    main_categories: 'الأقسام الرئيسية',
+    add_new_ad: 'إضافة إعلان',
+    latest_ads: 'أحدث الإعلانات',
+    favorites: 'المفضلة',
+    reset_filter: 'إعادة التصفية',
+    browse_ads: 'تصفح الإعلانات',
+    no_results: 'لا توجد نتائج',
+    change_search_try: 'جرّب تغيير البحث أو اختيار قسم/مدينة أخرى.',
+    details: 'التفاصيل',
+    full_ad_view: 'عرض كامل للإعلان مع وسائل التواصل.',
+    type: 'النوع',
+    year: 'السنة',
+    condition: 'الحالة',
+    seller: 'البائع',
+    location: 'الموقع',
+    message: 'مراسلة',
+    whatsapp: 'واتساب',
+    call: 'اتصال',
+    account: 'حسابي',
+    create_or_login: 'أنشئ حسابًا أو سجل الدخول لربط الإعلانات بصاحبها الحقيقي.',
+    login: 'تسجيل الدخول',
+    signup: 'إنشاء حساب',
+    email: 'البريد الإلكتروني',
+    password: 'كلمة المرور',
+    login_btn: 'دخول',
+    signup_btn: 'إنشاء حساب جديد',
+    active_account: 'Firebase Auth • حساب مفعل',
+    manage_my_ads: 'إدارة إعلاناتي',
+    new_ad: 'إضافة إعلان جديد',
+    chats: 'الدردشات',
+    unread: 'غير مقروء',
+    logout: 'تسجيل الخروج',
+    published_ads: 'إعلان منشور',
+    hidden_ads: 'إعلان مخفي',
+    in_favorites: 'في المفضلة',
+    quick_summary: 'ملخص سريع',
+    last_status: 'آخر حالة',
+    my_ads: 'إعلاناتي',
+    my_ads_sub: 'هذه الصفحة تعرض إعلانات الحساب الحالي فقط.',
+    total_ads: 'إجمالي الإعلانات',
+    published: 'إعلانات منشورة',
+    hidden: 'إعلانات مخفية',
+    ads_list: 'قائمة الإعلانات',
+    edit: 'تعديل',
+    hide: 'إخفاء',
+    show: 'إظهار',
+    delete: 'حذف',
+    favorites_title: 'المفضلة',
+    favorites_sub: 'قائمة الإعلانات التي حفظتها على حسابك الحقيقي مع لمسة ثنائية اللغة.',
+    saved_items: 'عناصر محفوظة',
+    favorites_list: 'قائمة المفضلة',
+    no_favorites: 'لا توجد مفضلة بعد',
+    no_favorites_sub: 'اضغط على زر القلب في أي إعلان ليظهر هنا مباشرة.',
+    add_ad_title: 'إضافة إعلان جديد',
+    add_ad_sub: 'مسار واضح وسريع لإضافة سيارة أو قطعة أو خدمة.',
+    step_category: '1. القسم',
+    step_details: '2. التفاصيل',
+    step_images: '3. الصور',
+    step_contact: '4. التواصل',
+    step_review: '5. المراجعة',
+    ad_data: 'بيانات الإعلان',
+    direct: 'مباشر',
+    ad_title: 'عنوان الإعلان',
+    price: 'السعر',
+    year_or_status: 'السنة أو الحالة',
+    meter_or_part_state: 'العداد أو حالة القطعة',
+    advertiser_name: 'اسم المعلن',
+    description: 'الوصف',
+    phone: 'رقم الهاتف',
+    map_area: 'اسم الموقع أو الحي',
+    map_link: 'رابط الخريطة',
+    images: 'الصور',
+    upload_images: 'رفع صور الإعلان',
+    save_preview: 'حفظ ومعاينة',
+    messages_title: 'دردشاتي',
+    messages_sub: 'رسائل العملاء والاستفسارات بشكل نظيف وواضح.',
+    inbox: 'صندوق الرسائل',
+    conversation: 'المحادثة',
+    conversation_sub: 'واجهة محادثة أوضح وأرتب.',
+    send: 'إرسال',
+    write_message: 'اكتب رسالتك هنا',
+    my_favorite_ads: 'إعلاناتي المفضلة',
+    manage_ads: 'إدارة إعلاناتي',
+    browse: 'تصفح',
+    settings: 'الإعدادات',
+    app_settings: 'إعدادات التطبيق',
+    settings_sub: 'تحكم باللغة والمظهر وبعض الخيارات الأساسية من مكان واحد.',
+    appearance: 'المظهر',
+    dark_mode: 'الوضع الليلي',
+    light_mode: 'الوضع النهاري',
+    language: 'اللغة',
+    app_info: 'معلومات التطبيق',
+    notifications: 'الإشعارات',
+    account_settings: 'إعدادات الحساب',
+    current_theme: 'المظهر الحالي',
+    current_language: 'اللغة الحالية',
+    enabled: 'مفعل',
+    disabled: 'غير مفعل',
+    open_settings: 'فتح الإعدادات'
+  },
+  en: {
+    language_name: 'Arabic',
+    language_english: 'English',
+    brand_tagline: 'Cars, parts, and mobile services in a clean fast layout',
+    nav_home: 'Home',
+    nav_messages: 'Chats',
+    nav_add: 'Add Ad',
+    nav_my_ads: 'My Ads',
+    nav_account: 'Account',
+    top_account: 'Account',
+    top_favorites: 'Favorites',
+    top_messages: 'Chats',
+    top_add: 'Add Ad',
+    home_title: 'Bratsho Car with a cleaner faster experience',
+    home_subtitle: 'Clearer cards, faster search, and easier filtering across Libyan cities.',
+    home_search: 'Quick Search',
+    search_now: 'Search Now',
+    ad_type: 'Category',
+    city: 'City',
+    all_cats: 'All Categories',
+    all_cities: 'All Cities',
+    cat_cars: 'Cars',
+    cat_parts: 'Parts',
+    cat_accessories: 'Car Accessories',
+    cat_service: 'Services',
+    cat_small_cars: 'Small Cars',
+    cat_heavy_cars: 'Heavy Vehicles',
+    cat_buses: 'Buses',
+    service_diag: 'Diagnostics',
+    service_mobile_mech: 'Mobile Mechanic',
+    service_tires: 'Tires & Rims',
+    service_mobile_tire_fix: 'Mobile Tire Repair',
+    service_oils: 'Oils & Additives',
+    stat_total_ads: 'Total Ads',
+    stat_cars: 'Cars',
+    stat_parts: 'Parts',
+    stat_services: 'Services',
+    main_categories: 'Main Categories',
+    add_new_ad: 'Add Ad',
+    latest_ads: 'Latest Ads',
+    favorites: 'Favorites',
+    reset_filter: 'Reset Filter',
+    browse_ads: 'Browse Ads',
+    no_results: 'No results',
+    change_search_try: 'Try another search, category, or city.',
+    details: 'Details',
+    full_ad_view: 'Complete listing view with all contact options.',
+    type: 'Type',
+    year: 'Year',
+    condition: 'Condition',
+    seller: 'Seller',
+    location: 'Location',
+    message: 'Message',
+    whatsapp: 'WhatsApp',
+    call: 'Call',
+    account: 'Account',
+    create_or_login: 'Create an account or sign in to link ads to the real owner.',
+    login: 'Login',
+    signup: 'Create Account',
+    email: 'Email',
+    password: 'Password',
+    login_btn: 'Login',
+    signup_btn: 'Create Account',
+    active_account: 'Firebase Auth • Active account',
+    manage_my_ads: 'Manage My Ads',
+    new_ad: 'Add New Ad',
+    chats: 'Chats',
+    unread: 'Unread',
+    logout: 'Logout',
+    published_ads: 'Published Ads',
+    hidden_ads: 'Hidden Ads',
+    in_favorites: 'In Favorites',
+    quick_summary: 'Quick Summary',
+    last_status: 'Latest Status',
+    my_ads: 'My Ads',
+    my_ads_sub: 'This page shows only the ads of the current account.',
+    total_ads: 'Total Ads',
+    published: 'Published Ads',
+    hidden: 'Hidden Ads',
+    ads_list: 'Ads List',
+    edit: 'Edit',
+    hide: 'Hide',
+    show: 'Show',
+    delete: 'Delete',
+    favorites_title: 'Favorites',
+    favorites_sub: 'Saved listings on your real account with a bilingual touch.',
+    saved_items: 'Saved Items',
+    favorites_list: 'Favorites List',
+    no_favorites: 'No favorites yet',
+    no_favorites_sub: 'Tap the heart icon on any listing to save it here.',
+    add_ad_title: 'Add New Ad',
+    add_ad_sub: 'A clear fast flow for adding a car, part, or service.',
+    step_category: '1. Category',
+    step_details: '2. Details',
+    step_images: '3. Images',
+    step_contact: '4. Contact',
+    step_review: '5. Review',
+    ad_data: 'Listing Data',
+    direct: 'Live',
+    ad_title: 'Ad Title',
+    price: 'Price',
+    year_or_status: 'Year or Status',
+    meter_or_part_state: 'Mileage or Part State',
+    advertiser_name: 'Advertiser Name',
+    description: 'Description',
+    phone: 'Phone',
+    map_area: 'Area or Location Name',
+    map_link: 'Map Link',
+    images: 'Images',
+    upload_images: 'Upload Images',
+    save_preview: 'Save & Preview',
+    messages_title: 'Chats',
+    messages_sub: 'Clean customer conversations and inquiries.',
+    inbox: 'Inbox',
+    conversation: 'Conversation',
+    conversation_sub: 'A clearer chat interface.',
+    send: 'Send',
+    write_message: 'Write your message here',
+    my_favorite_ads: 'My Favorite Ads',
+    manage_ads: 'Manage My Ads',
+    browse: 'Browse',
+    settings: 'Settings',
+    app_settings: 'App Settings',
+    settings_sub: 'Control language, appearance, and core options from one place.',
+    appearance: 'Appearance',
+    dark_mode: 'Dark Mode',
+    light_mode: 'Light Mode',
+    language: 'Language',
+    app_info: 'App Info',
+    notifications: 'Notifications',
+    account_settings: 'Account Settings',
+    current_theme: 'Current Theme',
+    current_language: 'Current Language',
+    enabled: 'Enabled',
+    disabled: 'Disabled',
+    open_settings: 'Open Settings'
+  }
+};
+
+export function getLang(){
+  const saved = localStorage.getItem(LANG_KEY);
+  return saved === 'en' ? 'en' : 'ar';
+}
+
+export function setLang(lang){
+  localStorage.setItem(LANG_KEY, lang === 'en' ? 'en' : 'ar');
+}
+
+export function t(key){
+  const lang = getLang();
+  return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || TRANSLATIONS.ar[key] || key;
+}
+
+export function bidi(ar, en){
+  return getLang() === 'en' ? en : ar;
+}
+
+
+const THEME_KEY = 'bratsho_theme_v1';
+
+export function getTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  return saved === 'dark' ? 'dark' : 'light';
+}
+
+export function setTheme(theme){
+  localStorage.setItem(THEME_KEY, theme === 'dark' ? 'dark' : 'light');
+}
+
+export function applyTheme(root=document){
+  const theme = getTheme();
+  root.documentElement?.setAttribute('data-theme', theme);
+  root.body?.setAttribute('data-theme', theme);
+}
+
 export const listings = [
   {
     id: '1', type: 'سيارة', title: 'هيونداي سوناتا 2016 فل رقم 1', price: 37772, city: 'طرابلس', year: '2016', km: '95,000 كم', seller: 'يونس البراتشو', sellerInitial: 'ي', phone: '0910000000', whatsapp: '218910000000', desc: 'فل رقم 1، بوش أصلي، صالون ممتاز، جاهزة بدون مصاريف.', cover: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', images: ['https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80'], createdAt: 'الآن', createdTs: Date.now() - 3600000
@@ -241,8 +557,10 @@ export function normalizeWhatsapp(raw=''){
   return digits;
 }
 
-export function makeMapsUrl(city=''){
-  const q = encodeURIComponent(city || 'ليبيا');
+export function makeMapsUrl(value=''){
+  const raw = String(value || '').trim();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const q = encodeURIComponent(raw || 'ليبيا');
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
 
@@ -278,6 +596,8 @@ function normalizeIncoming(item = {}){
     phone: item.phone || '',
     whatsapp: normalizeWhatsapp(item.whatsapp || item.phone || ''),
     desc: item.desc || '',
+    mapLocation: item.mapLocation || item.city || 'طرابلس',
+    mapLink: item.mapLink || '',
     cover: item.cover || 'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1200&q=80',
     images: Array.isArray(item.images) && item.images.length ? item.images : (item.cover ? [item.cover] : []),
     createdTs,
@@ -415,7 +735,7 @@ export async function saveListing(data){
 }
 
 export function authGateCard(message='سجّل دخولك أولًا لإدارة الإعلانات والحفظ الحقيقي.', cta='فتح تسجيل الدخول'){
-  return `<div class="empty-card"><div class="empty-icon">🔐</div><h3 class="listing-title">الدخول مطلوب</h3><p class="muted">${message}</p><a class="btn btn-primary" href="dashboard.html#auth-required">${cta}</a></div>`;
+  return `<div class="empty-card"><div class="empty-icon">🔐</div><h3 class="listing-title">الدخول مطلوب</h3><p class="muted">${message}</p><a class="btn btn-primary" href="dashboard.html#auth-required" data-route="dashboard.html#auth-required">${cta}</a></div>`;
 }
 
 
@@ -592,22 +912,32 @@ export function watchChatMessages(chatId, callback){
 }
 
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {
-  return `
+  const lang = getLang();
+  const titles = `
+      <div class="app-switcher app-switcher-lang-only">
+        <button type="button" class="switch-chip ${lang === 'ar' ? 'is-active' : ''}" data-lang="ar">العربية</button>
+        <button type="button" class="switch-chip ${lang === 'en' ? 'is-active' : ''}" data-lang="en">English</button>
+      </div>`;
+  const html = `
   <div class="app-shell">
     <header class="site-header">
+      <div class="header-toolbar">
+        <a class="header-settings-btn" id="header-settings-btn" href="settings.html?v=interactfix1" aria-label="${t('settings')}" title="${t('settings')}"><span>⚙</span></a>
+      </div>
       <div class="brand-wrap">
         <div class="brand-copy">
           <h1 class="brand-title">براتشو <span>كار</span></h1>
           <p class="brand-en">Bratsho Car</p>
-          <p class="brand-sub">سوق سيارات وقطع غيار وخدمات متنقلة بتصميم مرتب وسريع</p>
+          <p class="brand-sub">${t('brand_tagline')}</p>
         </div>
         <div class="logo-box">BC</div>
       </div>
-      <div class="top-shortcuts top-shortcuts-market">
-        <a class="shortcut-card shortcut-market" href="dashboard.html"><span>👤</span><b>حسابي</b></a>
-        <a class="shortcut-card shortcut-market" href="favorites.html"><span>♥</span><b>المفضلة</b></a>
-        <a class="shortcut-card shortcut-market shortcut-card-messages" href="messages.html"><span>💬</span><b>دردشاتي</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
-        <a class="shortcut-card shortcut-accent shortcut-market" href="add.html"><span>＋</span><b>أضف إعلان</b></a>
+      ${titles}
+      <div class="top-shortcuts top-shortcuts-clean">
+        <a class="shortcut-card shortcut-clean" data-route="dashboard.html" data-route="dashboard.html" href="dashboard.html"><span>👤</span><b>${t('top_account')}</b></a>
+        <a class="shortcut-card shortcut-clean" data-route="favorites.html" data-route="favorites.html" href="favorites.html"><span>♥</span><b>${t('top_favorites')}</b></a>
+        <a class="shortcut-card shortcut-clean shortcut-card-messages" data-route="messages.html" data-route="messages.html" href="messages.html"><span>💬</span><b>${t('top_messages')}</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
+        <a class="shortcut-card shortcut-accent shortcut-clean" data-route="add.html" data-route="add.html" href="add.html"><span>＋</span><b>${t('top_add')}</b></a>
       </div>
     </header>
 
@@ -620,15 +950,79 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
     </main>
 
     <nav class="bottom-nav">
-      <a href="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>الرئيسية</b></a>
-      <a href="messages.html" class="nav-item nav-item-messages ${active==='messages'?'is-active':''}"><span>◔</span><b>دردشاتي</b><i class="msg-badge nav-badge is-hidden" id="msg-badge-bottom">0</i></a>
-      <a href="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>أضف إعلان</b></a>
-      <a href="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>إعلاناتي</b></a>
-      <a href="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>حسابي</b></a>
+      <a href="index.html" data-route="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>${t('nav_home')}</b></a>
+      <a href="messages.html" data-route="messages.html" class="nav-item nav-item-messages ${active==='messages'?'is-active':''}"><span>◔</span><b>${t('nav_messages')}</b><i class="msg-badge nav-badge is-hidden" id="msg-badge-bottom">0</i></a>
+      <a href="add.html" data-route="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>${t('nav_add')}</b></a>
+      <a href="my-ads.html" data-route="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>${t('nav_my_ads')}</b></a>
+      <a href="dashboard.html" data-route="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>${t('nav_account')}</b></a>
     </nav>
   </div>`;
+  return html;
 }
 
+
+
+
+export function initAppChrome(root=document){
+  applyTheme(root);
+  initLanguageUI(root);
+
+  const settingsBtn = root.getElementById ? root.getElementById('header-settings-btn') : document.getElementById('header-settings-btn');
+  if (settingsBtn && settingsBtn.dataset.boundSettings !== '1') {
+    settingsBtn.dataset.boundSettings = '1';
+    settingsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.assign('settings.html?v=interactfix1');
+    });
+  }
+
+  root.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    const isInternal = href && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('tel:') && !href.startsWith('https://wa.me/');
+    if (!isInternal) return;
+    if (link.dataset.boundNav === '1') return;
+    link.dataset.boundNav = '1';
+
+    link.addEventListener('click', (e) => {
+      const next = link.getAttribute('href');
+      if (!next) return;
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.assign(next);
+    });
+  });
+}
+
+export function initLanguageUI(root=document){
+  root.querySelectorAll('[data-lang]').forEach(btn => {
+    if (btn.dataset.boundLang === '1') return;
+    btn.dataset.boundLang = '1';
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const next = btn.dataset.lang === 'en' ? 'en' : 'ar';
+      setLang(next);
+      try {
+        applyTheme(document);
+      } catch {}
+      location.reload();
+    });
+  });
+
+  root.querySelectorAll('[data-theme]').forEach(btn => {
+    if (btn.dataset.boundTheme === '1') return;
+    btn.dataset.boundTheme = '1';
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const next = btn.dataset.theme === 'dark' ? 'dark' : 'light';
+      setTheme(next);
+      try {
+        applyTheme(document);
+      } catch {}
+      location.reload();
+    });
+  });
+}
 
 export async function mountUnreadBadges(){
   await waitForAuthReady();
@@ -681,10 +1075,10 @@ export function listingCard(item){
         <span>${safeText(item.km || '')}</span>
         <span>${safeText(item.seller || 'براتشو')}</span>
       </div>
-      <div class="listing-actions listing-actions-market">
+      <div class="listing-actions">
         <a class="btn btn-primary" href="details.html?id=${safeText(item.id)}">عرض</a>
         <a class="btn btn-soft" target="_blank" href="${whatsappHref}">واتساب</a>
-        <a class="btn btn-soft btn-icon-market" href="${phoneHref}">☎</a>
+        <a class="icon-btn" href="${phoneHref}">☎</a>
       </div>
     </div>
   </article>`;
