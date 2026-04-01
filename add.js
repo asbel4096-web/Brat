@@ -1,4 +1,4 @@
-import { pageTemplate, customSelect, activateCustomSelects, saveListing, uploadListingImages, removeListingImages, normalizeWhatsapp, formatRelativeArabic, detailById, getCurrentUser, authGateCard, waitForAuthReady, t, initAppChrome } from './common.js';
+import { pageTemplate, customSelect, activateCustomSelects, saveListing, uploadListingImages, removeListingImages, normalizeWhatsapp, formatRelativeArabic, detailById, getCurrentUser, authGateCard, waitForAuthReady, t, initLanguageUI } from './common.js';
 
 const editId = new URLSearchParams(location.search).get('id');
 const cities = ['طرابلس','بنغازي','مصراتة','الزاوية','زليتن','صرمان','صبراتة','العجيلات','سبها','سرت','الخمس','درنة','البيضاء','طبرق','أجدابيا','المرج','غريان','نالوت','يفرن','زوارة','بني وليد','ترهونة','رقدالين','الكفرة','هون','ودان','مرزق','غات','أوباري','راس لانوف','البريقة','شحات','سوسة','القبة','توكرة','تاورغاء','مسلاتة','سلوق'];
@@ -17,7 +17,7 @@ function buildContent(){
     </div>
 
     <div class="grid">
-      ${customSelect(t('ad_type'), t('cat_small_cars'), [t('cat_small_cars'),t('cat_heavy_cars'),t('cat_buses'),t('cat_parts'),t('cat_accessories'),t('cat_service')], 'ad-type')}
+      ${customSelect(t('ad_type'), t('cat_cars'), [t('cat_cars'),t('cat_parts'),t('cat_service')], 'ad-type')}
       ${customSelect(t('city'), 'طرابلس', cities, 'ad-city')}
       <label class="field"><label>${t('ad_title')}</label><input name="title" required placeholder="مثال: هيونداي أزيرا 2023 محلية وكالة"></label>
       <label class="field"><label>${t('price')}</label><input name="price" type="number" required placeholder="45000"></label>
@@ -59,7 +59,7 @@ function buildContent(){
       subtitle:t('add_ad_sub'),
       content: authGateCard('لا يمكن إضافة أو تعديل إعلان بدون تسجيل الدخول.','فتح تسجيل الدخول')
     });
-    initAppChrome();
+    initLanguageUI();
     return;
   }
 
@@ -70,7 +70,7 @@ function buildContent(){
     content: buildContent()
   });
   activateCustomSelects();
-  initAppChrome();
+  initLanguageUI();
 
   const form = document.getElementById('ad-form');
   const imageInput = document.getElementById('image-input');

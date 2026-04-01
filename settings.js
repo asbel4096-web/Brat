@@ -11,7 +11,7 @@ function card(title, subtitle, body){
   const theme = getTheme();
 
   const content = `
-    ${card(t('app_settings'), t('settings_sub'), `
+    ${card('', '', `
       <div class="settings-grid">
         <div class="settings-option">
           <div>
@@ -30,17 +30,19 @@ function card(title, subtitle, body){
             <small>${t('current_theme')}: ${theme === 'dark' ? t('dark_mode') : t('light_mode')}</small>
           </div>
           <div class="settings-actions">
-            <button class="btn ${theme === 'light' ? 'btn-primary' : 'btn-soft'}" id="theme-light">☀ ${t('light_mode')}</button>
-            <button class="btn ${theme === 'dark' ? 'btn-primary' : 'btn-soft'}" id="theme-dark">☾ ${t('dark_mode')}</button>
+            <button class="btn ${theme === 'light' ? 'btn-primary' : 'btn-soft'}" id="theme-light">${t('light_mode')}</button>
+            <button class="btn ${theme === 'dark' ? 'btn-primary' : 'btn-soft'}" id="theme-dark">${t('dark_mode')}</button>
           </div>
         </div>
 
-        <div class="settings-option settings-option-static">
+        <div class="settings-option">
           <div>
             <strong>${t('notifications')}</strong>
             <small>${t('enabled')}</small>
           </div>
-          <div class="settings-pill">${t('enabled')}</div>
+          <div class="settings-actions">
+            <span class="settings-pill">${t('enabled')}</span>
+          </div>
         </div>
 
         <div class="settings-option">
@@ -59,7 +61,7 @@ function card(title, subtitle, body){
       <div class="settings-info-list">
         <div class="settings-info-row"><span>${t('language')}</span><b>${lang === 'en' ? 'English' : 'العربية'}</b></div>
         <div class="settings-info-row"><span>${t('appearance')}</span><b>${theme === 'dark' ? t('dark_mode') : t('light_mode')}</b></div>
-        <div class="settings-info-row"><span>Version</span><b>v2.1 Pro</b></div>
+        <div class="settings-info-row"><span>Version</span><b>v2 UI</b></div>
       </div>
     `)}
   `;
@@ -73,10 +75,22 @@ function card(title, subtitle, body){
 
   initAppChrome();
 
-  document.getElementById('lang-ar')?.addEventListener('click', ()=> { setLang('ar'); location.reload(); });
-  document.getElementById('lang-en')?.addEventListener('click', ()=> { setLang('en'); location.reload(); });
-  document.getElementById('theme-light')?.addEventListener('click', ()=> { setTheme('light'); location.reload(); });
-  document.getElementById('theme-dark')?.addEventListener('click', ()=> { setTheme('dark'); location.reload(); });
+  document.getElementById('lang-ar')?.addEventListener('click', ()=>{
+    setLang('ar');
+    location.reload();
+  });
+  document.getElementById('lang-en')?.addEventListener('click', ()=>{
+    setLang('en');
+    location.reload();
+  });
+  document.getElementById('theme-light')?.addEventListener('click', ()=>{
+    setTheme('light');
+    location.reload();
+  });
+  document.getElementById('theme-dark')?.addEventListener('click', ()=>{
+    setTheme('dark');
+    location.reload();
+  });
   document.getElementById('logout-settings')?.addEventListener('click', async ()=>{
     try {
       await signOutUser();

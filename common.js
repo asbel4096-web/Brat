@@ -62,16 +62,8 @@ const TRANSLATIONS = {
     all_cities: 'كل المدن',
     cat_cars: 'سيارات',
     cat_parts: 'قطع غيار',
-    cat_accessories: 'كماليات سيارات',
-    cat_service: 'خدمات',
-    cat_small_cars: 'سيارات صغيرة',
-    cat_heavy_cars: 'سيارات ثقيلة',
-    cat_buses: 'حافلات',
-    service_diag: 'كشف أعطال',
-    service_mobile_mech: 'ميكانيكي متنقل',
-    service_tires: 'إطارات ونضائد',
-    service_mobile_tire_fix: 'إصلاح إطارات متنقل',
-    service_oils: 'زيوت ومواد مضافة',
+    cat_accessories: 'كماليات',
+    cat_service: 'خدمة',
     stat_total_ads: 'إجمالي الإعلانات',
     stat_cars: 'سيارات',
     stat_parts: 'قطع غيار',
@@ -199,16 +191,8 @@ const TRANSLATIONS = {
     all_cities: 'All Cities',
     cat_cars: 'Cars',
     cat_parts: 'Parts',
-    cat_accessories: 'Car Accessories',
-    cat_service: 'Services',
-    cat_small_cars: 'Small Cars',
-    cat_heavy_cars: 'Heavy Vehicles',
-    cat_buses: 'Buses',
-    service_diag: 'Diagnostics',
-    service_mobile_mech: 'Mobile Mechanic',
-    service_tires: 'Tires & Rims',
-    service_mobile_tire_fix: 'Mobile Tire Repair',
-    service_oils: 'Oils & Additives',
+    cat_accessories: 'Accessories',
+    cat_service: 'Service',
     stat_total_ads: 'Total Ads',
     stat_cars: 'Cars',
     stat_parts: 'Parts',
@@ -735,7 +719,7 @@ export async function saveListing(data){
 }
 
 export function authGateCard(message='سجّل دخولك أولًا لإدارة الإعلانات والحفظ الحقيقي.', cta='فتح تسجيل الدخول'){
-  return `<div class="empty-card"><div class="empty-icon">🔐</div><h3 class="listing-title">الدخول مطلوب</h3><p class="muted">${message}</p><a class="btn btn-primary" href="dashboard.html#auth-required" data-route="dashboard.html#auth-required">${cta}</a></div>`;
+  return `<div class="empty-card"><div class="empty-icon">🔐</div><h3 class="listing-title">الدخول مطلوب</h3><p class="muted">${message}</p><a class="btn btn-primary" href="dashboard.html#auth">${cta}</a></div>`;
 }
 
 
@@ -914,16 +898,13 @@ export function watchChatMessages(chatId, callback){
 export function pageTemplate({active='home', title='', subtitle='', content=''}) {
   const lang = getLang();
   const titles = `
-      <div class="app-switcher app-switcher-lang-only">
-        <button type="button" class="switch-chip ${lang === 'ar' ? 'is-active' : ''}" data-lang="ar">العربية</button>
-        <button type="button" class="switch-chip ${lang === 'en' ? 'is-active' : ''}" data-lang="en">English</button>
+      <div class="lang-switcher">
+        <button type="button" class="lang-chip ${lang === 'ar' ? 'is-active' : ''}" data-lang="ar">العربية</button>
+        <button type="button" class="lang-chip ${lang === 'en' ? 'is-active' : ''}" data-lang="en">English</button>
       </div>`;
   const html = `
   <div class="app-shell">
     <header class="site-header">
-      <div class="header-toolbar">
-        <a class="header-settings-btn" id="header-settings-btn" href="settings.html?v=interactfix1" aria-label="${t('settings')}" title="${t('settings')}"><span>⚙</span></a>
-      </div>
       <div class="brand-wrap">
         <div class="brand-copy">
           <h1 class="brand-title">براتشو <span>كار</span></h1>
@@ -933,11 +914,11 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
         <div class="logo-box">BC</div>
       </div>
       ${titles}
-      <div class="top-shortcuts top-shortcuts-clean">
-        <a class="shortcut-card shortcut-clean" data-route="dashboard.html" data-route="dashboard.html" href="dashboard.html"><span>👤</span><b>${t('top_account')}</b></a>
-        <a class="shortcut-card shortcut-clean" data-route="favorites.html" data-route="favorites.html" href="favorites.html"><span>♥</span><b>${t('top_favorites')}</b></a>
-        <a class="shortcut-card shortcut-clean shortcut-card-messages" data-route="messages.html" data-route="messages.html" href="messages.html"><span>💬</span><b>${t('top_messages')}</b><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
-        <a class="shortcut-card shortcut-accent shortcut-clean" data-route="add.html" data-route="add.html" href="add.html"><span>＋</span><b>${t('top_add')}</b></a>
+      <div class="top-shortcuts top-shortcuts-4">
+        <a class="shortcut-card" href="dashboard.html">${t('top_account')} <span>👤</span></a>
+        <a class="shortcut-card" href="favorites.html">${t('top_favorites')} <span>♥</span></a>
+        <a class="shortcut-card shortcut-card-messages" href="messages.html">${t('top_messages')} <span>💬</span><i class="msg-badge is-hidden" id="msg-badge-top">0</i></a>
+        <a class="shortcut-card shortcut-accent" href="add.html">+ ${t('top_add')}</a>
       </div>
     </header>
 
@@ -950,11 +931,11 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
     </main>
 
     <nav class="bottom-nav">
-      <a href="index.html" data-route="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>${t('nav_home')}</b></a>
-      <a href="messages.html" data-route="messages.html" class="nav-item nav-item-messages ${active==='messages'?'is-active':''}"><span>◔</span><b>${t('nav_messages')}</b><i class="msg-badge nav-badge is-hidden" id="msg-badge-bottom">0</i></a>
-      <a href="add.html" data-route="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>${t('nav_add')}</b></a>
-      <a href="my-ads.html" data-route="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>${t('nav_my_ads')}</b></a>
-      <a href="dashboard.html" data-route="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>${t('nav_account')}</b></a>
+      <a href="index.html" class="nav-item ${active==='home'?'is-active':''}"><span>⌂</span><b>${t('nav_home')}</b></a>
+      <a href="messages.html" class="nav-item nav-item-messages ${active==='messages'?'is-active':''}"><span>◔</span><b>${t('nav_messages')}</b><i class="msg-badge nav-badge is-hidden" id="msg-badge-bottom">0</i></a>
+      <a href="add.html" class="nav-item nav-center ${active==='add'?'is-active':''}"><span>＋</span><b>${t('nav_add')}</b></a>
+      <a href="my-ads.html" class="nav-item ${active==='ads'?'is-active':''}"><span>▤</span><b>${t('nav_my_ads')}</b></a>
+      <a href="dashboard.html" class="nav-item ${active==='account'?'is-active':''}"><span>◉</span><b>${t('nav_account')}</b></a>
     </nav>
   </div>`;
   return html;
@@ -966,59 +947,14 @@ export function pageTemplate({active='home', title='', subtitle='', content=''})
 export function initAppChrome(root=document){
   applyTheme(root);
   initLanguageUI(root);
-
-  const settingsBtn = root.getElementById ? root.getElementById('header-settings-btn') : document.getElementById('header-settings-btn');
-  if (settingsBtn && settingsBtn.dataset.boundSettings !== '1') {
-    settingsBtn.dataset.boundSettings = '1';
-    settingsBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      window.location.assign('settings.html?v=interactfix1');
-    });
-  }
-
-  root.querySelectorAll('a[href]').forEach(link => {
-    const href = link.getAttribute('href') || '';
-    const isInternal = href && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('tel:') && !href.startsWith('https://wa.me/');
-    if (!isInternal) return;
-    if (link.dataset.boundNav === '1') return;
-    link.dataset.boundNav = '1';
-
-    link.addEventListener('click', (e) => {
-      const next = link.getAttribute('href');
-      if (!next) return;
-      e.preventDefault();
-      e.stopPropagation();
-      window.location.assign(next);
-    });
-  });
 }
 
 export function initLanguageUI(root=document){
   root.querySelectorAll('[data-lang]').forEach(btn => {
     if (btn.dataset.boundLang === '1') return;
     btn.dataset.boundLang = '1';
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const next = btn.dataset.lang === 'en' ? 'en' : 'ar';
-      setLang(next);
-      try {
-        applyTheme(document);
-      } catch {}
-      location.reload();
-    });
-  });
-
-  root.querySelectorAll('[data-theme]').forEach(btn => {
-    if (btn.dataset.boundTheme === '1') return;
-    btn.dataset.boundTheme = '1';
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const next = btn.dataset.theme === 'dark' ? 'dark' : 'light';
-      setTheme(next);
-      try {
-        applyTheme(document);
-      } catch {}
+    btn.addEventListener('click', () => {
+      setLang(btn.dataset.lang);
       location.reload();
     });
   });

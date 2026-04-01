@@ -1,4 +1,4 @@
-import { pageTemplate, getUserListings, signInWithEmail, signOutUser, signUpWithEmail, waitForAuthReady, getCurrentUser, getUserLabel, getFavoriteIds, getUserChats, t, initAppChrome } from './common.js';
+import { pageTemplate, getUserListings, signInWithEmail, signOutUser, signUpWithEmail, waitForAuthReady, getCurrentUser, getUserLabel, getFavoriteIds, getUserChats, t, initLanguageUI } from './common.js';
 
 function authForms(message=''){
   return `
@@ -56,7 +56,7 @@ function bindAuthForms(){
       await signInWithEmail(String(fd.get('email') || '').trim(), String(fd.get('password') || ''));
       location.href = 'dashboard.html';
     } catch {
-      status.textContent = 'تعذر تسجيل الدخول. تأكد من البريد وكلمة المرور أو أن الحساب موجود.';
+      status.textContent = 'تعذر تسجيل الدخول / Login failed';
     }
   });
 
@@ -68,7 +68,7 @@ function bindAuthForms(){
       await signUpWithEmail(String(fd.get('email') || '').trim(), String(fd.get('password') || ''));
       location.href = 'dashboard.html';
     } catch {
-      status.textContent = 'تعذر إنشاء الحساب. تأكد أن كلمة المرور 6 أحرف على الأقل وأن البريد غير مستخدم.';
+      status.textContent = 'تعذر إنشاء الحساب / Signup failed';
     }
   });
 }
@@ -88,7 +88,7 @@ async function render(){
       content: authForms(msg)
     });
     bindAuthForms();
-    initAppChrome();
+    initLanguageUI();
     return;
   }
 
@@ -177,7 +177,7 @@ async function render(){
     }
   });
 
-  initAppChrome();
+  initLanguageUI();
 }
 
 render();
